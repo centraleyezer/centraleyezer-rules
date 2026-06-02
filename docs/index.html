@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Centraleyezer Rules Feed</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: -apple-system, system-ui, sans-serif; max-width: 760px;
+           margin: 4rem auto; padding: 0 1rem; color: #1c1c1c; line-height: 1.55; }
+    code { background: #f3f3f3; padding: 2px 6px; border-radius: 3px; }
+    a { color: #0366d6; }
+    .product { border: 1px solid #e1e4e8; padding: 1rem 1.5rem; border-radius: 6px; margin: 1.5rem 0; }
+    .muted { color: #6a737d; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h1>Centraleyezer Rules Feed</h1>
+  <p>Machine-readable detection-rule manifests for Centraleyezer scanners.
+  Signed tarballs are downloaded from
+  <a href="https://github.com/centraleyezer/centraleyezer-rules/releases">GitHub Releases</a>.</p>
+
+  <div class="product">
+    <h2>Netzer — network device hardening + CVE</h2>
+    <p>Manifest: <a href="/netzer/v1/feed.json"><code>/netzer/v1/feed.json</code></a></p>
+    <p class="muted">Pack: cisco (Cisco IOS, IOS-XE, NX-OS, ASA)</p>
+  </div>
+
+  <div class="product">
+    <h2>Eyezer DAST — web application scanning</h2>
+    <p>Manifest: <a href="/dast/v1/feed.json"><code>/dast/v1/feed.json</code></a>
+       <span class="muted">— placeholder, integration in progress</span></p>
+  </div>
+
+  <h2>Shared</h2>
+  <p>Signing public key: <a href="/pubkey.txt"><code>/pubkey.txt</code></a></p>
+
+  <h2>For humans</h2>
+  <p>Looking for the products themselves, not the feed?</p>
+  <ul>
+    <li><a href="https://netzer.centraleyezer.io">netzer.centraleyezer.io</a></li>
+    <li><a href="https://eyezer.centraleyezer.io">eyezer.centraleyezer.io</a></li>
+  </ul>
+</body>
+</html>

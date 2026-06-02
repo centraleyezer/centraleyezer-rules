@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - 'packs/**'
-      - 'feed/**'
+      - 'docs/**'
       - '.github/workflows/lint.yml'
   push:
     branches: [main]
@@ -15,23 +15,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate YAML syntax (every file under packs/ and feed/)
+      - name: Validate YAML + JSON syntax
         run: |
           set -e
           python3 -c "
-          import sys, glob, yaml
+          import sys, glob, yaml, json
           ok = True
           for p in glob.glob('packs/**/*.yaml', recursive=True) + \
-                   glob.glob('packs/**/*.yml',  recursive=True) + \
-                   glob.glob('feed/**/*.json',  recursive=True):
+                   glob.glob('packs/**/*.yml',  recursive=True):
               try:
-                  with open(p) as f:
-                      if p.endswith('.json'):
-                          import json; json.load(f)
-                      else:
-                          yaml.safe_load(f)
+                  with open(p) as f: yaml.safe_load(f)
               except Exception as e:
-                  print(f'PARSE FAIL  {p}  {e}'); ok = False
+                  print(f'YAML FAIL  {p}  {e}'); ok = False
+          for p in glob.glob('docs/**/*.json', recursive=True):
+              try:
+                  with open(p) as f: json.load(f)
+              except Exception as e:
+                  print(f'JSON FAIL  {p}  {e}'); ok = False
           sys.exit(0 if ok else 1)
           "
 
@@ -44,7 +44,6 @@ jobs:
         run: |
           set -e
           if [ ! -d packs ]; then exit 0; fi
-          # Extract id: lines from every rule file, count duplicates.
           dups=$(find packs -name '*.yaml' -exec grep -H '^id:' {} \; \
                  | awk -F'[: ]+' '{print $NF}' \
                  | sort | uniq -d)

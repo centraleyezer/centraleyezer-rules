@@ -7,7 +7,7 @@ Signed detection rule packs for the Centraleyezer scanner suite:
 
 This repository is the canonical source of truth for the rule content. Customers
 do **not** consume rules from this repo directly — they consume signed releases
-via the published feed:
+via the published feeds:
 
 - https://rules.centraleyezer.io/netzer/v1/feed.json
 - https://rules.centraleyezer.io/dast/v1/feed.json
@@ -17,7 +17,7 @@ from GitHub Releases on this repository.
 
 ## Layout
 
-    packs/                    Rule YAML, fixtures, overlays
+    packs/                    Rule source content (not served via rules.* subdomain)
     ├── cis/                  CIS Benchmark L1 rules
     ├── cis-l2/               CIS Benchmark L2 rules
     ├── psirt/                Cisco PSIRT advisories (CVE + hardening)
@@ -26,10 +26,15 @@ from GitHub Releases on this repository.
     ├── cmmc/                 CMMC L2 overlays
     └── pci-dss/              PCI-DSS v4.0 overlays
 
-    feed/v1/                  Customer-facing manifests served by GitHub Pages
-    ├── feed.json             Per-product feed (per-pack URLs + sigs)
-    ├── pubkey.txt            Sandline signing public key (baked into scanners)
-    └── changelogs/           Per-release notes
+    docs/                     Public-facing feed (served by GitHub Pages at rules.centraleyezer.io)
+    ├── netzer/v1/            Netzer feed
+    │   ├── feed.json
+    │   ├── pubkey.txt
+    │   ├── index.html
+    │   └── changelogs/
+    ├── dast/v1/              DAST feed (placeholder)
+    ├── pubkey.txt            Shared signing public key
+    └── index.html            Human landing page
 
     .github/workflows/        CI: lint, fixture-eval, release packaging
 
