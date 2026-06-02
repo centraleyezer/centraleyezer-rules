@@ -1,8 +1,18 @@
 {
-  "schema": 1,
+  "schema_version": 1,
   "product": "netzer",
-  "released_at": "2026-06-02T00:00:00Z",
-  "min_scanner_version": "1.0.0",
-  "packs": {},
-  "history": []
+  "updated_at": "2026-06-02T22:20:33.1409169Z",
+  "entries": {
+    "cisco/stable": {
+      "pack": "cisco",
+      "channel": "stable",
+      "current": {
+        "version": "1.0.1",
+        "released_at": "2026-06-02T22:20:31.868515316Z",
+        "bundle_url": "",
+        "sig_url": "https://github.com/centraleyezer/centraleyezer-rules/releases/download/untagged-9c9e71dfe127fd2ebd94/netzer-cisco-rules-1.0.1.tar.gz.sig",
+        "sha256": "9cfceed1e5f2dd7dfb880cb3e9aa9ab284738aede2628083f986dc4987c61cdb"
+      }
+    }
+  }
 }
