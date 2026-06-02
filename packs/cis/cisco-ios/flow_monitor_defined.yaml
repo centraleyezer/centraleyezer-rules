@@ -1,0 +1,36 @@
+id: cisco.ios.cis.8.2.2
+title: "At least one Flexible NetFlow monitor must be defined"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  At least one `flow monitor <NAME>` stanza must be present so
+  the flow exporter is actually attached to traffic — the
+  exporter without a monitor produces no records.
+rationale: |
+  A flow monitor binds a flow record (what fields to capture)
+  to a flow exporter (where to send them). It must exist for
+  the exporter to be doing anything; lint catches the common
+  misconfiguration of defining the exporter without finishing
+  the chain.
+impact: |
+  NetFlow exporter is configured but never emits records;
+  traffic visibility silently absent.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 8.2.2"
+  nist: ["AU-2", "SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.ios_flow_monitor"
+  equals: true
+on_fail:
+  message: "No Flexible NetFlow monitor is defined."
+  remediation_cli: |
+    configure terminal
+     flow monitor NETZER-MON
+      record netflow ipv4 original-input
+      exporter NETZER-EXP
+    end
+    write memory
+fixtures:
+  positive: fixtures/flow_mon.compliant.txt
+  negative: fixtures/flow_mon.violating.txt

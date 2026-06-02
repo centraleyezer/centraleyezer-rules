@@ -1,0 +1,29 @@
+id: cisco.asa.cis-l2.1.3.3
+title: "L2: ASA `aaa local authentication attempts max-fail` must be ≤ 3"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `aaa local authentication attempts max-fail <N>` must be
+  ≤ 3 (L1 was ≤ 5). Tighter brute-force budget.
+rationale: |
+  Same logic as the IOS L2 rule. 3 attempts is the modern
+  norm; 5 is the legacy floor.
+impact: |
+  Local account brute-force budget is 5 instead of 3.
+references:
+  cis: "CIS Cisco ASA Benchmark — L2 1.3.3"
+  nist: ["AC-7"]
+  cwe: [307]
+query:
+  path: "$.aaa.max_login_attempts"
+  in: [1, 2, 3]
+on_fail:
+  message: "aaa local authentication attempts max-fail is not ≤ 3."
+  remediation_cli: |
+    configure terminal
+     aaa local authentication attempts max-fail 3
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_aaa_max.compliant.txt
+  negative: fixtures/l2_aaa_max.violating.txt

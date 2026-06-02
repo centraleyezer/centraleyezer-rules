@@ -1,0 +1,7 @@
+version 17.9
+hostname compliant
+!
+interface GigabitEthernet1/0/1
+ switchport mode access
+!
+end

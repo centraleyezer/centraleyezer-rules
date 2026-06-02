@@ -1,0 +1,33 @@
+id: cisco.nxos.cis.2.2.2
+title: "feature ssh must be enabled on NX-OS"
+severity: critical
+vendors: [cisco-nx-os]
+description: |
+  `feature ssh` must be enabled. SSH is the only acceptable
+  management transport; without `feature ssh` enabled, no SSH
+  listener exists and operators are forced to telnet or use
+  out-of-band only.
+rationale: |
+  A device without SSH enabled is either reachable only via the
+  console (operationally untenable) or has telnet enabled
+  (cleartext credentials).
+impact: |
+  Forces operators to insecure transports or to console-only
+  access; functionally a denial-of-management.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 2.2.2"
+  nist: ["AC-17", "SC-8"]
+  cwe: [319]
+query:
+  path: "$.features[*]"
+  in: ["ssh"]
+on_fail:
+  message: "feature ssh is not enabled."
+  remediation_cli: |
+    configure terminal
+     feature ssh
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/feature_ssh.compliant.txt
+  negative: fixtures/feature_ssh.violating.txt

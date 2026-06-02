@@ -1,0 +1,32 @@
+id: cisco.ios.cis.3.6.4
+title: "ip ssh maxstartups must be set (≤ 10)"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip ssh maxstartups N` must be configured with a small N
+  (default benchmark: ≤ 10) so the device limits unauthenticated
+  concurrent SSH connections.
+rationale: |
+  Without a small `maxstartups`, an attacker can spawn many
+  unauthenticated SSH connections and exhaust the device's
+  available SSH session slots — a denial of service against the
+  management plane.
+impact: |
+  SSH-session-exhaustion DoS against the management plane.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.6.4"
+  nist: ["SC-5", "AC-17"]
+  cwe: [400]
+query:
+  path: "$.hardening.ip_ssh_maxstartups"
+  in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "ip ssh maxstartups is not constrained (≤ 10)."
+  remediation_cli: |
+    configure terminal
+     ip ssh maxstartups 5
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssh_maxstartups.compliant.txt
+  negative: fixtures/ssh_maxstartups.violating.txt

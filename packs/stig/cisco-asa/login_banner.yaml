@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220405
+title: "The Cisco ASA must display the DoD-approved logon banner before authentication."
+severity: medium
+vendors: [cisco-asa]
+description: |
+  A pre-login banner asserting monitoring consent is mandatory STIG content.
+rationale: |
+  Sourced from the DISA Cisco ASA NDM STIG. CAT II finding.
+  See V-220405 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220405 on the device's POA&M.
+references:
+  stig: ["V-220405"]
+  cci:
+    - "CCI-000048"
+query:
+  path: "$.banners.login"
+  matches: "."
+on_fail:
+  message: "Cisco ASA STIG V-220405 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220405.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/login_banner.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/login_banner.violating.txt

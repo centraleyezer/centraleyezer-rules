@@ -1,0 +1,27 @@
+id: cisco.nxos.stig.v-220301
+title: "The NX-OS switch must not have the telnet feature enabled."
+severity: high
+vendors: [cisco-nx-os]
+description: |
+  Telnet sends credentials in cleartext; STIG forbids it on management surfaces.
+rationale: |
+  Sourced from the DISA Cisco NX-OS Switch NDM STIG. CAT I finding.
+  See V-220301 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-220301 on the device's POA&M.
+references:
+  stig: ["V-220301"]
+  cci:
+    - "CCI-000068"
+query:
+  path: "$.services.telnet"
+  equals: false
+on_fail:
+  message: "Cisco NX-OS STIG V-220301 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220301.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-nxos/fixtures/no_feature_telnet.compliant.txt
+  negative: ../../cis/cisco-nxos/fixtures/no_feature_telnet.violating.txt

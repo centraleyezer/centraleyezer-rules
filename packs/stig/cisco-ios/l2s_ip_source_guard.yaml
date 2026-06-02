@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220634
+title: "The Cisco switch must enable IP Source Guard on user-facing access ports."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  IP Source Guard binds the DHCP-snooping table to per-port ingress filtering, blocking spoofed source IPs.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Switch L2S STIG (CISC-L2-* control family).
+  CAT II finding. See V-220634 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220634 on the device's POA&M.
+references:
+  stig: ["V-220634"]
+  cci:
+    - "CCI-002385"
+query:
+  path: "$.hardening.ip_source_guard"
+  equals: true
+on_fail:
+  message: "Cisco IOS L2S STIG V-220634 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220634.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/ip_source_guard.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/ip_source_guard.violating.txt

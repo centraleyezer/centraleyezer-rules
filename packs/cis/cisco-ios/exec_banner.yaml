@@ -1,0 +1,31 @@
+id: cisco.ios.cis.5.2.3
+title: "Set an EXEC banner"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  An EXEC banner must be configured (`banner exec`). The EXEC
+  banner is shown to authenticated users entering exec mode.
+rationale: |
+  Reinforces the legal-notice / acceptable-use messaging at the
+  point the user has assumed the privileges granted by login.
+impact: |
+  Weaker disciplinary / legal basis in misuse cases.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 5.2.3"
+  nist: ["AC-8"]
+  cwe: []
+query:
+  path: "$.banners.exec"
+  matches: "."
+on_fail:
+  message: "No EXEC banner is configured."
+  remediation_cli: |
+    configure terminal
+     banner exec ^C
+     Authorized administrative access only.
+     ^C
+    end
+    write memory
+fixtures:
+  positive: fixtures/exec_banner.compliant.txt
+  negative: fixtures/exec_banner.violating.txt

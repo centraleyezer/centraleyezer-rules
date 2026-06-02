@@ -1,0 +1,32 @@
+id: cisco.ios.cis.7.4.5
+title: "No access ports assigned to VLAN 1"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  No `switchport mode access` interface may be assigned to
+  VLAN 1 (the default management VLAN). All access ports must
+  live in a dedicated user/data VLAN.
+rationale: |
+  VLAN 1 carries L2 control-plane traffic (CDP, VTP, DTP). A
+  user device in VLAN 1 sees that traffic and can participate
+  in attacks against L2 protocols.
+impact: |
+  L2 control-plane reconnaissance + injection from any user port.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.4.5"
+  nist: ["SC-7"]
+  cwe: [284]
+query:
+  path: "$.hardening.access_port_in_default_vlan"
+  equals: false
+on_fail:
+  message: "At least one access port is assigned to VLAN 1."
+  remediation_cli: |
+    configure terminal
+     interface range GigabitEthernet1/0/1 - 48
+      switchport access vlan 10
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_vlan1.compliant.txt
+  negative: fixtures/no_vlan1.violating.txt

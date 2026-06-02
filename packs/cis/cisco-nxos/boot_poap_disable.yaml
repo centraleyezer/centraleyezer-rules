@@ -1,0 +1,35 @@
+id: cisco.nxos.cis.6.1.2
+title: "NX-OS `boot poap disable` must be configured"
+severity: high
+vendors: [cisco-nx-os]
+description: |
+  `boot poap disable` must be present so Power-On Auto
+  Provisioning is disabled. POAP is the NX-OS zero-touch
+  bootstrap protocol — at boot, the switch reaches out via
+  DHCP for a script URL and downloads its initial config.
+rationale: |
+  POAP is great for greenfield deployment but a documented
+  attack surface in production. An attacker who can spoof
+  DHCP on the boot network (e.g. after a reboot) can serve
+  a hostile config script. Once the switch is in steady
+  state, POAP must be turned off.
+impact: |
+  Boot-time config injection possible via DHCP+TFTP spoofing
+  on the boot network.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 6.1.2"
+  nist: ["CM-3", "CM-7", "SI-7"]
+  cwe: [494]
+query:
+  path: "$.hardening.nxos_boot_poap_disable"
+  equals: true
+on_fail:
+  message: "boot poap disable is not configured."
+  remediation_cli: |
+    configure terminal
+     boot poap disable
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/boot_poap.compliant.txt
+  negative: fixtures/boot_poap.violating.txt

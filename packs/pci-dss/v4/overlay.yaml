@@ -1,0 +1,617 @@
+# PCI-DSS v4.0 requirement mapping overlay.
+#
+# Each entry maps a Netzer rule id to one or more PCI-DSS v4.0 sub-requirements.
+# The mapping is applied at finding-emit time, stamping references.pci_dss
+# onto every finding so reports group cleanly by PCI requirement.
+#
+# Mapping methodology — automatic topic classification on rule id + title:
+#   SSH / telnet / crypto      → 2.2.7 (secure config), 4.2.1 (PAN crypto in transit), 8.5.1 (auth crypto)
+#   SNMP                       → 2.2.7, 4.2.1, 10.4.1
+#   logging / syslog / audit   → 10.2.1–10.7
+#   NTP / clock                → 10.6.1–10.6.3
+#   AAA / password / login     → 7.2, 8.2, 8.3
+#   VTY ACL / management plane → 1.4, 7.2
+#   service hardening          → 2.2.4, 2.2.7
+#   routing / L2 protection    → 1.2, 1.3, 2.2
+#   inspection / threat detect → 1.4, 11.5
+#   PSIRT CVE                  → 6.3, 11.3 (patch / vuln mgmt)
+#
+# Bulk-generated. Hand-edit individual entries that need a finer-grained
+# requirement (e.g. promote a rule to 4.2.1.2 specifically) but keep the
+# bulk classifier in tools/.
+
+mappings:
+  - rule: cisco.asa.cis-l2.1.3.3
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.cis-l2.1.6.2
+    requirements: [8.2.8]
+  - rule: cisco.asa.cis-l2.1.6.1
+    requirements: [8.2.8]
+  - rule: cisco.asa.cis-l2.5.1.13
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis-l2.5.1.12
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis-l2.5.1.14
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis-l2.1.3.4
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.cis-l2.1.2.9
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.asa.cis-l2.1.2.7
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.asa.cis-l2.1.2.6
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.asa.cis-l2.1.2.10
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.asa.cis-l2.4.3.3
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.asa.cis-l2.2.2.5
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis-l2.2.2.4
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.ios.cis-l2.1.2.13
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis-l2.1.3.7
+    requirements: [8.2.4]
+  - rule: cisco.ios.cis-l2.1.3.6
+    requirements: [8.2.4]
+  - rule: cisco.ios.cis-l2.1.3.5
+    requirements: [8.2.4]
+  - rule: cisco.ios.cis-l2.1.1.15
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.ios.cis-l2.8.1.4
+    requirements: [10.2.1, 10.2.2, 10.3.1, 10.3.2, 10.3.3, 10.4.1, 10.5.1]
+  - rule: cisco.ios.cis-l2.8.1.5
+    requirements: [10.2.1, 10.2.2, 10.3.1, 10.3.2, 10.3.3, 10.4.1, 10.5.1]
+  - rule: cisco.ios.cis-l2.4.1.8
+    requirements: [10.6.1, 10.6.2, 10.6.3, 2.2.7, 4.2.1]
+  - rule: cisco.ios.cis-l2.1.1.14
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.ios.cis-l2.4.3.4
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.ios.cis-l2.3.6.10
+    requirements: [2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.ios.cis-l2.3.6.16
+    requirements: [2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.ios.cis-l2.3.6.12
+    requirements: [2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.ios.cis-l2.3.6.11
+    requirements: [2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.nxos.cis-l2.1.5.8
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.cis-l2.1.5.10
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.cis-l2.1.5.6
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.cis-l2.1.5.9
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.cis-l2.1.5.11
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.cis-l2.1.5.7
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.cis-l2.1.7.2
+    requirements: [8.2.8]
+  - rule: cisco.nxos.cis-l2.1.7.3
+    requirements: [8.2.8]
+  - rule: cisco.asa.cis.1.4.3
+    requirements: [2.2.7, 4.2.1, 7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.cis.1.4.2
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.cis.1.3.1
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.cis.1.3.2
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.cis.1.1.1
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.cis.1.4.4
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.cis.1.4.1
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.cis.6.6.1
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.asa.cis.4.2.1
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.asa.cis.1.4.5
+    requirements: [8.2.8]
+  - rule: cisco.asa.cis.5.1.2
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.5.1.1
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.5.2.1
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.2.3.2
+    requirements: [1.2.5, 2.2.1, 2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.6.7.1
+    requirements: [1.4.2, 1.4.3, 11.5.1]
+  - rule: cisco.asa.cis.1.2.1
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.asa.cis.5.4.1
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.5.1.8
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.5.1.3
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.5.1.6
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.5.1.9
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.5.1.7
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.5.1.4
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.5.1.11
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.5.1.10
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.5.2.2
+    requirements: [8.2.4]
+  - rule: cisco.asa.cis.5.1.5
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.3.3.1
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.2.3.3
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.4.3.2
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.4.1.2
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.asa.cis.1.2.6
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.asa.cis.1.2.4
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.asa.cis.1.2.5
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.asa.cis.4.3.1
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.2.1.4
+    requirements: [2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.asa.cis.2.1.5
+    requirements: [8.2.8]
+  - rule: cisco.asa.cis.2.1.2
+    requirements: [2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.asa.cis.2.2.2
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.2.2.3
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.2.2.1
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.cis.2.3.1
+    requirements: [1.2.5, 2.2.1, 2.2.7, 4.2.1]
+  - rule: cisco.ios.cis.1.1.8
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis.1.2.12
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis.1.2.6
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis.1.2.7
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis.1.2.8
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis.1.1.7
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis.1.2.5
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis.1.2.10
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis.1.1.9
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis.1.1.10
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis.1.1.1
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis.1.2.9
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis.7.4.2
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.cis.7.4.1
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.cis.7.4.6
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.cis.5.3.1
+    requirements: [10.5.1, 10.5.2, 10.5.3]
+  - rule: cisco.ios.cis.7.3.4
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.cis.7.3.2
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.cis.9.1.2
+    requirements: [1.2.4, 1.2.5, 1.3.3]
+  - rule: cisco.ios.cis.9.1.4
+    requirements: [1.2.4, 1.2.5, 1.3.3]
+  - rule: cisco.ios.cis.1.4.2
+    requirements: [8.2.8]
+  - rule: cisco.ios.cis.8.1.1
+    requirements: [1.4.1, 1.4.2, 7.2.1, 7.2.4]
+  - rule: cisco.ios.cis.7.5.2
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.cis.7.3.1
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.cis.9.1.3
+    requirements: [1.2.4, 1.2.5, 1.3.3]
+  - rule: cisco.ios.cis.1.1.13
+    requirements: [2.2.7, 4.2.1, 8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.ios.cis.5.2.3
+    requirements: [8.2.4]
+  - rule: cisco.ios.cis.1.4.1
+    requirements: [1.4.1, 1.4.2, 7.2.1, 7.2.4, 8.2.8]
+  - rule: cisco.ios.cis.2.2.1
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.ios.cis.2.2.24
+    requirements: [2.2.7, 4.2.1, 7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis.2.2.25
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.ios.cis.3.2.5
+    requirements: [1.4.1, 1.4.5, 2.2.1]
+  - rule: cisco.ios.cis.10.1.3
+    requirements: [1.4.1, 1.4.5, 2.2.1]
+  - rule: cisco.ios.cis.9.3.1
+    requirements: [1.2.4, 1.2.5, 1.3.3]
+  - rule: cisco.ios.cis.5.1.2
+    requirements: [10.2.1, 10.2.2, 10.3.1, 10.3.2, 10.3.3, 10.4.1, 10.5.1]
+  - rule: cisco.ios.cis.8.1.4
+    requirements: [10.2.1, 10.2.2, 10.3.1, 10.3.2, 10.3.3, 10.4.1, 10.5.1]
+  - rule: cisco.ios.cis.8.1.2
+    requirements: [10.2.1, 10.2.2, 10.3.1, 10.3.2, 10.3.3, 10.4.1, 10.5.1]
+  - rule: cisco.ios.cis.5.1.1
+    requirements: [10.2.1, 10.2.2, 10.3.1, 10.3.2, 10.3.3, 10.4.1, 10.5.1]
+  - rule: cisco.ios.cis.5.1.5
+    requirements: [10.2.1, 10.2.2, 10.3.1, 10.3.2, 10.3.3, 10.4.1, 10.5.1]
+  - rule: cisco.ios.cis.5.1.4
+    requirements: [10.2.1, 10.2.2, 10.3.1, 10.3.2, 10.3.3, 10.4.1, 10.5.1]
+  - rule: cisco.ios.cis.5.1.3
+    requirements: [10.2.1, 10.2.2, 10.3.1, 10.3.2, 10.3.3, 10.4.1, 10.5.1]
+  - rule: cisco.ios.cis.5.2.1
+    requirements: [8.2.4]
+  - rule: cisco.ios.cis.1.1.6
+    requirements: [8.3.4]
+  - rule: cisco.ios.cis.5.2.2
+    requirements: [8.2.4]
+  - rule: cisco.ios.cis.7.4.5
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.cis.3.3.7
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.ios.cis.2.2.2
+    requirements: [2.2.4, 2.2.7]
+  - rule: cisco.ios.cis.2.2.18
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.ios.cis.8.1.3
+    requirements: [10.2.1, 10.2.2, 10.3.1, 10.3.2, 10.3.3, 10.4.1, 10.5.1]
+  - rule: cisco.ios.cis.4.1.4
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.ios.cis.4.1.6
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.ios.cis.2.2.17
+    requirements: [2.2.4, 2.2.7]
+  - rule: cisco.ios.cis.2.2.11
+    requirements: [2.2.4, 2.2.7]
+  - rule: cisco.ios.cis.2.2.13
+    requirements: [2.2.4, 2.2.7]
+  - rule: cisco.ios.cis.4.1.7
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.ios.cis.4.1.1
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.ios.cis.4.1.5
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.ios.cis.4.1.3
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.ios.cis.9.1.1
+    requirements: [1.2.4, 1.2.5, 1.3.3]
+  - rule: cisco.ios.cis.9.1.5
+    requirements: [1.2.4, 1.2.5, 1.3.3]
+  - rule: cisco.ios.cis.1.2.1
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.ios.cis.1.1.11
+    requirements: [2.2.7, 4.2.1, 8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.ios.cis.1.2.2
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.ios.cis.1.2.11
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.cis.7.2.4
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.cis.3.3.3
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.ios.cis.3.3.8
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.ios.cis.3.3.6
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.ios.cis.3.3.5
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.ios.cis.4.3.2
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.ios.cis.4.3.3
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.ios.cis.2.1.8
+    requirements: [2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.ios.cis.2.1.4
+    requirements: [8.2.8]
+  - rule: cisco.ios.cis.2.1.2
+    requirements: [2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.ios.cis.7.2.2
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.cis.2.1.1
+    requirements: [1.4.1, 1.4.2, 7.2.1, 7.2.4]
+  - rule: cisco.ios.cis.7.4.3
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.cis.3.2.6
+    requirements: [1.4.1, 1.4.5, 2.2.1]
+  - rule: cisco.ios.cis.7.1.1
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.cis.2.1.3
+    requirements: [1.4.1, 1.4.2, 7.2.1, 7.2.4]
+  - rule: cisco.nxos.cis.1.2.7
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.cis.1.4.2
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.cis.1.1.5
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.cis.7.5.3
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.nxos.cis.5.2.1
+    requirements: [8.2.4]
+  - rule: cisco.nxos.cis.9.1.1
+    requirements: [1.2.4, 1.2.5, 1.3.3]
+  - rule: cisco.nxos.cis.4.2.2
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.nxos.cis.4.2.1
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.nxos.cis.8.1.1
+    requirements: [1.4.1, 1.4.2, 7.2.1, 7.2.4]
+  - rule: cisco.nxos.cis.7.5.4
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.nxos.cis.7.4.1
+    requirements: [1.2.1, 1.2.5, 8.2.1]
+  - rule: cisco.nxos.cis.7.5.1
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.nxos.cis.7.4.2
+    requirements: [1.2.1, 1.2.5, 8.2.1]
+  - rule: cisco.nxos.cis.4.2.4
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.nxos.cis.1.5.3
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.cis.7.6.2
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.nxos.cis.7.5.2
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.nxos.cis.5.1.2
+    requirements: [10.2.1, 10.2.2, 10.3.1, 10.3.2, 10.3.3, 10.4.1, 10.5.1]
+  - rule: cisco.nxos.cis.3.3.1
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.nxos.cis.7.5.5
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.nxos.cis.3.3.3
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.nxos.cis.4.1.2
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.nxos.cis.4.1.3
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.nxos.cis.9.2.1
+    requirements: [1.2.4, 1.2.5, 1.3.3]
+  - rule: cisco.nxos.cis.1.2.2
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.nxos.cis.1.2.1
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.nxos.cis.1.2.4
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.nxos.cis.1.5.4
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.cis.1.5.1
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.cis.3.3.2
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.nxos.cis.2.1.3
+    requirements: [8.3.4]
+  - rule: cisco.nxos.cis.1.5.5
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.cis.1.5.2
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.cis.1.7.1
+    requirements: [8.2.8]
+  - rule: cisco.nxos.cis.1.4.3
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.psirt.cve-2018-0101.webvpn_rce
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.asa.psirt.cve-2018-0296.webvpn_dos
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.asa.psirt.cve-2018-15454.sip_dos
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.asa.psirt.cve-2020-3187.webvpn_traversal
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.asa.psirt.cve-2020-3259.anyconnect_info_disclosure
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.asa.psirt.cve-2022-20770.webvpn_dos
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.asa.psirt.ikev1.disable
+    requirements: [2.2.5, 2.2.7, 4.2.1]
+  - rule: cisco.ios.psirt.arp_inspect_validate
+    requirements: [1.2.5, 2.2.1, 2.2.5, 2.2.7]
+  - rule: cisco.ios.psirt.clock_timezone_utc
+    requirements: [10.6.1, 10.6.2, 10.6.3, 2.2.5, 2.2.7]
+  - rule: cisco.ios.psirt.cve-2017-12240.dhcp_relay_rce
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.ios.psirt.cve-2017-3881.cmp_telnet_rce
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.ios.psirt.cve-2018-0156.smi_dos
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.ios.psirt.cve-2018-0171.smi_rce
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.ios-xe.psirt.cve-2019-12643.rest_auth_bypass
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.ios-xe.psirt.cve-2019-1862.webui_cmdinj
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.ios-xe.psirt.cve-2020-3161.webui_rce
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.ios.psirt.cve-2023-20109.gdoi_rce
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.ios-xe.psirt.cve-2023-20198.webui_rce
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.ios.psirt.enable_secret_not_md5
+    requirements: [2.2.5, 2.2.7, 4.2.1, 8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.ios.psirt.http_secure_trustpoint
+    requirements: [1.2.5, 2.2.1, 2.2.5, 2.2.7, 4.2.1]
+  - rule: cisco.ios.psirt.keychain_hmac_sha
+    requirements: [1.2.4, 1.2.5, 1.3.3, 2.2.5, 2.2.7, 4.2.1]
+  - rule: cisco.ios.psirt.loopback_required
+    requirements: [2.2.5, 2.2.7]
+  - rule: cisco.ios.psirt.no_eigrp_auto_summary
+    requirements: [2.2.5, 2.2.7]
+  - rule: cisco.ios.psirt.no_ip_rcmd_rcp
+    requirements: [2.2.5, 2.2.7]
+  - rule: cisco.ios.psirt.no_ip_rcmd_rsh
+    requirements: [2.2.5, 2.2.7]
+  - rule: cisco.ios.psirt.no_ipv6_source_route
+    requirements: [1.4.1, 1.4.5, 2.2.1, 2.2.5, 2.2.7]
+  - rule: cisco.ios.psirt.no_mdns_gateway
+    requirements: [2.2.5, 2.2.7]
+  - rule: cisco.ios.psirt.no_ospf_md5
+    requirements: [1.2.4, 1.2.5, 1.3.3, 2.2.5, 2.2.7, 4.2.1]
+  - rule: cisco.ios.psirt.no_password_only_ssh
+    requirements: [2.2.5, 2.2.7]
+  - rule: cisco.ios.psirt.no_pnp_autoinstall
+    requirements: [2.2.4, 2.2.5, 2.2.7]
+  - rule: cisco.ios.psirt.no_service_nagle
+    requirements: [2.2.4, 2.2.5, 2.2.7]
+  - rule: cisco.ios.psirt.no_ssh_3des
+    requirements: [2.2.5, 2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.ios.psirt.no_type7_passwords
+    requirements: [2.2.5, 2.2.7, 8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.ios.psirt.ntp_no_md5
+    requirements: [10.6.1, 10.6.2, 10.6.3, 2.2.5, 2.2.7, 4.2.1]
+  - rule: cisco.ios.psirt.smi.disable
+    requirements: [2.2.5, 2.2.7]
+  - rule: cisco.ios.psirt.ssh_kex_modern
+    requirements: [2.2.5, 2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.ios.psirt.ssh_mac_sha2
+    requirements: [2.2.5, 2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.ios.psirt.sshv1.disable
+    requirements: [2.2.5, 2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.ios.psirt.weak_ssh_ciphers
+    requirements: [2.2.5, 2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.nxos.psirt.cve-2018-15399.nxapi_dos
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.nxos.psirt.cve-2024-20399.bash_cmdinj
+    requirements: [11.3.1, 2.2.5, 2.2.7, 6.3.1, 6.3.3]
+  - rule: cisco.asa.stig.v-220415
+    requirements: [2.2.7, 4.2.1, 7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.stig.v-220416
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.stig.v-220408
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.stig.v-220406
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.stig.v-220407
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.stig.v-220413
+    requirements: [8.2.8]
+  - rule: cisco.asa.stig.v-220414
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.asa.stig.v-220706
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.asa.stig.v-220405
+    requirements: [8.2.4]
+  - rule: cisco.asa.stig.v-220410
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.asa.stig.v-220412
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.asa.stig.v-220409
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.asa.stig.v-220411
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.asa.stig.v-220402
+    requirements: [8.2.8]
+  - rule: cisco.asa.stig.v-220400
+    requirements: [2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.asa.stig.v-220805
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.stig.v-220807
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.stig.v-220802
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.stig.v-220801
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.stig.v-220803
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.stig.v-220804
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.stig.v-220800
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.stig.v-220806
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.asa.stig.v-220809
+    requirements: [1.2.5, 2.2.1, 2.2.7, 4.2.1]
+  - rule: cisco.ios.stig.v-215854.aaa_enabled
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.ios.stig.v-215823.aux_disabled
+    requirements: [2.2.4, 2.2.7]
+  - rule: cisco.ios.stig.v-215823.http_off
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.ios.stig.v-220157
+    requirements: [1.4.1, 1.4.5, 2.2.1]
+  - rule: cisco.ios.stig.v-220630.access_ports
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.stig.v-220601
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.stig.v-220633
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.stig.v-220630
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.stig.v-220604
+    requirements: [1.2.5, 2.2.1]
+  - rule: cisco.ios.stig.v-220139.syslog_level
+    requirements: [10.2.1, 10.2.2, 10.3.1, 10.3.2, 10.3.3, 10.4.1, 10.5.1]
+  - rule: cisco.ios.stig.v-215814
+    requirements: [8.2.4]
+  - rule: cisco.ios.stig.v-215823.no_bootp
+    requirements: [2.2.4, 2.2.7]
+  - rule: cisco.ios.stig.v-215823.no_finger
+    requirements: [2.2.4, 2.2.7]
+  - rule: cisco.ios.stig.v-215823.no_pad
+    requirements: [2.2.4, 2.2.7]
+  - rule: cisco.ios.stig.v-215823.no_proxy_arp
+    requirements: [1.4.1, 1.4.5, 2.2.1]
+  - rule: cisco.ios.stig.v-215823.no_source_route
+    requirements: [1.4.1, 1.4.5, 2.2.1]
+  - rule: cisco.ios.stig.v-215838
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.ios.stig.v-215826
+    requirements: [8.3.10, 8.3.11, 8.3.5, 8.3.6, 8.3.7, 8.3.8]
+  - rule: cisco.ios.stig.v-220500
+    requirements: [1.2.4, 1.2.5, 1.3.3, 2.2.7, 4.2.1]
+  - rule: cisco.ios.stig.v-220504
+    requirements: [1.2.4, 1.2.5, 1.3.3, 2.2.7, 4.2.1]
+  - rule: cisco.ios.stig.v-220506
+    requirements: [1.4.1, 1.4.5, 2.2.1]
+  - rule: cisco.ios.stig.v-220503
+    requirements: [1.2.4, 1.2.5, 1.3.3]
+  - rule: cisco.ios.stig.v-215841.no_default
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.ios.stig.v-215842
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.ios.stig.v-215844
+    requirements: [2.2.7, 4.2.1, 8.5.1]
+  - rule: cisco.ios.stig.v-215807.no_telnet
+    requirements: [2.2.7, 4.2.1]
+  - rule: cisco.ios.stig.v-215807.vty_acl
+    requirements: [1.4.1, 1.4.2, 7.2.1, 7.2.4]
+  - rule: cisco.nxos.stig.v-220303
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.stig.v-220302
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.stig.v-220315
+    requirements: [10.2.1, 10.2.2, 10.3.1, 10.3.2, 10.3.3, 10.4.1, 10.5.1]
+  - rule: cisco.nxos.stig.v-220304
+    requirements: [8.2.4]
+  - rule: cisco.nxos.stig.v-220314
+    requirements: [1.4.1, 1.4.5, 2.2.1]
+  - rule: cisco.nxos.stig.v-220306
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.nxos.stig.v-220305
+    requirements: [10.6.1, 10.6.2, 10.6.3]
+  - rule: cisco.nxos.stig.v-220307
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.nxos.stig.v-220308
+    requirements: [10.4.1, 2.2.7, 4.2.1]
+  - rule: cisco.nxos.stig.v-220309
+    requirements: [8.3.4]
+  - rule: cisco.nxos.stig.v-220313
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]
+  - rule: cisco.nxos.stig.v-220312
+    requirements: [7.2.1, 7.2.2, 8.2.1, 8.3.1, 8.3.6]

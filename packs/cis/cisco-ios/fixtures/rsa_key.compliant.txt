@@ -1,0 +1,6 @@
+version 17.9
+hostname compliant-sw
+!
+crypto key generate rsa modulus 2048
+!
+end

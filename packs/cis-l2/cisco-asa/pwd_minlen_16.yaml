@@ -1,0 +1,31 @@
+id: cisco.asa.cis-l2.1.2.10
+title: "L2: ASA `password-policy minimum-length` must be ≥ 16"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `password-policy minimum-length <N>` must be ≥ 16
+  (L2-round-1 was ≥ 14, L1 was ≥ 8). Strictest tier.
+rationale: |
+  16 chars exceeds the NIST 800-63B floor. Combined with
+  modern PBKDF2 hashing, makes offline brute-force
+  practically infeasible against a captured backup.
+impact: |
+  14-char passwords accepted; brute-force budget within
+  feasible reach for nation-state-level attackers.
+references:
+  cis: "CIS Cisco ASA Benchmark — L2 1.2.10"
+  nist: ["IA-5"]
+  cwe: [521]
+query:
+  path: "$.hardening.asa_pwd_policy_min_length"
+  in: [16, 18, 20, 24, 32]
+on_fail:
+  message: "password-policy minimum-length is below 16."
+  remediation_cli: |
+    configure terminal
+     password-policy minimum-length 16
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_asa_minlen16.compliant.txt
+  negative: fixtures/l2_asa_minlen16.violating.txt

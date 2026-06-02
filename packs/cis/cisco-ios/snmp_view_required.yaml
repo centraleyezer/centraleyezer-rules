@@ -1,0 +1,35 @@
+id: cisco.ios.cis.4.3.2
+title: "snmp-server view must be defined (restrict OID exposure)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  At least one `snmp-server view <NAME> <OID> included|excluded`
+  stanza must be present so SNMP groups can be bound to a
+  restricted view rather than to the full MIB tree.
+rationale: |
+  The default view (`v1default`) exposes every OID the agent
+  supports — including operationally sensitive subtrees like
+  the running-config-via-SNMP MIB. A view restricts what a
+  community / SNMPv3 user can read, mitigating the impact of a
+  credential leak.
+impact: |
+  SNMP credentials expose every supported MIB; running-config
+  retrievable via SNMP if the relevant subtree is in scope.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 4.3.2"
+  nist: ["AC-3", "AC-6"]
+  cwe: [284]
+query:
+  path: "$.hardening.snmp_server_view"
+  equals: true
+on_fail:
+  message: "No snmp-server view is defined."
+  remediation_cli: |
+    configure terminal
+     snmp-server view NETZER-RO iso included
+     snmp-server view NETZER-RO 1.3.6.1.4.1.9.9.96 excluded
+    end
+    write memory
+fixtures:
+  positive: fixtures/snmp_view.compliant.txt
+  negative: fixtures/snmp_view.violating.txt

@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-215836
+title: "The Cisco router must locally log audit events to a buffer sized for the operational record."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Local logging buffer survives transient syslog outages; STIG requires non-default sizing.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router NDM STIG. CAT II finding.
+  See V-215836 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-215836 on the device's POA&M.
+references:
+  stig: ["V-215836"]
+  cci:
+    - "CCI-001849"
+query:
+  path: "$.logging.buffer_size"
+  in: [16384, 32768, 65536, 131072, 262144, 524288, 1048576]
+on_fail:
+  message: "Cisco IOS STIG V-215836 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-215836.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/logging_buffered.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/logging_buffered.violating.txt

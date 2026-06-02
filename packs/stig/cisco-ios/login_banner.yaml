@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-215814
+title: "The Cisco router must display the DoD-approved standard logon banner before authentication."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  A pre-login banner is required to deter unauthorised use and to assert monitoring consent.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router NDM STIG. CAT II finding.
+  See V-215814 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-215814 on the device's POA&M.
+references:
+  stig: ["V-215814"]
+  cci:
+    - "CCI-000048"
+query:
+  path: "$.banners.login"
+  matches: "."
+on_fail:
+  message: "Cisco IOS STIG V-215814 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-215814.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/login_banner.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/login_banner.violating.txt

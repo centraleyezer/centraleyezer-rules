@@ -1,0 +1,35 @@
+id: cisco.asa.cis.6.7.1
+title: "ASA `dynamic-filter enable` (Botnet Traffic Filter) must be configured"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `dynamic-filter enable interface <X>` must be configured on
+  at least one interface so the ASA's Botnet Traffic Filter
+  examines outbound flows against the Cisco-curated
+  malicious-host database.
+rationale: |
+  BTF is the on-box outbound-flow check against known
+  command-and-control destinations. Without it, the ASA has
+  no visibility into hosts on the inside talking to known-bad
+  IPs — leaving infected hosts undetected.
+impact: |
+  Outbound C2 traffic from infected internal hosts is not
+  flagged.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.7.1"
+  nist: ["SI-3", "SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.asa_dynamic_filter"
+  equals: true
+on_fail:
+  message: "dynamic-filter (Botnet Traffic Filter) is not enabled."
+  remediation_cli: |
+    configure terminal
+     dynamic-filter use-database
+     dynamic-filter enable interface outside
+    end
+    write memory
+fixtures:
+  positive: fixtures/dyn_filter.compliant.txt
+  negative: fixtures/dyn_filter.violating.txt

@@ -1,0 +1,34 @@
+id: cisco.nxos.cis.1.6.3
+title: "NX-OS: `feature openflow` must be disabled unless used"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `feature openflow` must NOT be enabled unless an SDN
+  controller managing this switch is documented in the change
+  record. Openflow exposes an out-of-band control channel that
+  can override every locally configured policy.
+rationale: |
+  An attacker who can talk to the OpenFlow controller (or who
+  is the controller) can install arbitrary forwarding rules on
+  the switch — effectively bypassing all locally configured
+  ACLs, VLANs, and route policy.
+impact: |
+  Remote control of L2/L3 forwarding via the OpenFlow channel.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.6.3"
+  nist: ["CM-7", "AC-3"]
+  cwe: []
+query:
+  path: "$.features[*]"
+  in: ["openflow"]
+  not: true
+on_fail:
+  message: "feature openflow is enabled."
+  remediation_cli: |
+    configure terminal
+     no feature openflow
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/feature_openflow.compliant.txt
+  negative: fixtures/feature_openflow.violating.txt

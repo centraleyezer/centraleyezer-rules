@@ -1,0 +1,36 @@
+id: cisco.asa.cis.6.3.3
+title: "ASA `inspect http` must be enabled (when HTTP traverses the firewall)"
+severity: low
+vendors: [cisco-asa]
+description: |
+  `inspect http` must be configured in the global policy-map
+  so the ASA applies HTTP protocol-conformance checks to
+  HTTP traffic crossing the firewall — header size limits,
+  method enforcement, malformed-request drops.
+rationale: |
+  HTTP inspection is the place to enforce request-size
+  bounds and method whitelisting at the perimeter. Without
+  it, HTTP-based attacks (oversized-header DoS, smuggling)
+  pass straight through.
+impact: |
+  HTTP smuggling / oversized-header DoS attacks pass without
+  protocol validation at the firewall.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.3.3"
+  nist: ["SC-7", "SI-3"]
+  cwe: []
+query:
+  path: "$.hardening.asa_inspect_http"
+  equals: true
+on_fail:
+  message: "inspect http is not enabled."
+  remediation_cli: |
+    configure terminal
+     policy-map global_policy
+      class inspection_default
+       inspect http
+    end
+    write memory
+fixtures:
+  positive: fixtures/inspect_http.compliant.txt
+  negative: fixtures/inspect_http.violating.txt

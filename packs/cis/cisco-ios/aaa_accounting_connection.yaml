@@ -1,0 +1,34 @@
+id: cisco.ios.cis.1.2.12
+title: "`aaa accounting connection default` must be configured"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `aaa accounting connection default start-stop group <X>` must
+  be configured so outbound operator-initiated connections
+  (rsh, telnet, ssh from the device's EXEC) are logged to
+  TACACS+/RADIUS.
+rationale: |
+  Connection accounting catches operator-initiated lateral
+  movement — a device used as a stepping stone to reach
+  somewhere else. Without it, only the inbound session is
+  visible; the outbound hop is silent.
+impact: |
+  Outbound operator-initiated connections from the device
+  (telnet/SSH-from-EXEC) are not centrally audited.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.2.12"
+  nist: ["AU-2", "AU-12"]
+  cwe: []
+query:
+  path: "$.aaa.acct_connection"
+  equals: true
+on_fail:
+  message: "aaa accounting connection default is not configured."
+  remediation_cli: |
+    configure terminal
+     aaa accounting connection default start-stop group tacacs+
+    end
+    write memory
+fixtures:
+  positive: fixtures/acct_conn.compliant.txt
+  negative: fixtures/acct_conn.violating.txt

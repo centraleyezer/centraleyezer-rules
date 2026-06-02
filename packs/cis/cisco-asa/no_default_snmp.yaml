@@ -1,0 +1,29 @@
+id: cisco.asa.cis.3.3.1
+title: "ASA must not use default SNMP community strings"
+severity: high
+vendors: [cisco-asa]
+description: |
+  ASA SNMP communities must not use default / well-known names.
+rationale: |
+  Same rationale as IOS; ASA management plane is just as exposed.
+impact: |
+  Unauthenticated firewall inventory disclosure.
+references:
+  cis: "CIS Cisco ASA Benchmark — 3.3.1"
+  nist: ["AC-3", "IA-2"]
+  cwe: [521]
+query:
+  path: "$.snmp.communities[*].name"
+  in: ["public", "private", "cisco", "admin"]
+  not: true
+on_fail:
+  message: "An ASA SNMP community uses a default / well-known string."
+  remediation_cli: |
+    configure terminal
+     no snmp-server community public
+     snmp-server community <random>
+    end
+    write memory
+fixtures:
+  positive: fixtures/snmp_default.compliant.txt
+  negative: fixtures/snmp_default.violating.txt

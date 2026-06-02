@@ -1,0 +1,33 @@
+id: cisco.asa.cis.6.2.2
+title: "ASA class-map inspection_default must be configured"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `class-map inspection_default` must be present. It's the
+  canonical entry point for application-layer protocol
+  inspection in the ASA Modular Policy Framework.
+rationale: |
+  Without `class-map inspection_default`, the modular policy
+  framework has no traffic class to bind inspection actions to;
+  protocol-aware ALGs (HTTP, FTP, DNS) silently don't apply.
+impact: |
+  Application-layer inspection misconfigured; ALG behavior
+  unpredictable.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.2.2"
+  nist: ["SC-7", "SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.asa_class_map_inspection"
+  equals: true
+on_fail:
+  message: "class-map inspection_default is not configured."
+  remediation_cli: |
+    configure terminal
+     class-map inspection_default
+      match default-inspection-traffic
+    end
+    write memory
+fixtures:
+  positive: fixtures/class_map.compliant.txt
+  negative: fixtures/class_map.violating.txt

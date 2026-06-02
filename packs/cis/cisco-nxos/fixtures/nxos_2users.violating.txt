@@ -1,0 +1,4 @@
+!Command: show running-config
+version 9.3(8)
+switchname nxos-dirty
+username netzer-admin password 5 $5$a role network-admin

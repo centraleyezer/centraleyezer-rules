@@ -1,0 +1,32 @@
+id: cisco.ios.cis.6.2.1
+title: "Boot must not be set to manual (ROMmon prompt)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no boot manual` must be in effect. With `boot manual` set,
+  the router halts at ROMmon on every reboot — making remote
+  recovery impossible after any power event.
+rationale: |
+  Beyond the obvious operational hazard, an attacker who can
+  trigger a reboot (e.g., via a remote DoS) can keep the device
+  stuck at ROMmon, denying service indefinitely. Auto-boot from
+  a known image is the safe default.
+impact: |
+  Device hangs at ROMmon on reboot; remote recovery impossible.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 6.2.1"
+  nist: ["CM-3", "CP-10"]
+  cwe: []
+query:
+  path: "$.hardening.no_boot_manual"
+  equals: true
+on_fail:
+  message: "boot manual may be set (no explicit `no boot manual`)."
+  remediation_cli: |
+    configure terminal
+     no boot manual
+    end
+    write memory
+fixtures:
+  positive: fixtures/boot_manual.compliant.txt
+  negative: fixtures/boot_manual.violating.txt

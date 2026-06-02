@@ -1,0 +1,30 @@
+id: cisco.asa.cis-l2.1.1.2
+title: "L2: ASA must have ≥ 3 local user accounts (admin + emergency + audit)"
+severity: low
+vendors: [cisco-asa]
+description: |
+  At least 3 local `username` entries. L1 was ≥ 2 for
+  break-glass; L2 ≥ 3 enables role separation.
+rationale: |
+  Same logic as the IOS and NX-OS L2 user-count rules.
+impact: |
+  Privileged accounts reused for routine monitoring.
+references:
+  cis: "CIS Cisco ASA Benchmark — L2 1.1.2"
+  nist: ["AC-2", "AC-6"]
+  cwe: []
+query:
+  path: "$.hardening.asa_user_count"
+  in: [3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "Fewer than 3 local ASA user accounts are defined."
+  remediation_cli: |
+    configure terminal
+     username netzer-admin     password <X> pbkdf2 privilege 15
+     username netzer-emergency password <Y> pbkdf2 privilege 15
+     username netzer-monitor   password <Z> pbkdf2 privilege  5
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_asa_users3.compliant.txt
+  negative: fixtures/l2_asa_users3.violating.txt

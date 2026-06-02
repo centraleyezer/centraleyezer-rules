@@ -1,0 +1,32 @@
+id: cisco.ios.cis.10.1.3
+title: "Configure IPv6 ND Inspection"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ipv6 nd inspection` must be configured on access VLANs to
+  validate neighbor-discovery messages against a learned
+  binding table.
+rationale: |
+  IPv6 equivalent of Dynamic ARP Inspection. Without ND
+  Inspection, attackers can spoof neighbor advertisements and
+  poison the binding table.
+impact: |
+  L2-MITM on IPv6 segments via NA spoofing.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 10.1.3"
+  nist: ["SC-7"]
+  cwe: [346]
+query:
+  path: "$.hardening.ipv6_nd_inspection"
+  equals: true
+on_fail:
+  message: "IPv6 ND Inspection is not configured."
+  remediation_cli: |
+    configure terminal
+     vlan configuration 10
+      ipv6 nd inspection
+    end
+    write memory
+fixtures:
+  positive: fixtures/nd_inspection.compliant.txt
+  negative: fixtures/nd_inspection.violating.txt

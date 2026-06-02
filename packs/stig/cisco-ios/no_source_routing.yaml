@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-215823.no_source_route
+title: "The Cisco router must drop IP packets containing source-route options."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Source-routed packets let an attacker dictate the return path, bypassing security devices. Must be disabled globally.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router NDM STIG. CAT II finding.
+  See V-215823 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-215823 on the device's POA&M.
+references:
+  stig: ["V-215823"]
+  cci:
+    - "CCI-000382"
+query:
+  path: "$.services.ip_source_route"
+  equals: false
+on_fail:
+  message: "Cisco IOS STIG V-215823 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-215823.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/source_route.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/source_route.violating.txt

@@ -1,0 +1,7 @@
+version 15.2
+hostname legacy-sw
+!
+ip ssh version 2
+! No ip ssh time-out — defaults to 120s
+!
+end

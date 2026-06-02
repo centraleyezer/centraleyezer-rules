@@ -1,0 +1,34 @@
+id: cisco.asa.cis.7.2.1
+title: "ASA `multicast-routing` must NOT be enabled unless required"
+severity: low
+vendors: [cisco-asa]
+description: |
+  `multicast-routing` must NOT be configured unless a
+  documented multicast use case (e.g. PIM tunnel to a
+  multicast source) requires it. Multicast adds protocol
+  surface (PIM, IGMP) that's unused on most firewalls.
+rationale: |
+  PIM and IGMP have their own CVE history (PIM-SM RP
+  spoofing, IGMP-rate-flood DoS) and add control-plane CPU
+  load. Disabling multicast routing on firewalls that don't
+  carry multicast removes the surface entirely.
+impact: |
+  Unused PIM / IGMP control-plane surface exposed on the
+  firewall; CVE exposure for multicast-specific bugs.
+references:
+  cis: "CIS Cisco ASA Benchmark — 7.2.1"
+  nist: ["CM-7"]
+  cwe: [284]
+query:
+  path: "$.hardening.asa_multicast_routing"
+  equals: false
+on_fail:
+  message: "multicast-routing is enabled."
+  remediation_cli: |
+    configure terminal
+     no multicast-routing
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_mcast.compliant.txt
+  negative: fixtures/no_mcast.violating.txt

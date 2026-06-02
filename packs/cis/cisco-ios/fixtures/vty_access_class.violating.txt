@@ -1,0 +1,8 @@
+version 15.2
+hostname legacy-sw
+!
+line vty 0 4
+ transport input ssh
+! No access-class — VTY reachable from anywhere routable.
+!
+end

@@ -1,0 +1,38 @@
+id: cisco.asa.cis.2.3.2
+title: "ASA must have at least one `crypto pki trustpoint` defined"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  At least one `crypto pki trustpoint <NAME>` (or `crypto ca
+  trustpoint <NAME>`) must be present so the ASA has a
+  defined PKI binding for HTTPS, AnyConnect, and outbound
+  TLS — not relying solely on the default self-signed cert.
+rationale: |
+  Without an operator-defined trustpoint, the ASA's HTTPS
+  server presents a generic self-signed certificate that
+  every ASA serves identically. AnyConnect clients trust it
+  on first contact and have no path to verify subsequent
+  connections — a textbook MitM-ready setup.
+impact: |
+  Self-signed default cert in use; AnyConnect / HTTPS
+  management endpoints are MitM-able on first contact.
+references:
+  cis: "CIS Cisco ASA Benchmark — 2.3.2"
+  nist: ["SC-12", "SC-17"]
+  cwe: [295]
+query:
+  path: "$.hardening.asa_trustpoint_count"
+  in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "No crypto trustpoint is defined."
+  remediation_cli: |
+    configure terminal
+     crypto ca trustpoint NETZER-TP
+      enrollment self
+      subject-name CN=asa.example.com
+      crypto ca enroll NETZER-TP noconfirm
+    end
+    write memory
+fixtures:
+  positive: fixtures/trustpoint_count.compliant.txt
+  negative: fixtures/trustpoint_count.violating.txt

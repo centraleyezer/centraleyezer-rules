@@ -1,0 +1,33 @@
+id: cisco.nxos.cis.6.2.1
+title: "NX-OS `feature scp-server` must be enabled"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `feature scp-server` must be enabled so config / image
+  transfers use SCP over SSH rather than TFTP (or FTP)
+  cleartext.
+rationale: |
+  TFTP transfers are cleartext, authentication-less, and a
+  documented path to remote config exfiltration. SCP rides
+  the same SSH channel that AAA already secures — same
+  credentials, same encryption.
+impact: |
+  Transfers fall back to TFTP/FTP cleartext; config / image
+  contents observable on the wire.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 6.2.1"
+  nist: ["SC-8", "AC-17"]
+  cwe: [319]
+query:
+  path: "$.features[*]"
+  in: ["scp-server"]
+on_fail:
+  message: "feature scp-server is not enabled."
+  remediation_cli: |
+    configure terminal
+     feature scp-server
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/scp_server.compliant.txt
+  negative: fixtures/scp_server.violating.txt

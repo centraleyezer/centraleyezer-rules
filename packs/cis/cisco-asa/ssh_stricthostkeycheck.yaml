@@ -1,0 +1,30 @@
+id: cisco.asa.cis.2.1.3
+title: "Enable ssh stricthostkeycheck on ASA"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `ssh stricthostkeycheck` must be enabled on the ASA so outbound
+  SSH (e.g. to syslog / aaa servers) refuses unknown host keys.
+rationale: |
+  Without strict host-key checking, an attacker who can intercept
+  the outbound SSH flow can present a substitute host key and
+  decrypt the session.
+impact: |
+  Man-in-the-middle attack against outbound management traffic.
+references:
+  cis: "CIS Cisco ASA Benchmark — 2.1.3"
+  nist: ["AC-17", "SC-8"]
+  cwe: [295]
+query:
+  path: "$.crypto.ssh_strict_host_key"
+  equals: true
+on_fail:
+  message: "ssh stricthostkeycheck is not enabled."
+  remediation_cli: |
+    configure terminal
+     ssh stricthostkeycheck
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssh_strict.compliant.txt
+  negative: fixtures/ssh_strict.violating.txt

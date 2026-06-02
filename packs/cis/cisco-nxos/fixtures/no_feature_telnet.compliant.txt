@@ -1,0 +1,6 @@
+!Command: show running-config
+version 9.3(8)
+switchname nxos-compliant
+feature ssh
+feature ospf
+no feature telnet

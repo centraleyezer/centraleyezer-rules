@@ -1,0 +1,7 @@
+version 17.9
+hostname compliant-sw
+!
+ip ssh authentication-retries 3
+ip ssh version 2
+!
+end

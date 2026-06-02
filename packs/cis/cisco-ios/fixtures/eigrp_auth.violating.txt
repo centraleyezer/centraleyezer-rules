@@ -1,0 +1,7 @@
+version 15.2
+hostname legacy
+!
+router eigrp 100
+ network 10.0.0.0
+!
+end

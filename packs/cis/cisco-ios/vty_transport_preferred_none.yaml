@@ -1,0 +1,37 @@
+id: cisco.ios.cis.3.6.5
+title: "All VTYs must have `transport preferred none`"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Every `line vty` stanza must include `transport preferred
+  none` so that typing an unqualified hostname at the EXEC
+  prompt does NOT trigger an auto-Telnet attempt. The default
+  preferred-transport is `telnet`.
+rationale: |
+  Without `preferred none`, a typo in an operator-EXEC command
+  (e.g. `cdir flash:` instead of `dir flash:`) triggers an
+  auto-Telnet to the typo — leaking the typed string as a
+  hostname-lookup-and-connect attempt to whatever DNS/server
+  answers. Setting `preferred none` makes the operator type
+  `telnet HOST` explicitly.
+impact: |
+  Operator typos in EXEC trigger outbound Telnet connection
+  attempts; reconnaissance leakage.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.6.5"
+  nist: ["AC-17", "CM-7"]
+  cwe: []
+query:
+  path: "$.hardening.vty_transport_preferred_none"
+  equals: true
+on_fail:
+  message: "Not every VTY line has `transport preferred none`."
+  remediation_cli: |
+    configure terminal
+     line vty 0 4
+      transport preferred none
+    end
+    write memory
+fixtures:
+  positive: fixtures/vty_pref_none.compliant.txt
+  negative: fixtures/vty_pref_none.violating.txt

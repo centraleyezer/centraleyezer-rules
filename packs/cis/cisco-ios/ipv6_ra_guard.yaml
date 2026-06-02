@@ -1,0 +1,35 @@
+id: cisco.ios.cis.10.1.1
+title: "Configure IPv6 RA Guard"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ipv6 nd raguard policy X` must be configured. RA Guard
+  filters Router Advertisement (RA) messages on access ports
+  so only legitimate IPv6 routers can advertise on the segment.
+rationale: |
+  The IPv6 equivalent of rogue-DHCP: any host on an L2 segment
+  can advertise itself as the default IPv6 gateway via RA, and
+  most OS stacks accept the most recent advertisement. RA Guard
+  closes this attack class at the switch.
+impact: |
+  IPv6 traffic redirect / MITM from any L2-adjacent host.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 10.1.1"
+  nist: ["SC-7"]
+  cwe: [346]
+query:
+  path: "$.hardening.ipv6_ra_guard"
+  equals: true
+on_fail:
+  message: "IPv6 RA Guard policy is not configured."
+  remediation_cli: |
+    configure terminal
+     ipv6 nd raguard policy ACCESS-RAGUARD
+      device-role host
+     vlan configuration 10
+      ipv6 nd raguard attach-policy ACCESS-RAGUARD
+    end
+    write memory
+fixtures:
+  positive: fixtures/raguard.compliant.txt
+  negative: fixtures/raguard.violating.txt

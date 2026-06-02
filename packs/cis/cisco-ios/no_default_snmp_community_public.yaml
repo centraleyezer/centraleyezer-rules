@@ -1,0 +1,37 @@
+id: cisco.ios.cis.3.3.7
+title: "Do not use default / well-known SNMP community strings"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe, cisco-nx-os, cisco-asa]
+description: |
+  No SNMP community may use a default or well-known name. Forbidden:
+  public, private, cisco, admin. Real deployments must use a random,
+  rotated string.
+rationale: |
+  Default community strings are tested by every commodity scanner and
+  enumeration tool. They give unauthenticated visibility into routes,
+  interfaces, ARP, and CDP — enough to map the network.
+impact: |
+  An attacker on the management or any in-band-reachable network learns
+  topology, neighbor devices, and ACL structure without authentication.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.3.1"
+  nist: ["AC-3", "IA-2", "SC-8"]
+  cwe: [521]
+query:
+  path: "$.snmp.communities[*].name"
+  in: ["public", "private", "cisco", "admin"]
+  not: true
+on_fail:
+  message: "An SNMP community uses a default / well-known string."
+  remediation_cli: |
+    configure terminal
+     no snmp-server community public RO
+     no snmp-server community private RW
+     no snmp-server community cisco RO
+     no snmp-server community admin RW
+     snmp-server community <RANDOM-STRONG-STRING> RO 99
+    end
+    write memory
+fixtures:
+  positive: fixtures/snmp_public.compliant.txt
+  negative: fixtures/snmp_public.violating.txt

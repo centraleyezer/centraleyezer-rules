@@ -1,0 +1,35 @@
+id: cisco.ios.cis.8.2.1
+title: "At least one Flexible NetFlow exporter must be defined"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  At least one `flow exporter <NAME>` stanza must be present so
+  the device can export per-flow records to the central NetFlow
+  collector for traffic visibility and incident forensics.
+rationale: |
+  Flow records are the per-conversation audit trail of what
+  crossed the device. Without them, the SOC has only syslog
+  (rotated, sampled) and SNMP counters (aggregate) — neither
+  of which answers "what did host X talk to last Tuesday."
+impact: |
+  No per-flow audit trail; SOC retroactive-query capability
+  reduced to coarse counters.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 8.2.1"
+  nist: ["AU-2", "SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.ios_flow_exporter"
+  equals: true
+on_fail:
+  message: "No Flexible NetFlow exporter is defined."
+  remediation_cli: |
+    configure terminal
+     flow exporter NETZER-EXP
+      destination 10.0.0.1
+      transport udp 2055
+    end
+    write memory
+fixtures:
+  positive: fixtures/flow_exp.compliant.txt
+  negative: fixtures/flow_exp.violating.txt

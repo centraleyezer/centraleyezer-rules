@@ -1,0 +1,8 @@
+version 15.2
+hostname legacy
+!
+router ospf 100
+ area 0 authentication message-digest
+ network 10.0.0.0 0.255.255.255 area 0
+!
+end

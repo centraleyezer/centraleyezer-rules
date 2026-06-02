@@ -1,0 +1,35 @@
+id: cisco.nxos.cis.7.6.2
+title: "NX-OS `feature udld` must be enabled"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `feature udld` must be enabled so the switch detects
+  unidirectional links — fiber pairs where one strand is
+  broken but the other carries traffic, masking faults from
+  STP convergence.
+rationale: |
+  Unidirectional links are a known cause of L2 blackholes and
+  STP loops. UDLD catches them. Availability is a security
+  property — long-running blackholes count as DoS for any
+  service that depends on those links.
+impact: |
+  Unidirectional fiber faults go undetected; transient L2
+  loops or blackholes.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.6.2"
+  nist: ["CP-2"]
+  cwe: []
+query:
+  path: "$.features[*]"
+  in: ["udld"]
+on_fail:
+  message: "feature udld is not enabled."
+  remediation_cli: |
+    configure terminal
+     feature udld
+     udld aggressive
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/feature_udld.compliant.txt
+  negative: fixtures/feature_udld.violating.txt

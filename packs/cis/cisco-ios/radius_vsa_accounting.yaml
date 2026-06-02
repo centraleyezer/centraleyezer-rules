@@ -1,0 +1,35 @@
+id: cisco.ios.cis.1.2.11
+title: "`radius-server vsa send accounting` must be configured"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `radius-server vsa send accounting` must be configured so
+  Cisco-specific vendor attributes (Cisco-AV-Pair, etc.) are
+  included in RADIUS accounting records. Without this, the
+  command and session detail in central accounting is lost.
+rationale: |
+  Most RADIUS accounting analytics depend on the per-command
+  detail carried in Cisco-AV-Pair VSAs. Without `vsa send
+  accounting`, the central NMS sees only basic
+  start/stop/interim records — losing the per-command
+  forensic trail.
+impact: |
+  RADIUS accounting records lack per-command detail; central
+  forensic visibility reduced to session-level.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.2.11"
+  nist: ["AU-3", "AU-12"]
+  cwe: []
+query:
+  path: "$.aaa.radius_vsa_acct"
+  equals: true
+on_fail:
+  message: "radius-server vsa send accounting is not configured."
+  remediation_cli: |
+    configure terminal
+     radius-server vsa send accounting
+    end
+    write memory
+fixtures:
+  positive: fixtures/radius_vsa.compliant.txt
+  negative: fixtures/radius_vsa.violating.txt

@@ -1,0 +1,36 @@
+id: cisco.ios.cis.8.2.5
+title: "Flow monitor must be bound to at least one interface (`ip flow monitor`)"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  The flow chain (record + monitor + exporter) is only useful
+  if the monitor is bound to traffic — `ip flow monitor
+  <NAME> input` (or output) must appear on at least one
+  interface.
+rationale: |
+  Without an interface binding, the entire NetFlow chain is
+  dead config — exporter ready, monitor ready, record ready,
+  but no traffic ever flowing through them. This rule catches
+  the half-built configuration that silently produces zero
+  records.
+impact: |
+  NetFlow chain configured but exports nothing — operator
+  thinks visibility is on, but the collector sees nothing.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 8.2.5"
+  nist: ["AU-2", "SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.ip_flow_ingress_configured"
+  equals: true
+on_fail:
+  message: "No flow monitor is bound to any interface."
+  remediation_cli: |
+    configure terminal
+     interface GigabitEthernet0/0
+      ip flow monitor NETZER-MON input
+    end
+    write memory
+fixtures:
+  positive: fixtures/flow_ingress.compliant.txt
+  negative: fixtures/flow_ingress.violating.txt

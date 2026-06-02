@@ -1,0 +1,38 @@
+id: cisco.ios.psirt.no_eigrp_auto_summary
+title: "EIGRP must not use `auto-summary`"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+applies_when:
+  features: [eigrp]
+description: |
+  When EIGRP is configured, `no auto-summary` must be in effect.
+  Auto-summary at the classful boundary causes hard-to-debug
+  reachability surprises when modern discontiguous subnets are
+  in use.
+rationale: |
+  Auto-summary was the IOS default for backward-compatibility
+  with classful routing. In modern CIDR networks it silently
+  hides /16-style summaries and breaks expected reachability —
+  an operational landmine that the Cisco hardening guide
+  explicitly recommends turning off.
+impact: |
+  Inadvertent route summarization across classful boundaries;
+  reachability surprises during topology changes.
+references:
+  cis: ""
+  nist: ["CM-7"]
+  cwe: []
+query:
+  path: "$.routing.eigrp.auto_summary"
+  equals: false
+on_fail:
+  message: "EIGRP auto-summary is enabled."
+  remediation_cli: |
+    configure terminal
+     router eigrp 100
+      no auto-summary
+    end
+    write memory
+fixtures:
+  positive: fixtures/eigrp_no_auto.compliant.txt
+  negative: fixtures/eigrp_no_auto.violating.txt

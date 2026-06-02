@@ -1,0 +1,10 @@
+!
+! UDLD enabled globally — STIG L2S V-220639 satisfied.
+!
+hostname sw-l2-udld-compliant
+!
+udld aggressive
+!
+spanning-tree mode rapid-pvst
+!
+end

@@ -1,0 +1,37 @@
+id: cisco.ios.cis.9.1.4
+title: "BGP must use TTL security (`ttl-security hops N`)"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+applies_when:
+  features: [bgp]
+description: |
+  When BGP is configured, every external (eBGP) neighbor must
+  use `neighbor X ttl-security hops N`. TTL-security only
+  accepts BGP packets whose IP TTL is ≥ 255 − N, which means the
+  packet originated within N hops.
+rationale: |
+  TTL security defeats spoofed-source BGP packets from off-path
+  attackers. The Generalized TTL Security Mechanism (GTSM,
+  RFC 5082) is the canonical mitigation against the
+  long-standing BGP TCP-injection class of attacks.
+impact: |
+  Off-path BGP injection / TCP RST attacks remain feasible;
+  CVE-2019-7846-class issues exploitable.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 9.1.4"
+  nist: ["SC-7", "SC-23"]
+  cwe: [346]
+query:
+  path: "$.routing.bgp.ttl_security"
+  equals: true
+on_fail:
+  message: "BGP neighbors do not use TTL security."
+  remediation_cli: |
+    configure terminal
+     router bgp 65001
+      neighbor 192.0.2.1 ttl-security hops 1
+    end
+    write memory
+fixtures:
+  positive: fixtures/bgp_ttl.compliant.txt
+  negative: fixtures/bgp_ttl.violating.txt

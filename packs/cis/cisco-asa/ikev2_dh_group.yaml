@@ -1,0 +1,35 @@
+id: cisco.asa.cis.5.1.3
+title: "ASA IKEv2 policy DH group must be ≥ 14"
+severity: high
+vendors: [cisco-asa]
+description: |
+  IKEv2 policies must use Diffie-Hellman `group N` with N ≥ 14
+  (2048-bit MODP) or N ≥ 19 (ECDH). Groups 1, 2, 5 are below
+  current cryptographic strength.
+rationale: |
+  Logjam / WeakDH (CVE-2015-4000) class attacks recover DH
+  session keys from groups < 2048-bit MODP. NIST 800-57 retires
+  these groups for any use after 2030.
+impact: |
+  Recovery of IKE/IPsec session keys from captured tunnel
+  traffic; passive decryption of VPN payload.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.1.3"
+  nist: ["SC-13"]
+  cwe: [326]
+query:
+  path: "$.hardening.asa_ikev2_dh_group"
+  in: [14, 15, 16, 17, 18, 19, 20, 21, 24]
+on_fail:
+  message: "ASA IKEv2 DH group is below 14."
+  remediation_cli: |
+    configure terminal
+     crypto ikev2 policy 10
+      encryption aes-256
+      integrity sha256
+      group 14
+    end
+    write memory
+fixtures:
+  positive: fixtures/ikev2_dh.compliant.txt
+  negative: fixtures/ikev2_dh.violating.txt

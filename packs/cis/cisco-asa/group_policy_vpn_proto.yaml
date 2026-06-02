@@ -1,0 +1,36 @@
+id: cisco.asa.cis.5.4.1
+title: "ASA group-policy VPN tunnel protocol must exclude IKEv1"
+severity: high
+vendors: [cisco-asa]
+description: |
+  The default group-policy `vpn-tunnel-protocol` setting must
+  NOT include `ikev1`. Modern AnyConnect deployments use
+  `ikev2 ssl-client` (or `ssl-clientless` only). Allowing
+  ikev1 in the default policy exposes the IKEv1-CVE surface
+  to every client that lands on the default policy.
+rationale: |
+  Any client that connects without a custom group-policy
+  inherits the default. If the default policy permits IKEv1,
+  the device is effectively running IKEv1 even if no static
+  ikev1 tunnel is configured.
+impact: |
+  IKEv1 surface exposed by default to remote-access VPN
+  clients via the default group policy.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.4.1"
+  nist: ["SC-8", "SC-13"]
+  cwe: [327]
+query:
+  path: "$.hardening.asa_group_policy_vpn_proto"
+  matches: "^(ikev2|ssl-clientless|ikev2 ssl-client|ssl-client|ikev2 ssl-clientless|ssl-client ssl-clientless|ikev2 ssl-client ssl-clientless)$"
+on_fail:
+  message: "Default group-policy vpn-tunnel-protocol includes ikev1 or is unconfigured."
+  remediation_cli: |
+    configure terminal
+     group-policy DfltGrpPolicy attributes
+      vpn-tunnel-protocol ikev2 ssl-client ssl-clientless
+    end
+    write memory
+fixtures:
+  positive: fixtures/grp_vpn_proto.compliant.txt
+  negative: fixtures/grp_vpn_proto.violating.txt

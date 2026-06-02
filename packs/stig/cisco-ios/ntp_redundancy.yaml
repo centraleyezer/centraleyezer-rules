@@ -1,0 +1,28 @@
+id: cisco.ios.stig.v-215838
+title: "The Cisco router must synchronise its clock with at least two authoritative time sources."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  STIG requires NTP redundancy so log timestamps remain accurate when any single source is unreachable or compromised.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router NDM STIG. CAT II finding.
+  See V-215838 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-215838 on the device's POA&M.
+references:
+  stig: ["V-215838"]
+  cci:
+    - "CCI-001889"
+    - "CCI-001891"
+query:
+  path: "$.hardening.ntp_server_count"
+  in: [2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "Cisco IOS STIG V-215838 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-215838.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/ntp_redund.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/ntp_redund.violating.txt

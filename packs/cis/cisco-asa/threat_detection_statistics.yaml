@@ -1,0 +1,34 @@
+id: cisco.asa.cis.6.1.3
+title: "Enable ASA threat-detection statistics"
+severity: low
+vendors: [cisco-asa]
+description: |
+  `threat-detection statistics` must be enabled to record per-host,
+  per-access-list, and per-protocol counters that operators query
+  in incident response.
+rationale: |
+  Statistics are off by default. Without them, the ASA can
+  detect a scan but can't tell the responder which hosts /
+  ACLs were targeted.
+impact: |
+  Incident scoping data unavailable when an attack starts.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.1.3"
+  nist: ["AU-2", "SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.threat_detection_statistics"
+  equals: true
+on_fail:
+  message: "threat-detection statistics is not enabled."
+  remediation_cli: |
+    configure terminal
+     threat-detection statistics access-list
+     threat-detection statistics host
+     threat-detection statistics port
+     threat-detection statistics protocol
+    end
+    write memory
+fixtures:
+  positive: fixtures/td_stats.compliant.txt
+  negative: fixtures/td_stats.violating.txt

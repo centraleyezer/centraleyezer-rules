@@ -1,0 +1,32 @@
+id: cisco.ios.cis.4.1.2
+title: "Disable CDP globally if not required"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  CDP must be disabled on devices that don't need to share
+  neighbor information with Cisco endpoints. Where CDP is
+  required, it must be disabled on Internet-facing or untrusted
+  interfaces.
+rationale: |
+  CDP broadcasts vendor / model / IOS version / native VLAN to
+  any L2 listener. It's frequently used by attackers to enumerate
+  the device for follow-on CVE selection.
+impact: |
+  Vendor + version disclosure to L2-adjacent attackers.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 4.1.2"
+  nist: ["CM-7", "SC-7"]
+  cwe: [200]
+query:
+  path: "$.services.cdp"
+  equals: false
+on_fail:
+  message: "CDP is enabled globally."
+  remediation_cli: |
+    configure terminal
+     no cdp run
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_cdp.compliant.txt
+  negative: fixtures/no_cdp.violating.txt

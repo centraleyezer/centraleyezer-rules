@@ -1,0 +1,37 @@
+id: cisco.asa.cis.6.3.4
+title: "ASA legacy `fixup protocol` must NOT be configured"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  No `fixup protocol ...` line may appear. `fixup` is the
+  pre-7.0 ALG configuration mechanism — replaced by the
+  policy-map / `inspect` model in modern ASA. Any `fixup`
+  line indicates a stale config carried over from PIX.
+rationale: |
+  Legacy `fixup` and modern `inspect` can collide if both are
+  present, producing inconsistent ALG behaviour. The
+  hardening posture is to migrate fully to the MPF /
+  `inspect` model and remove any fixup leftovers.
+impact: |
+  Inconsistent ALG behaviour from mixed legacy/modern
+  configuration; rules may not apply as intended.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.3.4"
+  nist: ["CM-7"]
+  cwe: []
+query:
+  path: "$.hardening.asa_legacy_fixup"
+  equals: false
+on_fail:
+  message: "Legacy `fixup protocol` configuration present."
+  remediation_cli: |
+    configure terminal
+     no fixup protocol <NAME>
+     policy-map global_policy
+      class inspection_default
+       inspect <name>
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_fixup.compliant.txt
+  negative: fixtures/no_fixup.violating.txt

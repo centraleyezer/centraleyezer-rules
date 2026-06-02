@@ -1,0 +1,32 @@
+id: cisco.ios.cis.2.2.16
+title: "Disable `boot host` (no network-loaded host config)"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  No `boot host` lines may be configured. `boot host` pulls
+  per-device config from a network TFTP/RCP source at boot — an
+  unauthenticated supply-chain channel.
+rationale: |
+  An attacker who can spoof the boot-host TFTP source pushes
+  arbitrary configuration on the next reboot. Combined with
+  `service config` enabled, this is a full takeover path.
+impact: |
+  Configuration takeover via TFTP at next reboot; persistence
+  across power cycles.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.16"
+  nist: ["CM-3", "CM-7"]
+  cwe: [346]
+query:
+  path: "$.hardening.boot_host"
+  equals: false
+on_fail:
+  message: "boot host is configured."
+  remediation_cli: |
+    configure terminal
+     no boot host
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_boot_host.compliant.txt
+  negative: fixtures/no_boot_host.violating.txt

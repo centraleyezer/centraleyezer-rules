@@ -1,0 +1,5 @@
+version 17.9
+hostname compliant
+snmp-server group NETZER-GRP v3 priv
+snmp-server user nsuser NETZER-GRP v3 auth sha authkey priv aes 256 privkey
+end

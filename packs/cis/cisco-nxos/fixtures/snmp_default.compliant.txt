@@ -1,0 +1,5 @@
+!Command: show running-config
+version 9.3(8)
+switchname nxos-clean
+feature ospf
+snmp-server community s3cret-ro-2026 group network-operator

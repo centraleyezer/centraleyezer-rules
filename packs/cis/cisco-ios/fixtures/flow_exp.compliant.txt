@@ -1,0 +1,5 @@
+version 17.9
+hostname compliant
+flow exporter NETZER-EXP
+ destination 10.0.0.1
+end

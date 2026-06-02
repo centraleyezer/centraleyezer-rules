@@ -1,0 +1,35 @@
+id: cisco.nxos.cis.3.6.4
+title: "NX-OS SSH RSA modulus must be ≥ 2048"
+severity: high
+vendors: [cisco-nx-os]
+description: |
+  When SSH uses an RSA host key (`ssh key rsa <N>`), the
+  modulus must be ≥ 2048 bits. NIST 800-57 retires 1024-bit
+  RSA, and modern SSH clients refuse 1024-bit keys by
+  default.
+rationale: |
+  1024-bit RSA is below the NIST 800-57 floor. A nation-state
+  attacker with a captured SSH session can factor 1024-bit
+  keys offline within feasible bounds. Modern OpenSSH (8.2+)
+  rejects 1024-bit RSA host keys outright.
+impact: |
+  SSH host key recoverable under modern cryptanalysis; new
+  clients refuse to connect.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 3.6.4"
+  nist: ["SC-13", "SC-17"]
+  cwe: [326]
+query:
+  path: "$.hardening.nxos_rsa_modulus"
+  in: [2048, 3072, 4096, 8192]
+on_fail:
+  message: "NX-OS SSH RSA modulus is below 2048 bits."
+  remediation_cli: |
+    configure terminal
+     no ssh key rsa
+     ssh key rsa 2048 force
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/rsa_modulus.compliant.txt
+  negative: fixtures/rsa_modulus.violating.txt

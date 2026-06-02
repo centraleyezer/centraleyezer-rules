@@ -1,0 +1,36 @@
+id: cisco.asa.cis.2.3.1
+title: "ASA `crypto ca trustpool policy` must be configured"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `crypto ca trustpool policy` must be configured so the ASA
+  uses the curated CA trustpool (with revocation checking and
+  expiry validation) for outbound TLS — not whatever ad-hoc
+  trustpoint set it accumulated over time.
+rationale: |
+  Outbound TLS from the ASA (e.g. for cloud-AAA, syslog over
+  TLS, automatic CRL fetch) trusts the trustpool. Without a
+  policy, no revocation checking is enforced and expired root
+  certificates may still validate.
+impact: |
+  Outbound TLS does not enforce revocation; compromised CAs
+  remain trusted until the trustpool is manually pruned.
+references:
+  cis: "CIS Cisco ASA Benchmark — 2.3.1"
+  nist: ["SC-12", "SC-17"]
+  cwe: [295]
+query:
+  path: "$.hardening.asa_trustpool_policy"
+  equals: true
+on_fail:
+  message: "crypto ca trustpool policy is not configured."
+  remediation_cli: |
+    configure terminal
+     crypto ca trustpool policy
+      auto-import
+      revocation-check crl none
+    end
+    write memory
+fixtures:
+  positive: fixtures/trustpool.compliant.txt
+  negative: fixtures/trustpool.violating.txt

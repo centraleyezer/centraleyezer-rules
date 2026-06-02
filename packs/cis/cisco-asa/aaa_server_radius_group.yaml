@@ -1,0 +1,34 @@
+id: cisco.asa.cis.1.4.4
+title: "ASA `aaa-server <GROUP> protocol radius` must be defined"
+severity: low
+vendors: [cisco-asa]
+description: |
+  At least one `aaa-server <GROUP> protocol radius` stanza
+  must be present so remote-access VPN authentication (which
+  is RADIUS-typical) can bind to a central server group.
+rationale: |
+  AnyConnect / clientless SSL-VPN authentication is typically
+  RADIUS-driven (TACACS+ being more common for command-plane
+  auth). Both groups should exist in a typical hardened
+  deployment.
+impact: |
+  RADIUS-driven VPN auth not available; falls back to local
+  or TACACS+ accounts.
+references:
+  cis: "CIS Cisco ASA Benchmark — 1.4.4"
+  nist: ["AC-3", "IA-2"]
+  cwe: []
+query:
+  path: "$.hardening.asa_aaa_radius"
+  equals: true
+on_fail:
+  message: "No aaa-server RADIUS group is defined."
+  remediation_cli: |
+    configure terminal
+     aaa-server NETZER-RADIUS protocol radius
+     aaa-server NETZER-RADIUS (inside) host 10.0.0.20
+    end
+    write memory
+fixtures:
+  positive: fixtures/aaa_radius.compliant.txt
+  negative: fixtures/aaa_radius.violating.txt

@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant
+security passwords min-length 14
+end

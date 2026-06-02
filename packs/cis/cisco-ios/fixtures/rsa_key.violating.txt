@@ -1,0 +1,6 @@
+version 12.4
+hostname legacy-sw
+!
+crypto key generate rsa modulus 1024
+!
+end

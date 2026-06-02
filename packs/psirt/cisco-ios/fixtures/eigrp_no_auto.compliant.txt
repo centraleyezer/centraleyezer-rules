@@ -1,0 +1,10 @@
+version 17.9
+hostname compliant
+!
+router eigrp 100
+ no auto-summary
+!
+interface GigabitEthernet0/0
+ ip authentication mode eigrp 100 md5
+!
+end

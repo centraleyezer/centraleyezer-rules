@@ -1,0 +1,34 @@
+id: cisco.nxos.cis.6.3.1
+title: "NX-OS `feature scheduler` should be enabled (for automated job-based tasks)"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `feature scheduler` should be enabled so operators can
+  schedule periodic jobs — typically nightly config backups,
+  weekly key rotations, and periodic device-state snapshots.
+rationale: |
+  Without the scheduler, periodic config backup and rotation
+  jobs need an external system to drive them via SSH —
+  adding fragility and a credential-handling surface. The
+  on-box scheduler runs as the configuring user with no
+  external auth.
+impact: |
+  Automated nightly backups / periodic key rotation depend
+  on external automation; harder to enforce uniformly.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 6.3.1"
+  nist: ["CM-3", "CP-9"]
+  cwe: []
+query:
+  path: "$.features[*]"
+  in: ["scheduler"]
+on_fail:
+  message: "feature scheduler is not enabled."
+  remediation_cli: |
+    configure terminal
+     feature scheduler
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/feature_sched.compliant.txt
+  negative: fixtures/feature_sched.violating.txt

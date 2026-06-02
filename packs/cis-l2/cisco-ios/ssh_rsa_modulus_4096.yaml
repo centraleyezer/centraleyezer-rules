@@ -1,0 +1,34 @@
+id: cisco.ios.cis-l2.3.6.15
+title: "L2: SSH RSA modulus must be ≥ 4096"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `crypto key generate rsa modulus <N>` must be ≥ 4096
+  (L1 allows ≥ 2048). NIST 800-57 retains 2048-bit RSA only
+  through 2030; 4096 is the post-2030 floor.
+rationale: |
+  L1 keeps users off the cliff. L2 puts them on the long-term
+  safe side. 4096-bit RSA host keys cost ~10× more handshake
+  CPU but are practically irrelevant for management-plane
+  session rates.
+impact: |
+  Host key has post-2030 deprecation pressure; future-quantum
+  exposure higher.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 3.6.15"
+  nist: ["SC-13", "SC-17"]
+  cwe: [326]
+query:
+  path: "$.hardening.ssh_rsa_key_size"
+  in: [4096, 8192]
+on_fail:
+  message: "SSH RSA modulus is below 4096."
+  remediation_cli: |
+    configure terminal
+     crypto key zeroize rsa
+     crypto key generate rsa modulus 4096
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_rsa.compliant.txt
+  negative: fixtures/l2_rsa.violating.txt

@@ -1,0 +1,37 @@
+id: cisco.ios.cis.7.1.1
+title: "VTP must be in transparent mode OR have a password set"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  VTP must be configured with `vtp mode transparent` OR have a
+  password set (`vtp password ...`). Server / client mode without
+  a password is a documented network-wide outage vector.
+rationale: |
+  Without a password, any newly-inserted switch advertising a
+  higher VTP revision number wipes the entire VTP domain's VLAN
+  database. The "VTP bomb" outage scenario has caused multiple
+  high-profile multi-hour outages.
+impact: |
+  Estate-wide VLAN-database wipe from a single mis-configured /
+  malicious switch on the trunk fabric.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.1.1"
+  nist: ["CM-2", "SC-7"]
+  cwe: [346]
+query:
+  path: "$.vtp.mode"
+  equals: "transparent"
+on_fail:
+  message: "VTP is in server/client mode without a password set."
+  remediation_cli: |
+    configure terminal
+     vtp mode transparent
+     ! OR, if VTP propagation is required:
+     ! vtp domain CORP
+     ! vtp password <strong-random>
+     ! vtp version 3
+    end
+    write memory
+fixtures:
+  positive: fixtures/vtp.compliant.txt
+  negative: fixtures/vtp.violating.txt

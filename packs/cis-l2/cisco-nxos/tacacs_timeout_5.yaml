@@ -1,0 +1,29 @@
+id: cisco.nxos.cis-l2.1.5.7
+title: "L2: NX-OS `tacacs-server timeout` must be ≤ 5"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `tacacs-server timeout <N>` must be ≤ 5 (L1 was ≤ 10).
+  Sibling of the RADIUS-timeout L2 rule.
+rationale: |
+  Same operational rationale as the RADIUS variant — halve
+  the per-attempt login stall during TACACS+ outage.
+impact: |
+  Longer management-plane stalls during TACACS+ outage.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — L2 1.5.7"
+  nist: ["AC-2", "CP-2"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_tacacs_timeout"
+  in: [1, 2, 3, 4, 5]
+on_fail:
+  message: "tacacs-server timeout is not set ≤ 5."
+  remediation_cli: |
+    configure terminal
+     tacacs-server timeout 5
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/l2_tacacs_to.compliant.txt
+  negative: fixtures/l2_tacacs_to.violating.txt

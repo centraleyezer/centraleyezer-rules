@@ -1,0 +1,36 @@
+id: cisco.ios.psirt.no_ssh_3des
+title: "SSH ciphers must NOT include 3des-cbc"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip ssh server algorithm encryption` must NOT include
+  `3des-cbc`. Triple-DES at 64-bit block size is vulnerable
+  to the SWEET32 birthday-bound attack (CVE-2016-2183) on
+  any long-lived SSH session.
+rationale: |
+  SWEET32 demonstrated that 64-bit-block ciphers (3DES, RC4)
+  leak plaintext after roughly 2^32 blocks (~32 GiB) — easily
+  reached on long admin sessions. NIST 800-52r2 and IETF
+  RFC 8429 retire 3DES; OpenSSH dropped it from defaults in
+  v7.6.
+impact: |
+  Long-running SSH session plaintext recoverable via
+  SWEET32-class attacks.
+references:
+  cis: ""
+  nist: ["SC-13"]
+  cwe: [327]
+query:
+  path: "$.crypto.ssh_ciphers[*]"
+  in: ["3des-cbc"]
+  not: true
+on_fail:
+  message: "SSH ciphers include 3des-cbc."
+  remediation_cli: |
+    configure terminal
+     ip ssh server algorithm encryption aes256-ctr aes256-gcm@openssh.com aes128-ctr
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_3des.compliant.txt
+  negative: fixtures/no_3des.violating.txt

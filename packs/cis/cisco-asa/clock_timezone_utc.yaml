@@ -1,0 +1,31 @@
+id: cisco.asa.cis.4.2.1
+title: "ASA clock timezone must be UTC"
+severity: low
+vendors: [cisco-asa]
+description: |
+  `clock timezone UTC 0 0` must be configured. All ASA timestamps
+  in syslog / debug / capture output must be UTC.
+rationale: |
+  Cross-vendor / cross-region forensics fall apart when each
+  device labels events in its local timezone. UTC is the
+  universal reference.
+impact: |
+  Mis-correlated incidents across the firewall fleet; manual
+  timezone arithmetic in every investigation.
+references:
+  cis: "CIS Cisco ASA Benchmark — 4.2.1"
+  nist: ["AU-8"]
+  cwe: []
+query:
+  path: "$.hardening.clock_timezone"
+  equals: "UTC"
+on_fail:
+  message: "ASA clock timezone is not UTC."
+  remediation_cli: |
+    configure terminal
+     clock timezone UTC 0 0
+    end
+    write memory
+fixtures:
+  positive: fixtures/clock.compliant.txt
+  negative: fixtures/clock.violating.txt

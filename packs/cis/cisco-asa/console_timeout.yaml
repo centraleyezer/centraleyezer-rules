@@ -1,0 +1,30 @@
+id: cisco.asa.cis.1.4.5
+title: "ASA console timeout must be set"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `console timeout N` (N > 0, recommended 5) must be configured
+  so an idle console session is closed after N minutes.
+rationale: |
+  An abandoned console session in a rack inherits the privileges
+  of whoever opened it. The default value (0 = never) is
+  unacceptable in any shared rack.
+impact: |
+  Indefinite hijack of abandoned privileged ASA console session.
+references:
+  cis: "CIS Cisco ASA Benchmark — 1.4.1"
+  nist: ["AC-11", "AC-12"]
+  cwe: [613]
+query:
+  path: "$.hardening.console_timeout"
+  in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "console timeout is not set (or set to 0)."
+  remediation_cli: |
+    configure terminal
+     console timeout 5
+    end
+    write memory
+fixtures:
+  positive: fixtures/console_timeout.compliant.txt
+  negative: fixtures/console_timeout.violating.txt

@@ -1,0 +1,36 @@
+id: cisco.nxos.cis.1.6.4
+title: "NX-OS `nxapi sandbox` must be disabled"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `no nxapi sandbox` must be configured so the NXAPI sandbox
+  web UI (interactive command builder) is not reachable. The
+  sandbox is a development convenience that exposes the live
+  NXAPI command surface through a browser interface.
+rationale: |
+  The NXAPI sandbox lets anyone who can reach the management
+  HTTPS port poke at the device's NXAPI surface from a
+  browser without writing any client code — lowering the bar
+  for both legitimate ops and unauthorized exploration. Prod
+  devices should run sandbox off.
+impact: |
+  NXAPI sandbox web UI reachable from any host on the
+  management VRF; reduces attacker workload for NXAPI
+  reconnaissance.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.6.4"
+  nist: ["CM-7", "AC-17"]
+  cwe: [284]
+query:
+  path: "$.hardening.nxos_nxapi_sandbox_off"
+  equals: true
+on_fail:
+  message: "nxapi sandbox is not explicitly disabled."
+  remediation_cli: |
+    configure terminal
+     no nxapi sandbox
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/nxapi_sandbox.compliant.txt
+  negative: fixtures/nxapi_sandbox.violating.txt

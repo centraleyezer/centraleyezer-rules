@@ -1,0 +1,30 @@
+id: cisco.asa.cis-l2.1.3.4
+title: "L2: ASA `aaa proxy-limit` must be ≤ 3"
+severity: low
+vendors: [cisco-asa]
+description: |
+  `aaa proxy-limit <N>` must be ≤ 3 (L1 was ≤ 5). Tighter
+  cap on cut-through-proxy authentication state.
+rationale: |
+  Cut-through-proxy state-table flood resistance benefits
+  from the smaller cap; legitimate users rarely need more
+  than 3 concurrent authenticated flows.
+impact: |
+  Larger surface for auth-proxy state-table flood DoS.
+references:
+  cis: "CIS Cisco ASA Benchmark — L2 1.3.4"
+  nist: ["SC-5"]
+  cwe: [400]
+query:
+  path: "$.hardening.asa_proxy_limit"
+  in: [1, 2, 3]
+on_fail:
+  message: "aaa proxy-limit is not ≤ 3."
+  remediation_cli: |
+    configure terminal
+     aaa proxy-limit 3
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_proxy3.compliant.txt
+  negative: fixtures/l2_proxy3.violating.txt

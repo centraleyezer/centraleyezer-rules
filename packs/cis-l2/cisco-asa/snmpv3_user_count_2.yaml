@@ -1,0 +1,32 @@
+id: cisco.asa.cis-l2.4.3.3
+title: "L2: ASA must have ≥ 2 SNMPv3 users"
+severity: low
+vendors: [cisco-asa]
+description: |
+  At least 2 `snmp-server user ... v3` entries must be
+  defined (L1 was ≥ 1). Supports rotation without
+  monitoring outage. Sibling of the IOS L2 rule.
+rationale: |
+  Same key-rotation argument as the IOS L2 SNMPv3 rule.
+impact: |
+  Monitoring credential rotation requires a brief NMS
+  outage.
+references:
+  cis: "CIS Cisco ASA Benchmark — L2 4.3.3"
+  nist: ["IA-5", "AC-3"]
+  cwe: []
+query:
+  path: "$.hardening.asa_snmpv3_user_count"
+  in: [2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "Fewer than 2 SNMPv3 users defined on the ASA."
+  remediation_cli: |
+    configure terminal
+     snmp-server group MON v3 priv
+     snmp-server user mon-a MON v3 auth sha <A1> priv aes 256 <P1>
+     snmp-server user mon-b MON v3 auth sha <A2> priv aes 256 <P2>
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_asa_snmpv3_2.compliant.txt
+  negative: fixtures/l2_asa_snmpv3_2.violating.txt

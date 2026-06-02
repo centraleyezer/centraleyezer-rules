@@ -1,0 +1,4 @@
+version 12.4
+hostname legacy
+boot host tftp://10.0.0.50/configs/${HOSTNAME}-confg
+end

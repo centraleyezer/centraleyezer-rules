@@ -1,0 +1,37 @@
+id: cisco.ios.cis.7.4.6
+title: "Every access port must have storm-control configured"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Every access port must have at least one `storm-control`
+  threshold (broadcast / multicast / unicast) configured so a
+  malfunctioning or malicious endpoint can't broadcast-storm the
+  segment.
+rationale: |
+  A single chatty or malicious endpoint emitting broadcast at
+  line rate can saturate the access segment + degrade upstream.
+  Storm-control caps the rate and (optionally) err-disables the
+  port on violation.
+impact: |
+  Segment-wide DoS from one endpoint; cascade to upstream when
+  the access VLAN spans multiple switches.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.4.6"
+  nist: ["SC-5"]
+  cwe: [400]
+query:
+  path: "$.hardening.all_access_ports_storm_control"
+  equals: true
+on_fail:
+  message: "At least one access port lacks a storm-control threshold."
+  remediation_cli: |
+    configure terminal
+     interface range GigabitEthernet1/0/1 - 48
+      storm-control broadcast level 5.00
+      storm-control multicast level 10.00
+      storm-control action shutdown
+    end
+    write memory
+fixtures:
+  positive: fixtures/storm.compliant.txt
+  negative: fixtures/storm.violating.txt

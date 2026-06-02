@@ -1,0 +1,35 @@
+id: cisco.asa.cis.1.1.2
+title: "At least 2 local user accounts must exist (break-glass redundancy)"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  At least 2 local `username` accounts must be defined so
+  the ASA retains a working break-glass credential when one
+  local account's password is forgotten or compromised mid-
+  incident. Sibling of cisco.ios.cis.1.1.10.
+rationale: |
+  Single-account devices have a single point of failure for
+  emergency access. The hardening standard is two distinct
+  accounts (primary admin + emergency) stored in separate
+  password vaults.
+impact: |
+  Single point of failure for break-glass access during AAA
+  outage.
+references:
+  cis: "CIS Cisco ASA Benchmark — 1.1.1"
+  nist: ["AC-2", "CP-2"]
+  cwe: []
+query:
+  path: "$.hardening.asa_user_count"
+  in: [2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "Fewer than 2 local user accounts are defined."
+  remediation_cli: |
+    configure terminal
+     username netzer-primary password <X> privilege 15 pbkdf2
+     username netzer-breakglass password <Y> privilege 15 pbkdf2
+    end
+    write memory
+fixtures:
+  positive: fixtures/users2.compliant.txt
+  negative: fixtures/users2.violating.txt

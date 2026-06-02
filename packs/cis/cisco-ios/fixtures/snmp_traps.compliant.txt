@@ -1,0 +1,5 @@
+version 17.9
+hostname compliant
+snmp-server enable traps config
+snmp-server enable traps snmp authentication linkdown linkup
+end

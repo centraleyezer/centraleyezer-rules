@@ -1,0 +1,33 @@
+id: cisco.ios.cis.2.2.12
+title: "Enable Cisco Express Forwarding (`ip cef`)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip cef` (or `ip cef distributed` on multi-card platforms) must
+  be enabled. CEF is a prerequisite for several CIS hardening
+  features (uRPF, NetFlow, and certain QoS policies) and removes
+  process-switching from the data path.
+rationale: |
+  Without CEF, packets are process-switched — which exposes the
+  CPU to data-plane DoS and disables hardware-accelerated
+  features like uRPF that close source-spoofing gaps.
+impact: |
+  uRPF / source-validation features silently inoperative;
+  control-plane CPU consumed by transit packets under load.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.12"
+  nist: ["SC-5"]
+  cwe: []
+query:
+  path: "$.hardening.ip_cef"
+  equals: true
+on_fail:
+  message: "ip cef is not enabled."
+  remediation_cli: |
+    configure terminal
+     ip cef
+    end
+    write memory
+fixtures:
+  positive: fixtures/ipcef.compliant.txt
+  negative: fixtures/ipcef.violating.txt

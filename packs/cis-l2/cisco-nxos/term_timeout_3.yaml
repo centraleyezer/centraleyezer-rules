@@ -1,0 +1,31 @@
+id: cisco.nxos.cis-l2.1.7.3
+title: "L2: NX-OS `terminal session-timeout` must be ≤ 3 minutes"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `terminal session-timeout <N>` must be ≤ 3 (L2-round-1 was
+  ≤ 5, L1 was ≤ 15). Aggressively short auto-close.
+rationale: |
+  3 minutes matches the strictest workstation lock policies.
+  Walking away during a privileged session leaves the
+  smallest possible exposure window.
+impact: |
+  Longer abandoned-session exposure to physical-access
+  takeover.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — L2 1.7.3"
+  nist: ["AC-11", "AC-12"]
+  cwe: [613]
+query:
+  path: "$.hardening.nxos_term_session_timeout"
+  in: [1, 2, 3]
+on_fail:
+  message: "terminal session-timeout is not ≤ 3 minutes."
+  remediation_cli: |
+    configure terminal
+     terminal session-timeout 3
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/l2_term3.compliant.txt
+  negative: fixtures/l2_term3.violating.txt

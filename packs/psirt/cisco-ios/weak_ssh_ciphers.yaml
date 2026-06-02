@@ -1,0 +1,43 @@
+id: cisco.ios.psirt.weak_ssh_ciphers
+title: "Refuse weak SSH cipher suites (Cisco hardening guide)"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  When `ip ssh server algorithm encryption` is explicitly
+  configured, it must not list weak ciphers (3des-cbc, aes*-cbc,
+  arcfour, blowfish-cbc). Only modern AEAD modes (aes*-ctr,
+  aes*-gcm, chacha20-poly1305@openssh.com) are acceptable.
+rationale: |
+  CBC-mode SSH ciphers are vulnerable to the SSH plaintext-recovery
+  attack (CVE-2008-5161 era, still surfaced by Qualys / Nessus on
+  current scans). Cisco's hardening guide explicitly recommends
+  CTR / GCM modes.
+impact: |
+  Plaintext recovery from captured SSH traffic; long-term passive
+  decryption of management sessions.
+references:
+  cis: ""
+  nist: ["SC-13"]
+  cwe: [327]
+# Fire when ANY configured cipher matches the deny-list. The DSL's
+# `in` semantics return "any value in list" — so listing the
+# forbidden ciphers (rather than allow-listing the modern ones) is
+# the right shape for this check.
+query:
+  path: "$.crypto.ssh_ciphers[*]"
+  in: ["3des-cbc", "aes128-cbc", "aes192-cbc", "aes256-cbc",
+       "arcfour", "arcfour128", "arcfour256",
+       "blowfish-cbc", "cast128-cbc"]
+  # `in` matches "any cipher is in the deny-list"; the rule must
+  # fire when that's true, so we invert with `not`.
+  not: true
+on_fail:
+  message: "Weak SSH cipher present on the server."
+  remediation_cli: |
+    configure terminal
+     ip ssh server algorithm encryption aes256-ctr aes192-ctr aes128-ctr aes256-gcm aes128-gcm
+    end
+    write memory
+fixtures:
+  positive: fixtures/weak_ciphers.compliant.txt
+  negative: fixtures/weak_ciphers.violating.txt

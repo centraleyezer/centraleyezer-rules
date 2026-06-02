@@ -1,0 +1,32 @@
+id: cisco.ios.cis.2.1.8
+title: "SSH DH min size must be at least 2048 bits"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip ssh dh min size 2048` (or larger) must be configured. The
+  default of 1024 is below current cryptographic strength
+  thresholds.
+rationale: |
+  DH groups < 2048 bits are vulnerable to nation-state-scale
+  precomputation (Logjam). NIST 800-57 deprecated 1024-bit DH
+  for any use after 2030.
+impact: |
+  Session keys recoverable from captured SSH traffic via
+  precomputed DH group attacks.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.1.8"
+  nist: ["SC-13"]
+  cwe: [326]
+query:
+  path: "$.crypto.ssh_dh_min_size"
+  in: [2048, 3072, 4096, 8192]
+on_fail:
+  message: "ip ssh dh min size is not set to ≥ 2048."
+  remediation_cli: |
+    configure terminal
+     ip ssh dh min size 2048
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssh_dh.compliant.txt
+  negative: fixtures/ssh_dh.violating.txt

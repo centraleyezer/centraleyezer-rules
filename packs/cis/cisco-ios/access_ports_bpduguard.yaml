@@ -1,0 +1,32 @@
+id: cisco.ios.cis.7.4.2
+title: "Every access port must have BPDU Guard enabled"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Every `switchport mode access` interface must have
+  `spanning-tree bpduguard enable` configured (in addition to the
+  global `bpduguard default` for portfast ports).
+rationale: |
+  Per-interface BPDU Guard hardens the root-bridge takeover
+  attack: a switch plugged into an access port is immediately
+  err-disabled, regardless of portfast state.
+impact: |
+  Root bridge takeover via rogue switch on access VLAN.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.4.2"
+  nist: ["SC-7"]
+  cwe: [346]
+query:
+  path: "$.hardening.all_access_ports_bpdu_guard"
+  equals: true
+on_fail:
+  message: "At least one access port lacks spanning-tree bpduguard."
+  remediation_cli: |
+    configure terminal
+     interface range GigabitEthernet1/0/1 - 48
+      spanning-tree bpduguard enable
+    end
+    write memory
+fixtures:
+  positive: fixtures/access_bpdu.compliant.txt
+  negative: fixtures/access_bpdu.violating.txt

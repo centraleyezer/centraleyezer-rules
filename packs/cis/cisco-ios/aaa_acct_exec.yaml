@@ -1,0 +1,32 @@
+id: cisco.ios.cis.1.2.7
+title: "aaa accounting exec default must be configured"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `aaa accounting exec default start-stop group <X>` must be
+  configured so every interactive EXEC session is logged to
+  TACACS+/RADIUS at start and stop.
+rationale: |
+  EXEC accounting answers "who logged in, from where, when, for
+  how long" — the second-most-asked question after "who ran
+  what command". Without it, login/logout activity is invisible
+  off-box.
+impact: |
+  No central audit of operator login/logout activity.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.2.7"
+  nist: ["AU-2", "AU-3"]
+  cwe: []
+query:
+  path: "$.aaa.acct_exec"
+  equals: true
+on_fail:
+  message: "aaa accounting exec default is not configured."
+  remediation_cli: |
+    configure terminal
+     aaa accounting exec default start-stop group tacacs+
+    end
+    write memory
+fixtures:
+  positive: fixtures/acct_exec.compliant.txt
+  negative: fixtures/acct_exec.violating.txt

@@ -1,0 +1,34 @@
+id: cisco.ios.psirt.no_mdns_gateway
+title: "Disable mDNS gateway unless explicitly required (cisco-sa-20180530-mdns)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  The Cisco mDNS gateway service must be disabled on devices that
+  don't actively bridge mDNS traffic between segments. The
+  service was the subject of cisco-sa-20180530-mdns and several
+  follow-on PSIRT advisories.
+rationale: |
+  mDNS service-discovery responses are routinely abused for
+  reflection amplification (5–10x amplification factor).
+  Cisco's mDNS gateway implementation has had multiple parsing
+  CVEs requiring image upgrades.
+impact: |
+  Amplification vector exposure; parsing-CVE exposure during
+  the patch window after each advisory.
+references:
+  cis: ""
+  nist: ["CM-7", "SC-5"]
+  cwe: [400]
+query:
+  path: "$.hardening.mdns_gateway"
+  equals: false
+on_fail:
+  message: "mdns-sd gateway is enabled."
+  remediation_cli: |
+    configure terminal
+     no mdns-sd gateway
+    end
+    write memory
+fixtures:
+  positive: fixtures/mdns.compliant.txt
+  negative: fixtures/mdns.violating.txt

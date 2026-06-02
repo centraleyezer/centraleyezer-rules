@@ -1,0 +1,33 @@
+id: cisco.ios.cis.10.1.2
+title: "Configure IPv6 DHCP Guard"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ipv6 dhcp guard policy X` must be configured to filter DHCPv6
+  server messages on access ports.
+rationale: |
+  IPv6 equivalent of DHCP snooping: any host can answer DHCPv6
+  requests and hand out attacker-controlled DNS / default-route
+  options if DHCP Guard isn't bound on access VLANs.
+impact: |
+  IPv6 default-gateway / DNS hijack on access segments.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 10.1.2"
+  nist: ["SC-7", "AC-4"]
+  cwe: [346]
+query:
+  path: "$.hardening.ipv6_dhcp_guard"
+  equals: true
+on_fail:
+  message: "IPv6 DHCP Guard policy is not configured."
+  remediation_cli: |
+    configure terminal
+     ipv6 dhcp guard policy ACCESS-DHCPGUARD
+      device-role client
+     vlan configuration 10
+      ipv6 dhcp guard attach-policy ACCESS-DHCPGUARD
+    end
+    write memory
+fixtures:
+  positive: fixtures/dhcpguard.compliant.txt
+  negative: fixtures/dhcpguard.violating.txt

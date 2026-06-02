@@ -1,0 +1,33 @@
+id: cisco.asa.cis.2.2.2
+title: "ASA SSL/TLS cipher level must be `high` or `fips`"
+severity: high
+vendors: [cisco-asa]
+description: |
+  `ssl cipher tlsv1.2 high` (or `fips`) must be configured. The
+  default `medium` includes 3DES and aes128-cbc which are below
+  current cryptographic thresholds.
+rationale: |
+  PCI DSS 4.0, FIPS 140-3, NIST 800-52r2 all require modern
+  TLS cipher suites. The `medium` cipher level on ASA accepts
+  weak ciphers that are auto-failures on any compliance scan.
+impact: |
+  Compliance findings (PCI, FedRAMP); ASDM / AnyConnect
+  sessions vulnerable to known TLS attacks.
+references:
+  cis: "CIS Cisco ASA Benchmark — 2.2.2"
+  nist: ["SC-13"]
+  cwe: [327]
+query:
+  path: "$.hardening.asa_ssl_cipher"
+  in: ["high", "fips"]
+on_fail:
+  message: "ASA ssl cipher level is not `high` or `fips`."
+  remediation_cli: |
+    configure terminal
+     ssl cipher tlsv1.2 high
+     ssl cipher dtlsv1.2 high
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssl_cipher.compliant.txt
+  negative: fixtures/ssl_cipher.violating.txt

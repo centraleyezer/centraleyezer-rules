@@ -1,0 +1,29 @@
+id: cisco.ios.cis-l2.4.4.1
+title: "IGMP snooping enabled on the switch"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Without IGMP snooping the switch floods every multicast group to every port in a VLAN, generating gratuitous load and leaking subscription information.
+rationale: |
+  Default-on; an explicit `no ip igmp snooping` line is the violating case.
+impact: |
+  Loss of one defence-in-depth layer for the LAN switching plane; combines
+  with other gaps to amplify lateral-movement risk.
+references:
+  cis: "CIS Cisco IOS Switch L2 Hardening — 4.4.1"
+  nist:
+    - "CM-7"
+query:
+  path: "$.hardening.igmp_snooping_enabled"
+  equals: true
+on_fail:
+  message: "IGMP snooping enabled on the switch: switch missing the L2 hardening control."
+  remediation_cli: |
+    configure terminal
+     ! See CIS Cisco IOS L2 Benchmark for the canonical CLI; the
+     ! corresponding STIG L2S rule lists the exact knob.
+    end
+    write memory
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/igmp_snoop.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/igmp_snoop.violating.txt

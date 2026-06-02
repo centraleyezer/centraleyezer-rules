@@ -1,0 +1,37 @@
+id: cisco.ios.cis.5.3.1
+title: "Enable archive log config for command auditing"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  The `archive` / `log config` stanza must be configured so every
+  config change is recorded and (optionally) shipped via syslog
+  with `notify syslog contenttype plaintext`.
+rationale: |
+  Without `archive log config`, the device offers no first-class
+  record of *which command* was entered by *which user*, only
+  the resulting running-config diff after the fact.
+impact: |
+  Lost attribution: forensics can see what changed but not who or
+  how (e.g. command typo vs deliberate edit).
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 5.3.1"
+  nist: ["AU-2", "AU-12", "CM-3"]
+  cwe: [778]
+query:
+  path: "$.hardening.archive_log_config"
+  equals: true
+on_fail:
+  message: "archive log config is not enabled."
+  remediation_cli: |
+    configure terminal
+     archive
+      log config
+       logging enable
+       logging size 200
+       notify syslog contenttype plaintext
+       hidekeys
+    end
+    write memory
+fixtures:
+  positive: fixtures/archive.compliant.txt
+  negative: fixtures/archive.violating.txt

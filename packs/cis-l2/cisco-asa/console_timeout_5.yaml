@@ -1,0 +1,31 @@
+id: cisco.asa.cis-l2.1.6.1
+title: "L2: ASA `console timeout` must be ≤ 5 minutes"
+severity: low
+vendors: [cisco-asa]
+description: |
+  `console timeout <N>` must be ≤ 5 (L1 was ≤ 15). Faster
+  auto-close on the physical console.
+rationale: |
+  Walking-away exposure on the console (physical-access
+  takeover) cut from 15 to 5 minutes. Workstation lock
+  policies typically run at 5 minutes; this matches.
+impact: |
+  Longer abandoned-console exposure on physical-access
+  takeover.
+references:
+  cis: "CIS Cisco ASA Benchmark — L2 1.6.1"
+  nist: ["AC-11", "AC-12"]
+  cwe: [613]
+query:
+  path: "$.hardening.console_timeout"
+  in: [1, 2, 3, 4, 5]
+on_fail:
+  message: "console timeout is not ≤ 5 minutes."
+  remediation_cli: |
+    configure terminal
+     console timeout 5
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_console_to.compliant.txt
+  negative: fixtures/l2_console_to.violating.txt

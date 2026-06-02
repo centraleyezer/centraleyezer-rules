@@ -1,0 +1,33 @@
+id: cisco.ios.cis.3.3.4
+title: "No SNMP read-write communities"
+severity: critical
+vendors: [cisco-ios, cisco-ios-xe, cisco-nx-os, cisco-asa]
+description: |
+  No SNMP community may grant read-write access. RW communities
+  permit remote re-configuration without authentication.
+rationale: |
+  An attacker with an RW community string can change ACLs, push
+  configuration, and disable logging — full device compromise
+  with a single guessable / leaked string.
+impact: |
+  Unauthenticated remote configuration push and full device
+  takeover.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.3.4"
+  nist: ["AC-3", "AC-6"]
+  cwe: [284, 521]
+query:
+  path: "$.snmp.communities[*].ro"
+  equals: false
+  not: true
+on_fail:
+  message: "At least one SNMP community is configured RW."
+  remediation_cli: |
+    configure terminal
+     no snmp-server community <NAME> RW
+     snmp-server community <NAME> RO 99
+    end
+    write memory
+fixtures:
+  positive: fixtures/snmp_rw.compliant.txt
+  negative: fixtures/snmp_rw.violating.txt

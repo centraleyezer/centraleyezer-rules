@@ -1,0 +1,34 @@
+id: cisco.asa.cis.5.3.1
+title: "ASA must not enable legacy `anyconnect-essentials`"
+severity: low
+vendors: [cisco-asa]
+description: |
+  `anyconnect-essentials` must NOT be configured. This was the
+  cheaper, legacy AnyConnect licensing tier that disabled
+  advanced posture / endpoint-integrity features. It is
+  deprecated and end-of-software on current ASA images.
+rationale: |
+  Running on the legacy tier means endpoint posture checks
+  (HostScan, ISE compliance) are not enforced — clients can
+  connect without endpoint-side controls. Migrate to the
+  modern Plus/Apex licensing model.
+impact: |
+  No endpoint posture / compliance enforcement on incoming VPN
+  clients.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.3.1"
+  nist: ["AC-19", "IA-3"]
+  cwe: []
+query:
+  path: "$.hardening.asa_anyconnect_essentials"
+  equals: false
+on_fail:
+  message: "anyconnect-essentials (legacy) is configured."
+  remediation_cli: |
+    configure terminal
+     no anyconnect-essentials
+    end
+    write memory
+fixtures:
+  positive: fixtures/anyconnect_ess.compliant.txt
+  negative: fixtures/anyconnect_ess.violating.txt

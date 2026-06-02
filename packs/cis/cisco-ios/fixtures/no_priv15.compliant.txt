@@ -1,0 +1,6 @@
+version 17.9
+hostname compliant
+username netadmin privilege 1 secret 9 $9$abc
+username noc-user privilege 1 secret 9 $9$xyz
+enable algorithm-type scrypt secret $9$pqr
+end

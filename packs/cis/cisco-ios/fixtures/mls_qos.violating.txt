@@ -1,0 +1,8 @@
+!
+! No `mls qos` — bandwidth management not configured.
+!
+hostname sw-l2-mlsqos-violating
+!
+spanning-tree mode rapid-pvst
+!
+end

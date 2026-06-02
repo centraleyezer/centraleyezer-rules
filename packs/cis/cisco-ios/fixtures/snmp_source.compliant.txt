@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant
+snmp-server source-interface traps Loopback0
+end

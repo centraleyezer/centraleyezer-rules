@@ -1,0 +1,33 @@
+id: cisco.nxos.cis.3.6.2
+title: "NX-OS `ssh login-grace-time` must be bounded (≤ 60s)"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `ssh login-grace-time <N>` must be configured with N ≤ 60.
+  This limits how long an SSH session can sit at the
+  authentication prompt without completing — the longer it is,
+  the more sessions an attacker can tie up.
+rationale: |
+  NX-OS default `login-grace-time` is 120s. Reducing it to
+  ≤ 60 cuts the window an unauthenticated socket can occupy a
+  daemon worker — a small-but-non-zero SSH-flood mitigation.
+impact: |
+  Longer unauthenticated-SSH-socket lifetime; easier to
+  exhaust SSH daemon workers.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 3.6.2"
+  nist: ["SC-5", "AC-17"]
+  cwe: [400]
+query:
+  path: "$.hardening.nxos_ssh_login_grace_time"
+  in: [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
+on_fail:
+  message: "ssh login-grace-time is not set ≤ 60 seconds."
+  remediation_cli: |
+    configure terminal
+     ssh login-grace-time 60
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/ssh_grace.compliant.txt
+  negative: fixtures/ssh_grace.violating.txt

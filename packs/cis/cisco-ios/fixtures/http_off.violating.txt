@@ -1,0 +1,7 @@
+version 15.2
+hostname legacy-sw
+!
+ip http server
+ip http secure-server
+!
+end

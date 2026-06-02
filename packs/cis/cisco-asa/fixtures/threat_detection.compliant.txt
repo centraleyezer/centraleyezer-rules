@@ -1,0 +1,5 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-clean
+threat-detection basic-threat
+threat-detection scanning-threat

@@ -1,0 +1,33 @@
+id: cisco.ios.cis.1.1.12
+title: "`service hide-keys` must be enabled"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `service hide-keys` must be configured so `show running-
+  config` and `more system:running-config` redact pre-shared
+  keys and other crypto material in the output.
+rationale: |
+  Operator screen-share / over-the-shoulder is a real
+  exfiltration vector. With `service hide-keys` on, an operator
+  can paste `show run` into a ticket without revealing IKE
+  PSKs, OSPF/EIGRP keychains, or TACACS+ secrets.
+impact: |
+  Operator-initiated show-run captures leak embedded
+  cryptographic material.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.1.12"
+  nist: ["AC-3", "AU-9", "SC-28"]
+  cwe: [200]
+query:
+  path: "$.hardening.service_hide_keys"
+  equals: true
+on_fail:
+  message: "service hide-keys is not enabled."
+  remediation_cli: |
+    configure terminal
+     service hide-keys
+    end
+    write memory
+fixtures:
+  positive: fixtures/hide_keys.compliant.txt
+  negative: fixtures/hide_keys.violating.txt

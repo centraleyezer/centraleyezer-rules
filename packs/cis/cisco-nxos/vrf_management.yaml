@@ -1,0 +1,32 @@
+id: cisco.nxos.cis.7.1.2
+title: "NX-OS VRF management context must be configured"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `vrf context management` must be present so management
+  traffic (SSH, SNMP, NTP, AAA) is in a separate routing /
+  forwarding context from the data plane.
+rationale: |
+  Management-plane in a dedicated VRF can't leak into / out of
+  the data plane via mis-installed routes. The dedicated mgmt0
+  interface + `vrf context management` is the NX-OS standard.
+impact: |
+  Management traffic and data traffic share routing context;
+  data-plane reachability changes can disrupt management.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.1.2"
+  nist: ["AC-4", "SC-7"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_vrf_management"
+  equals: true
+on_fail:
+  message: "vrf context management is not configured."
+  remediation_cli: |
+    configure terminal
+     vrf context management
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/vrf_mgmt.compliant.txt
+  negative: fixtures/vrf_mgmt.violating.txt

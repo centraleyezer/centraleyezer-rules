@@ -1,0 +1,35 @@
+id: cisco.asa.cis.5.1.11
+title: "ASA IPsec SA `pmtu-aging` must NOT be infinite"
+severity: low
+vendors: [cisco-asa]
+description: |
+  `crypto ipsec security-association pmtu-aging infinite`
+  must NOT be configured. With `infinite`, the discovered
+  Path-MTU is never re-validated — masking real PMTU changes
+  on the underlying transport.
+rationale: |
+  PMTU-aging set to infinite is an operational footgun: when
+  a transport-side PMTU shrinks (carrier change, MPLS-MTU
+  change), the IPsec tunnel keeps using the stale value and
+  fragments inside the tunnel start being dropped. Defaulting
+  to a finite aging keeps PMTU honest.
+impact: |
+  Tunnel fragments dropped after transport-PMTU change;
+  intermittent application failures inside the VPN.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.1.11"
+  nist: ["SC-5"]
+  cwe: []
+query:
+  path: "$.hardening.asa_ipsec_pmtu_aging_infinite"
+  equals: false
+on_fail:
+  message: "crypto ipsec SA pmtu-aging is set to infinite."
+  remediation_cli: |
+    configure terminal
+     no crypto ipsec security-association pmtu-aging infinite
+    end
+    write memory
+fixtures:
+  positive: fixtures/pmtu_aging.compliant.txt
+  negative: fixtures/pmtu_aging.violating.txt

@@ -1,0 +1,32 @@
+id: cisco.nxos.cis.2.2.1
+title: "Disable feature tftp-server on NX-OS"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `no feature tftp-server` must be in effect. TFTP transfers
+  config / images in cleartext with no authentication.
+rationale: |
+  TFTP server on a switch is rarely needed in production. When
+  enabled, attackers who can reach UDP/69 can read arbitrary
+  files the switch exposes.
+impact: |
+  Cleartext file disclosure; potential config exfil via
+  predictable file names.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 2.2.1"
+  nist: ["CM-7", "SC-8"]
+  cwe: [319]
+query:
+  path: "$.features[*]"
+  in: ["tftp-server"]
+  not: true
+on_fail:
+  message: "feature tftp-server is enabled."
+  remediation_cli: |
+    configure terminal
+     no feature tftp-server
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/no_tftp.compliant.txt
+  negative: fixtures/no_tftp.violating.txt

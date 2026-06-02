@@ -1,0 +1,31 @@
+id: cisco.asa.cis-l2.2.2.5
+title: "L2: ASA `ssl cipher` must be `high` or `fips`"
+severity: high
+vendors: [cisco-asa]
+description: |
+  `ssl cipher tlsv1.2 high` (or `fips`) must be configured.
+  L1 accepted `medium`; L2 requires `high`/`fips`, which
+  excludes RC4, 3DES, MD5-MAC, and other deprecated suites.
+rationale: |
+  ASA's `medium` cipher class still includes RC4 and 3DES for
+  legacy compat. `high` drops both; `fips` further locks to
+  FIPS-approved suites.
+impact: |
+  Deprecated cipher suites acceptable on the SSL listener.
+references:
+  cis: "CIS Cisco ASA Benchmark — L2 2.2.5"
+  nist: ["SC-13"]
+  cwe: [327]
+query:
+  path: "$.hardening.asa_ssl_cipher"
+  in: ["high", "fips"]
+on_fail:
+  message: "ASA ssl cipher is not `high` or `fips`."
+  remediation_cli: |
+    configure terminal
+     ssl cipher tlsv1.2 high
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_ssl_cipher.compliant.txt
+  negative: fixtures/l2_ssl_cipher.violating.txt

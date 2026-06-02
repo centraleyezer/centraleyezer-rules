@@ -1,0 +1,11 @@
+version 17.9
+hostname compliant
+!
+router eigrp 100
+ network 10.0.0.0
+!
+interface GigabitEthernet0/0
+ ip authentication mode eigrp 100 md5
+ ip authentication key-chain eigrp 100 EIGRP-KEYS
+!
+end

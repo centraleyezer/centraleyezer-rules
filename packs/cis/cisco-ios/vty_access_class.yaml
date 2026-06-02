@@ -1,0 +1,35 @@
+id: cisco.ios.cis.2.1.3
+title: "Bind a management ACL to VTY lines"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Every VTY line must reference an ACL via `access-class X in` that
+  restricts which source addresses may attempt to authenticate.
+rationale: |
+  Without an ACL bound to the VTY, the management plane is
+  reachable from any host that can route to the device — including
+  Internet-exposed corporate environments where SSH is exposed by
+  oversight.
+impact: |
+  Brute-force surface exposed to anywhere the device is routable.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.1.3"
+  nist: ["AC-3", "AC-17", "SC-7"]
+  cwe: [284]
+query:
+  path: "$.vty_lines[*].access_class"
+  matches: "."
+on_fail:
+  message: "No access-class ACL is bound to the VTY lines."
+  remediation_cli: |
+    ip access-list standard MGMT_IN
+     permit 10.0.0.0 0.0.0.255
+     deny any log
+    !
+    line vty 0 15
+     access-class MGMT_IN in
+    end
+    write memory
+fixtures:
+  positive: fixtures/vty_access_class.compliant.txt
+  negative: fixtures/vty_access_class.violating.txt

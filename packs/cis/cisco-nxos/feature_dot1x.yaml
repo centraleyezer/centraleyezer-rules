@@ -1,0 +1,33 @@
+id: cisco.nxos.cis.7.4.2
+title: "NX-OS `feature dot1x` must be enabled"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `feature dot1x` must be enabled — it's the precondition for
+  the `dot1x system-auth-control` global switch and any
+  per-port 802.1X stanza. Without it, NX-OS rejects every
+  dot1x-related command.
+rationale: |
+  802.1X port-level authentication can't be configured until
+  the feature is enabled. This rule is the upstream gate for
+  the 7.4.1 system-auth-control rule.
+impact: |
+  Per-port 802.1X cannot be configured; access-port network
+  admission control unavailable.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.4.2"
+  nist: ["AC-3", "IA-3"]
+  cwe: []
+query:
+  path: "$.features[*]"
+  in: ["dot1x"]
+on_fail:
+  message: "feature dot1x is not enabled."
+  remediation_cli: |
+    configure terminal
+     feature dot1x
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/feature_dot1x.compliant.txt
+  negative: fixtures/feature_dot1x.violating.txt

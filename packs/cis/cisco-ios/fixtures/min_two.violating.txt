@@ -1,0 +1,4 @@
+version 15.2
+hostname legacy
+username solo privilege 1 secret 9 $9$abc
+end

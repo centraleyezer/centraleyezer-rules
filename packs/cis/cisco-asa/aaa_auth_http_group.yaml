@@ -1,0 +1,33 @@
+id: cisco.asa.cis.1.4.3
+title: "ASA `aaa authentication http console` must use an AAA group"
+severity: high
+vendors: [cisco-asa]
+description: |
+  `aaa authentication http console <GROUP>` must point at a
+  TACACS+/RADIUS group — not the literal `LOCAL` keyword.
+  Same rationale as the SSH-console rule: ASDM HTTP-console
+  access must bind to per-user identity.
+rationale: |
+  ASDM is a management plane endpoint. Local-only auth means
+  every operator shares the local credential. AAA-group auth
+  gives per-user audit, central revocation, and identity.
+impact: |
+  ASDM authentication is gated by a shared local credential;
+  no per-operator audit or revocation.
+references:
+  cis: "CIS Cisco ASA Benchmark — 1.4.3"
+  nist: ["IA-2", "AC-2", "AU-2"]
+  cwe: [798]
+query:
+  path: "$.hardening.asa_auth_http_group"
+  equals: true
+on_fail:
+  message: "aaa authentication http console uses LOCAL (or is unset)."
+  remediation_cli: |
+    configure terminal
+     aaa authentication http console NETZER-TACACS LOCAL
+    end
+    write memory
+fixtures:
+  positive: fixtures/auth_http.compliant.txt
+  negative: fixtures/auth_http.violating.txt

@@ -1,0 +1,33 @@
+id: cisco.ios.cis.2.2.14
+title: "Disable the local DNS server (`no ip dns server`)"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no ip dns server` must be in effect. The IOS DNS server has
+  no defensible use on managed gear and is a documented
+  amplification vector.
+rationale: |
+  Open recursive DNS resolvers are top-tier reflection
+  amplifiers (the DNS amplification factor is ~28-50x). The
+  IOS embedded DNS server is small but the device can become an
+  unwitting amplifier when reachable from the Internet.
+impact: |
+  Device participates in DNS amplification DDoS against third
+  parties.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.14"
+  nist: ["CM-7", "SC-5"]
+  cwe: [406]
+query:
+  path: "$.hardening.ip_dns_server"
+  equals: false
+on_fail:
+  message: "ip dns server is enabled."
+  remediation_cli: |
+    configure terminal
+     no ip dns server
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_dns_server.compliant.txt
+  negative: fixtures/no_dns_server.violating.txt

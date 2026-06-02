@@ -1,0 +1,32 @@
+id: cisco.nxos.cis.3.3.1
+title: "Do not use default / well-known SNMP community strings (NX-OS)"
+severity: high
+vendors: [cisco-nx-os]
+description: |
+  SNMP communities on NX-OS must not use default / well-known
+  names (public, private, cisco, admin).
+rationale: |
+  Default community strings are trivially enumerated; their
+  presence on management gear is unauthenticated read access.
+impact: |
+  Topology + interface + ACL discovery to any L3-reachable peer.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 3.3.1"
+  nist: ["AC-3", "IA-2"]
+  cwe: [521]
+query:
+  path: "$.snmp.communities[*].name"
+  in: ["public", "private", "cisco", "admin"]
+  not: true
+on_fail:
+  message: "An SNMP community uses a default / well-known string on NX-OS."
+  remediation_cli: |
+    configure terminal
+     no snmp-server community public
+     no snmp-server community private
+     snmp-server community <random> group network-operator
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/snmp_default.compliant.txt
+  negative: fixtures/snmp_default.violating.txt

@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220400
+title: "The Cisco ASA must use SSH version 2 for management."
+severity: medium
+vendors: [cisco-asa]
+description: |
+  SSHv1 is deprecated; STIG requires v2 exclusively on the management plane.
+rationale: |
+  Sourced from the DISA Cisco ASA NDM STIG. CAT II finding.
+  See V-220400 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220400 on the device's POA&M.
+references:
+  stig: ["V-220400"]
+  cci:
+    - "CCI-001941"
+query:
+  path: "$.services.ssh_version"
+  equals: 2
+on_fail:
+  message: "Cisco ASA STIG V-220400 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220400.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/ssh_v2.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/ssh_v2.violating.txt

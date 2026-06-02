@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220901
+title: "The Cisco ASA must enable threat-detection statistics for ACL / port / protocol counters."
+severity: low
+vendors: [cisco-asa]
+description: |
+  Per-counter statistics feed the SIEM with the baseline data needed for anomaly detection.
+rationale: |
+  Sourced from the DISA Cisco ASA IDPS STIG. CAT III finding.
+  See V-220901 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220901 on the device's POA&M.
+references:
+  stig: ["V-220901"]
+  cci:
+    - "CCI-001253"
+query:
+  path: "$.hardening.threat_detection_statistics"
+  equals: true
+on_fail:
+  message: "STIG V-220901 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220901.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/td_stats.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/td_stats.violating.txt

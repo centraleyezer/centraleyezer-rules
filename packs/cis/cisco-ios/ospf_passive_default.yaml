@@ -1,0 +1,41 @@
+id: cisco.ios.cis.9.1.5
+title: "OSPF must use `passive-interface default`"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+applies_when:
+  features: [ospf]
+description: |
+  When OSPF is configured, `passive-interface default` must be
+  set so OSPF Hellos are not sent on every interface that
+  matches the network statement by default. Operators then
+  explicitly enable OSPF on the interfaces that should peer
+  with `no passive-interface IFACE`.
+rationale: |
+  Default-passive flips the OSPF interface model from "open by
+  default" to "closed by default" — the same shift Cisco's
+  hardening guide recommends across the routing stack. Without
+  it, every newly-added interface that matches the network
+  statement starts emitting Hellos, exposing OSPF adjacency to
+  attackers on that segment.
+impact: |
+  Inadvertent OSPF adjacency on new / migrated segments;
+  L2-adjacent OSPF takeover surface.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 9.1.5"
+  nist: ["CM-7", "SC-7"]
+  cwe: [284]
+query:
+  path: "$.routing.ospf.passive_default"
+  equals: true
+on_fail:
+  message: "OSPF does not use `passive-interface default`."
+  remediation_cli: |
+    configure terminal
+     router ospf 100
+      passive-interface default
+      no passive-interface GigabitEthernet0/0
+    end
+    write memory
+fixtures:
+  positive: fixtures/ospf_passive.compliant.txt
+  negative: fixtures/ospf_passive.violating.txt

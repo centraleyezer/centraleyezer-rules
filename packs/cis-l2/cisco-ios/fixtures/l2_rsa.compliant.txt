@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant
+crypto key generate rsa modulus 4096
+end

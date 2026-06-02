@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant
+ip icmp rate-limit unreachable 500
+end

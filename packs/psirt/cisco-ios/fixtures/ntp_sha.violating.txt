@@ -1,0 +1,6 @@
+version 15.2
+hostname legacy
+ntp authentication-key 1 md5 something
+ntp authenticate
+ntp server 10.0.0.10 key 1
+end

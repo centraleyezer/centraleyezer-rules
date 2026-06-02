@@ -1,0 +1,33 @@
+id: cisco.ios.cis-l2.2.2.27
+title: "L2: LLDP must be globally disabled (`no lldp run`)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no lldp run` must be configured globally. LLDP leaks the
+  same recon information CDP does — just via the IEEE
+  standard instead of Cisco-proprietary.
+rationale: |
+  L1 is "no CDP/LLDP on internet edge". L2 is "no LLDP
+  anywhere unless a documented MED / TR-069 use case
+  requires it." Disabling everywhere matches the
+  zero-information-leak posture.
+impact: |
+  Platform / port / capability advertisement on every LLDP-
+  enabled interface — usable for L2 recon.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 2.2.27"
+  nist: ["CM-7"]
+  cwe: [200]
+query:
+  path: "$.services.lldp"
+  equals: false
+on_fail:
+  message: "lldp run is enabled globally."
+  remediation_cli: |
+    configure terminal
+     no lldp run
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_no_lldp.compliant.txt
+  negative: fixtures/l2_no_lldp.violating.txt

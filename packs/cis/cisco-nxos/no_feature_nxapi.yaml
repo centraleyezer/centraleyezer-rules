@@ -1,0 +1,36 @@
+id: cisco.nxos.cis.1.6.2
+title: "NX-OS: `feature nxapi` disabled unless explicitly required"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `feature nxapi` (the JSON-RPC over HTTP/HTTPS programmability
+  API) must be disabled unless a documented automation use case
+  requires it; if enabled, it must be HTTPS-only with strict
+  ACLs.
+rationale: |
+  NXAPI is a remotely reachable, credential-validated HTTP/S
+  endpoint that executes arbitrary CLI commands. Multiple
+  historical NXAPI CVEs allowed authenticated RCE; even when
+  patched it is a high-value, high-privilege attack surface
+  that should not be exposed by default.
+impact: |
+  Remote authenticated command-execution endpoint reachable
+  from any host that can reach the device's HTTPS interface.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.6.2"
+  nist: ["CM-7", "AC-17"]
+  cwe: [284]
+query:
+  path: "$.features[*]"
+  in: ["nxapi"]
+  not: true
+on_fail:
+  message: "feature nxapi is enabled."
+  remediation_cli: |
+    configure terminal
+     no feature nxapi
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/feature_nxapi.compliant.txt
+  negative: fixtures/feature_nxapi.violating.txt

@@ -1,0 +1,33 @@
+id: cisco.nxos.cis.4.2.2
+title: "NX-OS clock protocol must be NTP (not PTP/none)"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `clock protocol ntp vdc 1` (or equivalent) must be configured
+  so the system clock is sourced from authenticated NTP rather
+  than PTP or no external reference.
+rationale: |
+  NX-OS supports both NTP and PTP. NTP with authentication is
+  the recommended trust anchor for log timestamps. PTP is
+  intended for time-sensitive networking (precision) but lacks
+  the same authentication maturity for management-plane use.
+impact: |
+  Time skew under PTP-source failure; audit-log timestamps
+  drift if external time source is unauthenticated.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 4.2.2"
+  nist: ["AU-8"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_clock_protocol_ntp"
+  equals: true
+on_fail:
+  message: "NX-OS clock protocol is not set to NTP."
+  remediation_cli: |
+    configure terminal
+     clock protocol ntp vdc 1
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/clock_protocol.compliant.txt
+  negative: fixtures/clock_protocol.violating.txt

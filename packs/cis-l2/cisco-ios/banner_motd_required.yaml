@@ -1,0 +1,36 @@
+id: cisco.ios.cis-l2.1.3.5
+title: "L2: MOTD banner must be configured"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `banner motd <DELIM><text><DELIM>` must be present. Shown to
+  every user before login. The MOTD is the device-level
+  acceptable-use / unauthorized-access notice.
+rationale: |
+  Required by most regulatory frameworks (FISMA, PCI-DSS,
+  SOX). Even when not strictly required, a clear no-access
+  notice is the basis for later prosecution / disciplinary
+  action against unauthorised use.
+impact: |
+  No legal notice presented to attackers; weakens the
+  prosecution-of-intrusion case.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 1.3.5"
+  nist: ["AC-8"]
+  cwe: []
+query:
+  path: "$.banners.motd"
+  exists: true
+on_fail:
+  message: "MOTD banner is not configured."
+  remediation_cli: |
+    configure terminal
+     banner motd ^
+       *** AUTHORIZED ACCESS ONLY ***
+       All activity is logged. Unauthorized use is prohibited.
+     ^
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_banner_motd.compliant.txt
+  negative: fixtures/l2_banner_motd.violating.txt

@@ -1,0 +1,33 @@
+id: cisco.asa.cis.6.2.4
+title: "ASA Modular Policy Framework global policy must be applied"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `service-policy global_policy global` must be configured. The
+  ASA's Modular Policy Framework is what applies inspection
+  (HTTP, DNS, ICMP), connection limits, and traffic
+  classification globally.
+rationale: |
+  Without a global service-policy, application-layer inspection
+  is largely off, leaving HTTP / DNS / ICMP / SIP / SQL*Net
+  traffic unmediated by the ASA's NGFW layer.
+impact: |
+  Application-layer inspection silently disabled; protocol-aware
+  ALGs unavailable.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.2.1"
+  nist: ["SC-7", "SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.mpf_global_policy"
+  equals: true
+on_fail:
+  message: "service-policy global_policy global is not applied."
+  remediation_cli: |
+    configure terminal
+     service-policy global_policy global
+    end
+    write memory
+fixtures:
+  positive: fixtures/mpf.compliant.txt
+  negative: fixtures/mpf.violating.txt

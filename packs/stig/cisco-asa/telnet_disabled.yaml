@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220401
+title: "The Cisco ASA must not accept inbound telnet."
+severity: high
+vendors: [cisco-asa]
+description: |
+  Telnet transmits credentials in cleartext and is forbidden by STIG.
+rationale: |
+  Sourced from the DISA Cisco ASA NDM STIG. CAT I finding.
+  See V-220401 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-220401 on the device's POA&M.
+references:
+  stig: ["V-220401"]
+  cci:
+    - "CCI-000068"
+query:
+  path: "$.services.telnet"
+  equals: false
+on_fail:
+  message: "Cisco ASA STIG V-220401 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220401.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/no_telnet.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/no_telnet.violating.txt

@@ -1,0 +1,31 @@
+id: cisco.ios.cis.2.2.22
+title: "Disable `ip identd`"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no ip identd` must be configured. RFC-1413 ident is a legacy
+  service used by some IRC and SMTP servers to query the remote
+  user; it leaks information and has no role on a router.
+rationale: |
+  ident replies expose the local username (or system identity)
+  for any TCP connection — useful primarily for reconnaissance
+  against the device.
+impact: |
+  Information disclosure via ident probes.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.22"
+  nist: ["CM-7"]
+  cwe: [200]
+query:
+  path: "$.hardening.no_ip_identd"
+  equals: true
+on_fail:
+  message: "ip identd is enabled."
+  remediation_cli: |
+    configure terminal
+     no ip identd
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_identd.compliant.txt
+  negative: fixtures/no_identd.violating.txt

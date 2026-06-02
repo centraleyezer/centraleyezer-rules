@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220604
+title: "The Cisco switch must run VTP in transparent mode (no fleet-wide VLAN propagation)."
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  VTP server/client modes risk fleet-wide VLAN deletion from a single misconfigured switch and are forbidden by STIG.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Switch L3 STIG. CAT III finding.
+  See V-220604 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220604 on the device's POA&M.
+references:
+  stig: ["V-220604"]
+  cci:
+    - "CCI-000366"
+query:
+  path: "$.vtp.mode"
+  equals: "transparent"
+on_fail:
+  message: "STIG V-220604 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220604.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/vtp.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/vtp.violating.txt

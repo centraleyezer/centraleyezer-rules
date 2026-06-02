@@ -1,0 +1,31 @@
+id: cisco.ios.cis-l2.7.5.1
+title: "802.1X port-based authentication globally enabled"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  dot1x system-auth-control enables 802.1X authentication on the switch. Without it, no port can require a supplicant identity exchange.
+rationale: |
+  Per-port authentication binds access to identity rather than physical port location. The CIS L2 IOS switch baseline mandates it.
+impact: |
+  Loss of one defence-in-depth layer for the LAN switching plane; combines
+  with other gaps to amplify lateral-movement risk.
+references:
+  cis: "CIS Cisco IOS Switch L2 Hardening — 7.5.1"
+  nist:
+    - "IA-2"
+    - "IA-3"
+    - "AC-3"
+query:
+  path: "$.hardening.dot1x_system_auth_control"
+  equals: true
+on_fail:
+  message: "802.1X port-based authentication globally enabled: switch missing the L2 hardening control."
+  remediation_cli: |
+    configure terminal
+     ! See CIS Cisco IOS L2 Benchmark for the canonical CLI; the
+     ! corresponding STIG L2S rule lists the exact knob.
+    end
+    write memory
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/dot1x_global.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/dot1x_global.violating.txt

@@ -1,0 +1,30 @@
+id: cisco.nxos.cis.4.2.1
+title: "NX-OS clock timezone must be UTC"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `clock timezone UTC 0 0` must be configured. All NX-OS
+  timestamps (syslog, accounting, show clock) must be UTC.
+rationale: |
+  Cross-vendor / cross-region forensics fall apart when each
+  device labels events in its local timezone.
+impact: |
+  Mis-correlated incidents across the fleet; manual timezone
+  arithmetic in every investigation.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 4.2.1"
+  nist: ["AU-8"]
+  cwe: []
+query:
+  path: "$.hardening.clock_timezone"
+  equals: "UTC"
+on_fail:
+  message: "NX-OS clock timezone is not UTC."
+  remediation_cli: |
+    configure terminal
+     clock timezone UTC 0 0
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/clock_utc.compliant.txt
+  negative: fixtures/clock_utc.violating.txt

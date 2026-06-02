@@ -1,0 +1,33 @@
+id: cisco.asa.cis.7.1.2
+title: "ASA must not permit `same-security-traffic inter-interface`"
+severity: high
+vendors: [cisco-asa]
+description: |
+  `same-security-traffic permit inter-interface` must NOT be in
+  effect. This setting lets traffic flow between two interfaces
+  configured with the same security-level without any ACL check.
+rationale: |
+  Same-security inter-interface is a documented zone-segmentation
+  bypass. Operators occasionally enable it to "fix" routing
+  problems without realizing it bypasses the firewall policy
+  between same-level zones.
+impact: |
+  Zone-to-zone traffic flows without ACL enforcement; firewall
+  effectively bypassed between same-security-level interfaces.
+references:
+  cis: "CIS Cisco ASA Benchmark — 7.1.2"
+  nist: ["AC-4", "SC-7"]
+  cwe: [284]
+query:
+  path: "$.hardening.asa_same_security_permit"
+  equals: false
+on_fail:
+  message: "same-security-traffic permit inter-interface is configured."
+  remediation_cli: |
+    configure terminal
+     no same-security-traffic permit inter-interface
+    end
+    write memory
+fixtures:
+  positive: fixtures/same_security.compliant.txt
+  negative: fixtures/same_security.violating.txt

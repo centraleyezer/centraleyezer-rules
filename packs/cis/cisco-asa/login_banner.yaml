@@ -1,0 +1,29 @@
+id: cisco.asa.cis.5.2.2
+title: "Set a login banner on ASA"
+severity: low
+vendors: [cisco-asa]
+description: |
+  A login banner must be configured on the ASA via
+  `banner login <text>` (one or more lines).
+rationale: |
+  Standard legal-notice / consent-to-monitor requirement.
+impact: |
+  Audit findings against PCI / SOX / HIPAA; failed misuse cases.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.2.1"
+  nist: ["AC-8"]
+  cwe: []
+query:
+  path: "$.banners.login"
+  matches: "."
+on_fail:
+  message: "ASA login banner is not configured."
+  remediation_cli: |
+    configure terminal
+     banner login UNAUTHORIZED ACCESS PROHIBITED.
+     banner login Disconnect immediately if not authorized.
+    end
+    write memory
+fixtures:
+  positive: fixtures/login_banner.compliant.txt
+  negative: fixtures/login_banner.violating.txt

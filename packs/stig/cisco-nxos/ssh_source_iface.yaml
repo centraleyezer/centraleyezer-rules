@@ -1,0 +1,27 @@
+id: cisco.nxos.stig.v-220311
+title: "The NX-OS switch must source outbound SSH from the dedicated management interface."
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  Binding management traffic to a known interface keeps ACL/audit design coherent across the fleet.
+rationale: |
+  Sourced from the DISA Cisco NX-OS Switch NDM STIG. CAT III finding.
+  See V-220311 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220311 on the device's POA&M.
+references:
+  stig: ["V-220311"]
+  cci:
+    - "CCI-000366"
+query:
+  path: "$.hardening.nxos_ssh_source_interface"
+  exists: true
+on_fail:
+  message: "Cisco NX-OS STIG V-220311 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220311.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-nxos/fixtures/ssh_src.compliant.txt
+  negative: ../../cis/cisco-nxos/fixtures/ssh_src.violating.txt

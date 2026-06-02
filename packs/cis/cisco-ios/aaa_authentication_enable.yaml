@@ -1,0 +1,34 @@
+id: cisco.ios.cis.1.2.8
+title: "aaa authentication enable default must be configured"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `aaa authentication enable default group <X> enable` must be
+  configured so escalation to privileged mode (`enable`)
+  authenticates against TACACS+/RADIUS first, with the local
+  enable secret only as a fallback.
+rationale: |
+  Without this, anyone with the shared enable secret can enter
+  privileged mode. Central-AAA-first enable authentication
+  binds enable to per-user identity instead of a shared
+  secret.
+impact: |
+  Privileged-mode escalation is gated only by a shared static
+  secret with no per-user identity binding.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.2.8"
+  nist: ["IA-2", "AC-6"]
+  cwe: [284]
+query:
+  path: "$.aaa.authentication_enable"
+  equals: true
+on_fail:
+  message: "aaa authentication enable default is not configured."
+  remediation_cli: |
+    configure terminal
+     aaa authentication enable default group tacacs+ enable
+    end
+    write memory
+fixtures:
+  positive: fixtures/auth_enable.compliant.txt
+  negative: fixtures/auth_enable.violating.txt

@@ -1,0 +1,33 @@
+id: cisco.ios.cis.1.1.7
+title: "AAA authorization must be configured"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `aaa authorization exec default group tacacs+ local` (or similar)
+  must be configured so users are only granted the privileges
+  their AAA profile assigns them.
+rationale: |
+  Without authorization, every authenticated user lands in
+  whichever privilege level the device defaults to. There is no
+  per-user separation of duties.
+impact: |
+  Privilege escalation by AAA-authenticated users; no enforced
+  least-privilege boundary.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.1.7"
+  nist: ["AC-3", "AC-6"]
+  cwe: [285]
+query:
+  path: "$.aaa.authorization_on"
+  equals: true
+on_fail:
+  message: "AAA authorization is not configured."
+  remediation_cli: |
+    configure terminal
+     aaa authorization exec default group tacacs+ local
+     aaa authorization commands 15 default group tacacs+ local
+    end
+    write memory
+fixtures:
+  positive: fixtures/aaa_authorization.compliant.txt
+  negative: fixtures/aaa_authorization.violating.txt

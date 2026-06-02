@@ -1,0 +1,35 @@
+id: cisco.ios.cis.8.1.4
+title: "logging buffered must be sized ≥ 16384 bytes"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `logging buffered <SIZE>` must be configured with a SIZE of
+  at least 16384 (16 KB). The IOS default of 4096 fills in
+  seconds during any moderate incident and overwrites the
+  forensic trail.
+rationale: |
+  The buffered log is the on-box forensic trail. At 4 KB it
+  rolls in seconds during a port-security storm or routing
+  flap, losing the line of events that explains what
+  happened. 16 KB is the operational minimum recommended by
+  CIS and Cisco hardening guides.
+impact: |
+  Loss of in-device event trail during the incident that
+  matters most.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 8.1.1"
+  nist: ["AU-4", "AU-11"]
+  cwe: []
+query:
+  path: "$.logging.buffer_size"
+  in: [16384, 32768, 65536, 131072, 262144, 524288, 1048576]
+on_fail:
+  message: "logging buffered is below 16384 bytes."
+  remediation_cli: |
+    configure terminal
+     logging buffered 65536 informational
+    end
+    write memory
+fixtures:
+  positive: fixtures/log_buffered.compliant.txt
+  negative: fixtures/log_buffered.violating.txt

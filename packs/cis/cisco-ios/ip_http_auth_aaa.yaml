@@ -1,0 +1,34 @@
+id: cisco.ios.cis.2.2.24
+title: "`ip http authentication aaa` must be configured when HTTP(S) is enabled"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  When `ip http server` or `ip http secure-server` is on, `ip
+  http authentication aaa` must also be set so the HTTP(S)
+  management endpoint authenticates against TACACS+/RADIUS —
+  not the legacy `enable secret` shared credential.
+rationale: |
+  IOS defaults HTTP authentication to the enable secret, which
+  is a shared credential. AAA-bound HTTP auth gives per-user
+  identity, central revocation, and per-user audit on the
+  HTTP / RESTCONF surface.
+impact: |
+  HTTP / RESTCONF surface authenticated by shared static
+  credential; no per-user audit.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.24"
+  nist: ["IA-2", "AC-3"]
+  cwe: [798]
+query:
+  path: "$.hardening.ip_http_auth_aaa"
+  equals: true
+on_fail:
+  message: "ip http authentication aaa is not configured."
+  remediation_cli: |
+    configure terminal
+     ip http authentication aaa
+    end
+    write memory
+fixtures:
+  positive: fixtures/http_auth_aaa.compliant.txt
+  negative: fixtures/http_auth_aaa.violating.txt

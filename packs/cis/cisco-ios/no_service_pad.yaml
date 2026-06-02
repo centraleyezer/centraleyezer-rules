@@ -1,0 +1,31 @@
+id: cisco.ios.cis.2.2.13
+title: "Disable `service pad` (X.25 PAD)"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no service pad` must be set. PAD (Packet Assembler/
+  Disassembler) is the X.25 service interface — ancient, with no
+  defensible production use.
+rationale: |
+  An unused service listening on the device is pure attack
+  surface. PAD specifically has a history of parsing CVEs.
+impact: |
+  Exposure to historical PAD-specific CVEs and future
+  parser-bug rediscoveries.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.13"
+  nist: ["CM-7"]
+  cwe: []
+query:
+  path: "$.hardening.service_pad"
+  equals: false
+on_fail:
+  message: "service pad is enabled."
+  remediation_cli: |
+    configure terminal
+     no service pad
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_pad.compliant.txt
+  negative: fixtures/no_pad.violating.txt

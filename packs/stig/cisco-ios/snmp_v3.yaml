@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-215842
+title: "The Cisco router must use SNMPv3 with authPriv for all SNMP access."
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  SNMPv1/v2c lacks per-message authentication and encryption. Only SNMPv3 with authPriv is STIG-permitted.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router NDM STIG. CAT I finding.
+  See V-215842 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-215842 on the device's POA&M.
+references:
+  stig: ["V-215842"]
+  cci:
+    - "CCI-000068"
+query:
+  path: "$.hardening.snmpv3_user_count"
+  in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "Cisco IOS STIG V-215842 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-215842.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/snmpv3_user.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/snmpv3_user.violating.txt

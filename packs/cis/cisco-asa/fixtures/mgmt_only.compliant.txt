@@ -1,0 +1,10 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-clean
+!
+interface Management0/0
+ nameif management
+ security-level 100
+ ip address 10.0.0.1 255.255.255.0
+ management-only
+!

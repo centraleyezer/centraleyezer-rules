@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220803
+title: "The Cisco ASA must disable ISAKMP aggressive mode."
+severity: medium
+vendors: [cisco-asa]
+description: |
+  Aggressive mode discloses the initiator identity in cleartext, enabling offline PSK cracking. STIG forbids it.
+rationale: |
+  Sourced from the DISA Cisco ASA VPN STIG. CAT II finding.
+  See V-220803 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220803 on the device's POA&M.
+references:
+  stig: ["V-220803"]
+  cci:
+    - "CCI-001144"
+query:
+  path: "$.hardening.asa_isakmp_am_disable"
+  equals: true
+on_fail:
+  message: "STIG V-220803 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220803.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/isakmp_am.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/isakmp_am.violating.txt

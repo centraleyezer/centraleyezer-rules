@@ -1,0 +1,37 @@
+id: cisco.ios.cis.9.1.6
+title: "`bgp log-neighbor-changes` must be enabled"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+applies_when:
+  features: [bgp]
+description: |
+  When BGP is configured, `bgp log-neighbor-changes` must be
+  enabled inside the `router bgp` stanza so the device logs
+  every neighbor state transition. Without it, the operator
+  has to actively poll BGP state to see flaps.
+rationale: |
+  BGP-neighbor flap is both an operational red flag and a
+  hijacking indicator — sudden state changes correlate with
+  route-injection attempts. Logging them at syslog level
+  makes them visible to the central NMS without polling.
+impact: |
+  BGP-neighbor flaps are invisible to syslog; route-hijack
+  and partner-link instability events go unobserved.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 9.1.6"
+  nist: ["AU-2", "SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.bgp_log_neighbor_changes"
+  equals: true
+on_fail:
+  message: "bgp log-neighbor-changes is not enabled."
+  remediation_cli: |
+    configure terminal
+     router bgp 65000
+      bgp log-neighbor-changes
+    end
+    write memory
+fixtures:
+  positive: fixtures/bgp_log.compliant.txt
+  negative: fixtures/bgp_log.violating.txt

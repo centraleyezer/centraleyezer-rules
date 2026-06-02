@@ -1,0 +1,28 @@
+id: cisco.asa.stig.v-220409
+title: "The Cisco ASA must not use well-known default SNMP community strings."
+severity: high
+vendors: [cisco-asa]
+description: |
+  Default communities allow anonymous SNMP access from anyone reachable on UDP/161.
+rationale: |
+  Sourced from the DISA Cisco ASA NDM STIG. CAT I finding.
+  See V-220409 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-220409 on the device's POA&M.
+references:
+  stig: ["V-220409"]
+  cci:
+    - "CCI-001967"
+query:
+  path: "$.snmp.communities[*].name"
+  in: ["public", "private", "cisco", "admin"]
+  not: true
+on_fail:
+  message: "Cisco ASA STIG V-220409 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220409.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/snmp_default.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/snmp_default.violating.txt

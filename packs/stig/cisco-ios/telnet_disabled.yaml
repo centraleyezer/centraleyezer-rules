@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-215807.no_telnet
+title: "The Cisco router must not accept inbound Telnet for management."
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Telnet transmits credentials in cleartext. All VTY transports must exclude telnet.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router NDM STIG. CAT I finding.
+  See V-215807 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-215807 on the device's POA&M.
+references:
+  stig: ["V-215807"]
+  cci:
+    - "CCI-000054"
+query:
+  path: "$.services.telnet"
+  equals: false
+on_fail:
+  message: "Cisco IOS STIG V-215807 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-215807.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/telnet_disabled.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/telnet_disabled.violating.txt

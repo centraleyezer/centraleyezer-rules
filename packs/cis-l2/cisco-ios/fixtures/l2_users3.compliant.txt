@@ -1,0 +1,6 @@
+version 17.9
+hostname compliant
+username admin privilege 15 secret 9 $9$a
+username emergency privilege 15 secret 9 $9$b
+username monitor privilege 1 secret 9 $9$c
+end

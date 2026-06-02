@@ -1,0 +1,27 @@
+id: cisco.nxos.stig.v-220315
+title: "The NX-OS switch must configure a syslog severity threshold."
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  An explicit logging severity is required to satisfy STIG audit-record completeness.
+rationale: |
+  Sourced from the DISA Cisco NX-OS Switch NDM STIG. CAT II finding.
+  See V-220315 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220315 on the device's POA&M.
+references:
+  stig: ["V-220315"]
+  cci:
+    - "CCI-001851"
+query:
+  path: "$.logging.level"
+  matches: "."
+on_fail:
+  message: "Cisco NX-OS STIG V-220315 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220315.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-nxos/fixtures/nxos_log_level.compliant.txt
+  negative: ../../cis/cisco-nxos/fixtures/nxos_log_level.violating.txt

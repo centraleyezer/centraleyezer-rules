@@ -1,0 +1,4 @@
+version 12.4
+hostname legacy
+tftp-server flash:c2960-lanbasek9-mz.bin
+end

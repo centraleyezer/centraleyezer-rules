@@ -1,0 +1,35 @@
+id: cisco.nxos.cis.1.5.1
+title: "NX-OS `radius-server timeout` must be bounded (≤ 10s)"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `radius-server timeout <N>` must be configured with N ≤ 10.
+  The default of 5 seconds is fine; values above 10 stack up
+  during a RADIUS outage and lock the device out of its
+  management plane while it waits.
+rationale: |
+  When RADIUS is unreachable, each login attempt waits
+  `timeout × retransmits` seconds before falling through to
+  the local fallback. A 60-second timeout means a 3-attempt
+  retry stack stalls login for 3 minutes — long enough that
+  every operator gives up and the device looks "frozen".
+impact: |
+  Long management-plane stalls during transient RADIUS
+  outages.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.5.1"
+  nist: ["AC-2", "CP-2"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_radius_timeout"
+  in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "radius-server timeout is not set ≤ 10 seconds."
+  remediation_cli: |
+    configure terminal
+     radius-server timeout 5
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/radius_to.compliant.txt
+  negative: fixtures/radius_to.violating.txt

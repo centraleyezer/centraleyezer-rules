@@ -1,0 +1,5 @@
+!Command: show running-config
+version 9.3(8)
+switchname nxos-clean
+errdisable recovery cause bpduguard
+errdisable recovery interval 300

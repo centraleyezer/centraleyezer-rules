@@ -1,0 +1,4 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-clean
+crypto ipsec security-association lifetime seconds 3600

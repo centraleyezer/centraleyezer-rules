@@ -1,0 +1,5 @@
+!Command: show running-config
+version 9.3(8)
+switchname nxos-dirty
+interface mgmt0
+ no ip address

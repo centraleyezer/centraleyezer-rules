@@ -1,0 +1,31 @@
+id: cisco.ios.psirt.no_ip_rcmd_rcp
+title: "Disable the rcp server (`no ip rcmd rcp-enable`)"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no ip rcmd rcp-enable` must be in effect. The rcp service
+  shares rsh's trust model and is similarly obsolete.
+rationale: |
+  rcp transfers files cleartext over the rsh trust model.
+  Modern Cisco devices use SCP (over SSH) for file transfer,
+  with full authentication and encryption.
+impact: |
+  Cleartext file transfer; unauthenticated file disclosure via
+  IP spoofing.
+references:
+  cis: ""
+  nist: ["AC-17", "SC-8"]
+  cwe: [287, 319]
+query:
+  path: "$.hardening.ip_rcmd_rcp_enable"
+  equals: false
+on_fail:
+  message: "ip rcmd rcp-enable is configured."
+  remediation_cli: |
+    configure terminal
+     no ip rcmd rcp-enable
+    end
+    write memory
+fixtures:
+  positive: fixtures/rcp.compliant.txt
+  negative: fixtures/rcp.violating.txt

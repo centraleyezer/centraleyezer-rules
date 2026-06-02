@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220501
+title: "The Cisco router must log BGP neighbor state transitions."
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Neighbor up/down events are first-line evidence of peer compromise or link issues; STIG requires they be logged.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router RTR STIG. CAT III finding.
+  See V-220501 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220501 on the device's POA&M.
+references:
+  stig: ["V-220501"]
+  cci:
+    - "CCI-000172"
+query:
+  path: "$.hardening.bgp_log_neighbor_changes"
+  equals: true
+on_fail:
+  message: "STIG V-220501 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220501.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/bgp_log.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/bgp_log.violating.txt

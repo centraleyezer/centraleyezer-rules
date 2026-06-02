@@ -1,0 +1,43 @@
+id: cisco.ios.cis.8.2.3
+title: "At least one Flexible NetFlow record must be defined"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  At least one `flow record <NAME>` stanza must be present.
+  A record defines which fields (5-tuple, ToS, AS path, etc.)
+  the flow monitor captures. Without it, the monitor has
+  nothing to populate.
+rationale: |
+  A NetFlow chain needs record → monitor → exporter all
+  three. We already lint for exporter (8.2.1) and monitor
+  (8.2.2); record is the missing third leg. Without it the
+  monitor either falls back to a built-in subset or fails
+  silently on older images.
+impact: |
+  Flow records empty or built-in-only — operator-defined
+  field selection (e.g. include security-relevant fields) is
+  inactive.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 8.2.3"
+  nist: ["AU-2", "SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.ios_flow_record"
+  equals: true
+on_fail:
+  message: "No Flexible NetFlow record is defined."
+  remediation_cli: |
+    configure terminal
+     flow record NETZER-REC
+      match ipv4 source address
+      match ipv4 destination address
+      match transport source-port
+      match transport destination-port
+      match transport tcp flags
+      collect counter bytes
+      collect counter packets
+    end
+    write memory
+fixtures:
+  positive: fixtures/flow_rec.compliant.txt
+  negative: fixtures/flow_rec.violating.txt

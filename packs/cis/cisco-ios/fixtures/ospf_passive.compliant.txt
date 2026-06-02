@@ -1,0 +1,9 @@
+version 17.9
+hostname compliant
+!
+router ospf 100
+ area 0 authentication
+ passive-interface default
+ no passive-interface GigabitEthernet0/0
+!
+end

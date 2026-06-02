@@ -1,0 +1,35 @@
+id: cisco.nxos.cis.9.1.1
+title: "NX-OS BGP neighbors must be authenticated"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  When `router bgp` is configured on NX-OS, at least one
+  neighbor must carry a `password <X>` or MD5 / keychain
+  authentication line. Unauthenticated BGP accepts UPDATE
+  messages from any peer that can reach TCP/179.
+rationale: |
+  BGP without MD5 or keychain authentication is the textbook
+  route-injection target. Border devices have been hijacked
+  via attackers spoofing eBGP from a downstream interface.
+impact: |
+  BGP route-injection from any source that can reach TCP/179
+  on the device.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 9.1.1"
+  nist: ["AC-3", "IA-2", "SC-8"]
+  cwe: [294]
+query:
+  path: "$.hardening.nxos_bgp_auth"
+  equals: true
+on_fail:
+  message: "BGP neighbor authentication is not configured."
+  remediation_cli: |
+    configure terminal
+     router bgp 65000
+      neighbor 10.0.0.2 remote-as 65001
+       password <STRONG>
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/nxos_bgp_auth.compliant.txt
+  negative: fixtures/nxos_bgp_auth.violating.txt

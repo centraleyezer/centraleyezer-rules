@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220704
+title: "The Cisco ASA must not permit ARP responses for non-connected addresses."
+severity: medium
+vendors: [cisco-asa]
+description: |
+  Permitting non-connected ARP enables on-path attacks via the firewall; STIG forbids it.
+rationale: |
+  Sourced from the DISA Cisco ASA Firewall STIG. CAT II finding.
+  See V-220704 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220704 on the device's POA&M.
+references:
+  stig: ["V-220704"]
+  cci:
+    - "CCI-000366"
+query:
+  path: "$.hardening.asa_arp_permit_nonconnected"
+  equals: false
+on_fail:
+  message: "STIG V-220704 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220704.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/no_arp_nonconn.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/no_arp_nonconn.violating.txt

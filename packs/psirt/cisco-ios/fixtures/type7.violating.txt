@@ -1,0 +1,4 @@
+version 15.2
+hostname legacy
+username admin privilege 15 password 7 0822455D0A16
+end

@@ -1,0 +1,31 @@
+id: cisco.nxos.cis.5.1.2
+title: "NX-OS logging level must capture informational+"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `logging level <severity>` must be set to `informational` (6)
+  or more verbose so login + config-change events ship to syslog.
+rationale: |
+  NX-OS defaults to a more restrictive level on many feature
+  modules; without an explicit `logging level`, audit-relevant
+  events may be silently dropped.
+impact: |
+  Audit-evidence loss for the events incident responders need.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 5.1.2"
+  nist: ["AU-2", "AU-3"]
+  cwe: [778]
+query:
+  path: "$.logging.level"
+  matches: "."
+on_fail:
+  message: "NX-OS logging level is not explicitly configured."
+  remediation_cli: |
+    configure terminal
+     logging level local7 6
+     logging level auth 6
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/nxos_log_level.compliant.txt
+  negative: fixtures/nxos_log_level.violating.txt

@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220635
+title: "The Cisco switch must enable Dynamic ARP Inspection (DAI) on user VLANs."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  DAI validates ARP replies against the DHCP-snooping binding table, blocking ARP-spoofing / man-in-the-middle on the LAN.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Switch L2S STIG (CISC-L2-* control family).
+  CAT II finding. See V-220635 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220635 on the device's POA&M.
+references:
+  stig: ["V-220635"]
+  cci:
+    - "CCI-002385"
+query:
+  path: "$.hardening.arp_inspection"
+  equals: true
+on_fail:
+  message: "Cisco IOS L2S STIG V-220635 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220635.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/dai.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/dai.violating.txt

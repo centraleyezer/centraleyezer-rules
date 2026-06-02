@@ -1,0 +1,5 @@
+!Command: show running-config
+version 9.3(8)
+switchname nxos-clean
+ntp authenticate
+ntp server 10.0.0.10 key 1

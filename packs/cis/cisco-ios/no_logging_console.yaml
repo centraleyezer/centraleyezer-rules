@@ -1,0 +1,35 @@
+id: cisco.ios.cis.8.1.3
+title: "`no logging console` must be configured"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no logging console` must be configured to prevent syslog
+  messages from flooding the physical console — both an
+  operational hazard and a CPU spike during incidents.
+rationale: |
+  Console logging is synchronous: every message printed
+  blocks the console. Under a noisy incident (storm-control
+  flap, BPDU storm, link saturation), the console becomes
+  unusable AND the device burns CPU formatting messages no
+  one is reading. Operators land on the console, can't type,
+  and recovery is delayed.
+impact: |
+  Console blocked during incidents; CPU consumed formatting
+  unread console messages.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 8.1.3"
+  nist: ["AU-4"]
+  cwe: []
+query:
+  path: "$.hardening.no_logging_console"
+  equals: true
+on_fail:
+  message: "no logging console is not configured."
+  remediation_cli: |
+    configure terminal
+     no logging console
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_log_console.compliant.txt
+  negative: fixtures/no_log_console.violating.txt

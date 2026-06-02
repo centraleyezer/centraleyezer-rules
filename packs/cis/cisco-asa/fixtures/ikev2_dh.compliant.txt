@@ -1,0 +1,7 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-clean
+crypto ikev2 policy 10
+ encryption aes-256
+ integrity sha256
+ group 14

@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220630.access_ports
+title: "The Cisco switch must apply BPDU guard on every access port (not just default)."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Per-port BPDU guard catches misconfiguration where the default does not apply (PortFast manually disabled).
+rationale: |
+  Sourced from the DISA Cisco IOS XE Switch L3 STIG. CAT II finding.
+  See V-220630 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220630 on the device's POA&M.
+references:
+  stig: ["V-220630"]
+  cci:
+    - "CCI-002385"
+query:
+  path: "$.hardening.all_access_ports_bpdu_guard"
+  equals: true
+on_fail:
+  message: "STIG V-220630 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220630.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/access_bpdu.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/access_bpdu.violating.txt

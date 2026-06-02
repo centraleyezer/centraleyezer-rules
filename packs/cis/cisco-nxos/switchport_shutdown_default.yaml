@@ -1,0 +1,34 @@
+id: cisco.nxos.cis.7.2.1
+title: "NX-OS `system default switchport shutdown` must be set"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `system default switchport shutdown` must be configured so
+  newly added or freshly unboxed ports default to `shutdown` —
+  not to `no shutdown`. Operators must explicitly enable each
+  port they intend to use.
+rationale: |
+  This is the NX-OS equivalent of "ports closed by default":
+  it prevents the cheap, common mistake of adding a switch and
+  having every port immediately able to forward L2 traffic on
+  VLAN 1 to whatever is plugged in.
+impact: |
+  Newly added / replaced ports come up live by default; rogue
+  devices can connect immediately.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.2.1"
+  nist: ["AC-4", "SC-7"]
+  cwe: [284]
+query:
+  path: "$.hardening.nxos_switchport_shutdown"
+  equals: true
+on_fail:
+  message: "system default switchport shutdown is not set."
+  remediation_cli: |
+    configure terminal
+     system default switchport shutdown
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/sw_default_shut.compliant.txt
+  negative: fixtures/sw_default_shut.violating.txt

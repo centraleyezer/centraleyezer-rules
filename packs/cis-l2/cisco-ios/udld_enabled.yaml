@@ -1,0 +1,29 @@
+id: cisco.ios.cis-l2.7.6.3
+title: "UDLD enabled globally to detect unidirectional links"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  UDLD detects fibre / SFP failures STP cannot see, disabling the affected link before it causes a forwarding loop.
+rationale: |
+  Catalyst best-practice recommendation; CIS L2 promotes it from optional to required on switching infrastructure.
+impact: |
+  Loss of one defence-in-depth layer for the LAN switching plane; combines
+  with other gaps to amplify lateral-movement risk.
+references:
+  cis: "CIS Cisco IOS Switch L2 Hardening — 7.6.3"
+  nist:
+    - "CM-7"
+query:
+  path: "$.hardening.udld_enabled"
+  equals: true
+on_fail:
+  message: "UDLD enabled globally to detect unidirectional links: switch missing the L2 hardening control."
+  remediation_cli: |
+    configure terminal
+     ! See CIS Cisco IOS L2 Benchmark for the canonical CLI; the
+     ! corresponding STIG L2S rule lists the exact knob.
+    end
+    write memory
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/udld_global.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/udld_global.violating.txt

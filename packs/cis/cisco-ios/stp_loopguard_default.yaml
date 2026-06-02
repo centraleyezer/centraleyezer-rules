@@ -1,0 +1,33 @@
+id: cisco.ios.cis.7.2.3
+title: "Enable spanning-tree loopguard default"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `spanning-tree loopguard default` must be configured. Loop
+  Guard prevents a unidirectional link failure from causing an
+  L2 forwarding loop.
+rationale: |
+  A unidirectional link (fiber that drops one direction) appears
+  to STP as "no BPDUs received" on a port that previously was
+  blocking. STP wakes the port up and a forwarding loop forms.
+  Loop Guard keeps the port in loop-inconsistent state instead.
+impact: |
+  L2 forwarding loops on uni-directional link failure; broadcast
+  storm + control-plane CPU exhaustion.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.2.3"
+  nist: ["SC-5"]
+  cwe: []
+query:
+  path: "$.stp.loopguard_default"
+  equals: true
+on_fail:
+  message: "spanning-tree loopguard default is not enabled."
+  remediation_cli: |
+    configure terminal
+     spanning-tree loopguard default
+    end
+    write memory
+fixtures:
+  positive: fixtures/loopguard.compliant.txt
+  negative: fixtures/loopguard.violating.txt

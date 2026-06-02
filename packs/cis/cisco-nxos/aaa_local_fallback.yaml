@@ -1,0 +1,31 @@
+id: cisco.nxos.cis.1.1.5
+title: "NX-OS AAA authentication must include local fallback"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  The AAA login method list must end in `local` so the NX-OS
+  device remains manageable when every TACACS+ / RADIUS server
+  is unreachable.
+rationale: |
+  Without a local fallback, an AAA outage locks every administrator
+  out of every NX-OS switch simultaneously.
+impact: |
+  Operational lockout during AAA outage; per-device console-with-
+  physical-access recovery required.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.1.5"
+  nist: ["AC-2", "CP-2"]
+  cwe: []
+query:
+  path: "$.aaa.local_fallback"
+  equals: true
+on_fail:
+  message: "NX-OS AAA login method list lacks a local fallback."
+  remediation_cli: |
+    configure terminal
+     aaa authentication login default group tacacs+ local
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/aaa_local.compliant.txt
+  negative: fixtures/aaa_local.violating.txt

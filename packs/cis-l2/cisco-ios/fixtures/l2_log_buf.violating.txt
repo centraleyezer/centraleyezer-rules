@@ -1,0 +1,4 @@
+version 15.2
+hostname legacy
+logging buffered 32768 informational
+end

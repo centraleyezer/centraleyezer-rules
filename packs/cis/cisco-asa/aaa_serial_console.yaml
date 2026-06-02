@@ -1,0 +1,31 @@
+id: cisco.asa.cis.1.1.1
+title: "ASA serial console must require AAA authentication"
+severity: high
+vendors: [cisco-asa]
+description: |
+  `aaa authentication serial console LOCAL` (or against a
+  TACACS+ / RADIUS group) must be configured.
+rationale: |
+  Without this directive, the serial console accepts the
+  enable / line password — bypassing the AAA model entirely. Any
+  physical or terminal-server access becomes a credential-skip.
+impact: |
+  AAA model bypass via console; no per-user attribution of
+  out-of-band actions.
+references:
+  cis: "CIS Cisco ASA Benchmark — 1.1.1"
+  nist: ["AC-3", "IA-2"]
+  cwe: [287]
+query:
+  path: "$.aaa.serial_console_auth"
+  equals: true
+on_fail:
+  message: "aaa authentication serial console is not configured."
+  remediation_cli: |
+    configure terminal
+     aaa authentication serial console LOCAL
+    end
+    write memory
+fixtures:
+  positive: fixtures/aaa_serial.compliant.txt
+  negative: fixtures/aaa_serial.violating.txt

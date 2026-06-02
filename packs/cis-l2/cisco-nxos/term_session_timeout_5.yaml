@@ -1,0 +1,31 @@
+id: cisco.nxos.cis-l2.1.7.2
+title: "L2: NX-OS `terminal session-timeout` must be ≤ 5 minutes"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `terminal session-timeout <N>` must be ≤ 5 (L1 was ≤ 15).
+  Tightens auto-close on idle CLI sessions to 5 minutes.
+rationale: |
+  Stricter L2 baseline — walking-away-from-the-screen
+  exposure drops from 15 minutes to 5. Workstation lock
+  policies typically lock at 5 minutes for the same reason.
+impact: |
+  Longer abandoned-session exposure on physical-access
+  takeover.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — L2 1.7.2"
+  nist: ["AC-11", "AC-12"]
+  cwe: [613]
+query:
+  path: "$.hardening.nxos_term_session_timeout"
+  in: [1, 2, 3, 4, 5]
+on_fail:
+  message: "terminal session-timeout is not ≤ 5 minutes."
+  remediation_cli: |
+    configure terminal
+     terminal session-timeout 5
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/l2_term_to.compliant.txt
+  negative: fixtures/l2_term_to.violating.txt

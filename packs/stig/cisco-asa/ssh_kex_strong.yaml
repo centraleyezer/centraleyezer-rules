@@ -1,0 +1,28 @@
+id: cisco.asa.stig.v-220403
+title: "The Cisco ASA must use a STIG-approved SSH key-exchange algorithm."
+severity: high
+vendors: [cisco-asa]
+description: |
+  Legacy DH groups (1, 5) are no longer FIPS-acceptable; STIG mandates the listed modern set.
+rationale: |
+  Sourced from the DISA Cisco ASA NDM STIG. CAT I finding.
+  See V-220403 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-220403 on the device's POA&M.
+references:
+  stig: ["V-220403"]
+  cci:
+    - "CCI-001144"
+    - "CCI-002418"
+query:
+  path: "$.crypto.ssh_kex[*]"
+  in: ["dh-group14-sha1", "dh-group14-sha256", "ecdh-sha2-nistp256", "ecdh-sha2-nistp384", "ecdh-sha2-nistp521"]
+on_fail:
+  message: "Cisco ASA STIG V-220403 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220403.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/ssh_kex.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/ssh_kex.violating.txt

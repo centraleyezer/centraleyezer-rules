@@ -1,0 +1,33 @@
+id: cisco.ios.cis.7.2.2
+title: "Enable BPDU Guard by default on portfast edge ports"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `spanning-tree portfast bpduguard default` must be configured.
+  When a portfast-edge port receives a BPDU (i.e. someone plugged
+  in a switch where an endpoint belongs), the port is err-disabled
+  immediately.
+rationale: |
+  Without BPDU Guard default, an attacker (or careless user) who
+  plugs a switch into an access port can become the root bridge
+  for the entire L2 segment — a classic root-bridge takeover.
+impact: |
+  L2 topology takeover; selective MITM via spanning-tree
+  manipulation.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.2.2"
+  nist: ["SC-7"]
+  cwe: [346]
+query:
+  path: "$.stp.bpduguard_default"
+  equals: true
+on_fail:
+  message: "spanning-tree portfast bpduguard default is not enabled."
+  remediation_cli: |
+    configure terminal
+     spanning-tree portfast bpduguard default
+    end
+    write memory
+fixtures:
+  positive: fixtures/bpduguard.compliant.txt
+  negative: fixtures/bpduguard.violating.txt

@@ -1,0 +1,34 @@
+id: cisco.asa.cis.2.1.9
+title: "ASA `ssh stricthostkeycheck` must be enabled"
+severity: low
+vendors: [cisco-asa]
+description: |
+  `ssh stricthostkeycheck` must be configured so when the ASA
+  initiates outbound SSH (e.g. for SCP transfer of backups),
+  it verifies the destination host key against the stored
+  known-hosts list rather than accepting any key.
+rationale: |
+  Without strict host-key checking, an attacker who can
+  redirect outbound SSH (DNS poison, ARP spoof, route hijack)
+  can MitM the device's outbound SCP traffic — capturing the
+  uploaded backup which contains every configured credential.
+impact: |
+  Outbound SSH/SCP from the ASA is MitM-able; backup config
+  capture possible.
+references:
+  cis: "CIS Cisco ASA Benchmark — 2.1.9"
+  nist: ["SC-8", "SC-12"]
+  cwe: [295]
+query:
+  path: "$.hardening.asa_ssh_strict_host_key"
+  equals: true
+on_fail:
+  message: "ssh stricthostkeycheck is not enabled."
+  remediation_cli: |
+    configure terminal
+     ssh stricthostkeycheck
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssh_strict.compliant.txt
+  negative: fixtures/ssh_strict.violating.txt

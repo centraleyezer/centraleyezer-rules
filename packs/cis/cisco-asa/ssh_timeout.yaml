@@ -1,0 +1,30 @@
+id: cisco.asa.cis.2.1.5
+title: "ASA SSH timeout must be set (≤ 5 minutes)"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `ssh timeout N` (1-60 minutes) must be configured. CIS L1
+  recommends ≤ 5.
+rationale: |
+  Idle SSH sessions inherit administrator privileges. Bounding
+  the idle window forces re-authentication.
+impact: |
+  Unattended privileged SSH session hijack from a shared
+  workstation.
+references:
+  cis: "CIS Cisco ASA Benchmark — 2.1.5"
+  nist: ["AC-11", "AC-12"]
+  cwe: [613]
+query:
+  path: "$.hardening.asa_ssh_timeout"
+  in: [1, 2, 3, 4, 5]
+on_fail:
+  message: "ASA ssh timeout is not set to ≤ 5."
+  remediation_cli: |
+    configure terminal
+     ssh timeout 5
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssh_timeout.compliant.txt
+  negative: fixtures/ssh_timeout.violating.txt

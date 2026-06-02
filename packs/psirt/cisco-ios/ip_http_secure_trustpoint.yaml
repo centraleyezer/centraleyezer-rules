@@ -1,0 +1,39 @@
+id: cisco.ios.psirt.http_secure_trustpoint
+title: "If HTTPS is enabled, `ip http secure-trustpoint` must be set"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  When `ip http secure-server` is enabled, `ip http
+  secure-trustpoint <NAME>` must also be configured so the
+  HTTPS server presents a known PKI certificate — not the
+  self-signed default IOS certificate.
+rationale: |
+  The default IOS self-signed certificate is identical across
+  many devices and unverifiable by clients; an attacker can
+  MitM the HTTPS management session and the operator's
+  browser will see no warning that's distinguishable from the
+  expected one.
+impact: |
+  HTTPS management session is MitM-able by anyone on the path
+  between the operator and the device.
+references:
+  cis: ""
+  nist: ["SC-8", "SC-12", "SC-23"]
+  cwe: [295]
+query:
+  path: "$.hardening.ip_http_secure_trustpoint"
+  exists: true
+on_fail:
+  message: "ip http secure-trustpoint is not configured."
+  remediation_cli: |
+    configure terminal
+     crypto pki trustpoint NETZER
+      enrollment selfsigned
+      subject-name CN=device.example.com
+      revocation-check none
+     ip http secure-trustpoint NETZER
+    end
+    write memory
+fixtures:
+  positive: fixtures/http_secure_tp.compliant.txt
+  negative: fixtures/http_secure_tp.violating.txt

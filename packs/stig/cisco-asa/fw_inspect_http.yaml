@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220703
+title: "The Cisco ASA should apply HTTP inspection where HTTP traverses the firewall."
+severity: low
+vendors: [cisco-asa]
+description: |
+  HTTP inspection catches malformed requests and protocol smuggling commonly used in pivot attacks.
+rationale: |
+  Sourced from the DISA Cisco ASA Firewall STIG. CAT III finding.
+  See V-220703 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220703 on the device's POA&M.
+references:
+  stig: ["V-220703"]
+  cci:
+    - "CCI-001094"
+query:
+  path: "$.hardening.asa_inspect_http"
+  equals: true
+on_fail:
+  message: "STIG V-220703 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220703.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/inspect_http.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/inspect_http.violating.txt

@@ -1,0 +1,35 @@
+id: cisco.nxos.cis.7.5.5
+title: "NX-OS `ip dhcp snooping information option allow-untrusted` must NOT be set"
+severity: high
+vendors: [cisco-nx-os]
+description: |
+  `ip dhcp snooping information option allow-untrusted` must
+  NOT be configured. The option lets DHCP relay accept
+  Option-82-tagged packets from untrusted ports — bypassing
+  one of snooping's core protections.
+rationale: |
+  Option-82 from untrusted ports lets an attacker spoof the
+  relay-agent information field. Combined with a permissive
+  DHCP server policy, this is a path to claim leases against
+  arbitrary subnets. The hardening posture is "untrusted
+  ports never get to set Option-82".
+impact: |
+  DHCP-snooping Option-82 trust boundary breached; lease
+  spoofing across subnets possible.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.5.5"
+  nist: ["SC-7", "AC-4"]
+  cwe: [345]
+query:
+  path: "$.hardening.nxos_dhcp_snoop_allow_untrusted"
+  equals: false
+on_fail:
+  message: "ip dhcp snooping information option allow-untrusted is configured."
+  remediation_cli: |
+    configure terminal
+     no ip dhcp snooping information option allow-untrusted
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/dhcp_allow_untrusted.compliant.txt
+  negative: fixtures/dhcp_allow_untrusted.violating.txt

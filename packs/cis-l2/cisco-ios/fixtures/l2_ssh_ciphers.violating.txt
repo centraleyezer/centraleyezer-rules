@@ -1,0 +1,4 @@
+version 15.2
+hostname legacy
+ip ssh server algorithm encryption aes256-cbc
+end

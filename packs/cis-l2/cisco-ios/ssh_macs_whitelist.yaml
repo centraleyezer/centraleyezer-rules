@@ -1,0 +1,33 @@
+id: cisco.ios.cis-l2.3.6.11
+title: "L2: SSH MAC algorithms must be SHA-2 only"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Every algorithm in `ip ssh server algorithm mac` must be on
+  the SHA-2 allow-list: `hmac-sha2-256`, `hmac-sha2-512`, or
+  their ETM variants. Any SHA-1 / MD5 variant is a failure.
+rationale: |
+  Per RFC 9519 + RFC 6668, SHA-1-based MAC suites are retired
+  for SSH integrity. OpenSSH 9.x removed SHA-1 MACs from the
+  default set; devices that still list them are interop-
+  fragile.
+impact: |
+  Legacy SHA-1 / MD5 MAC suites acceptable; SHA-1-related
+  cryptographic depreciation pressure ignored.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 3.6.11"
+  nist: ["SC-13"]
+  cwe: [327]
+query:
+  path: "$.crypto.ssh_macs[*]"
+  in: ["hmac-sha2-256", "hmac-sha2-512", "hmac-sha2-256-etm@openssh.com", "hmac-sha2-512-etm@openssh.com"]
+on_fail:
+  message: "SSH MAC list contains entries outside the SHA-2 allow-list."
+  remediation_cli: |
+    configure terminal
+     ip ssh server algorithm mac hmac-sha2-512 hmac-sha2-256
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_ssh_macs.compliant.txt
+  negative: fixtures/l2_ssh_macs.violating.txt

@@ -1,0 +1,33 @@
+id: cisco.asa.cis.1.2.2
+title: "ASA must not configure the legacy `passwd` (Telnet) command"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  The legacy `passwd <X>` command (separate from `enable
+  password`) sets the Telnet / console password — a holdover
+  from PIX. It must NOT be present; the ASA must use only
+  `enable password` (PBKDF2) and AAA-bound credentials.
+rationale: |
+  `passwd` is the Telnet shared password. It is reversible,
+  stored alongside the running config, and bypasses any AAA
+  configuration. Removing it eliminates a parallel
+  credential path that AAA cannot see or audit.
+impact: |
+  Parallel, AAA-invisible credential path on the device.
+references:
+  cis: "CIS Cisco ASA Benchmark — 1.2.2"
+  nist: ["IA-5", "AC-2"]
+  cwe: [798]
+query:
+  path: "$.hardening.asa_legacy_passwd"
+  equals: false
+on_fail:
+  message: "Legacy `passwd` is configured."
+  remediation_cli: |
+    configure terminal
+     no passwd
+    end
+    write memory
+fixtures:
+  positive: fixtures/legacy_passwd.compliant.txt
+  negative: fixtures/legacy_passwd.violating.txt

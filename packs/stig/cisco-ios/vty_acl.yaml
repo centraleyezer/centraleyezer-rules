@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-215807.vty_acl
+title: "The Cisco router must restrict management access via an access-class on all VTY lines."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  An ACL on each VTY line constrains the source addresses permitted to reach the management plane.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router NDM STIG. CAT II finding.
+  See V-215807 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-215807 on the device's POA&M.
+references:
+  stig: ["V-215807"]
+  cci:
+    - "CCI-000054"
+query:
+  path: "$.vty_lines[*].access_class"
+  matches: "."
+on_fail:
+  message: "Cisco IOS STIG V-215807 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-215807.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/vty_access_class.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/vty_access_class.violating.txt

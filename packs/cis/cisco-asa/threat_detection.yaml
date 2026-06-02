@@ -1,0 +1,35 @@
+id: cisco.asa.cis.6.1.1
+title: "Enable ASA threat-detection basic-threat"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `threat-detection basic-threat` must be enabled so the ASA
+  emits alerts when traffic patterns indicate scans, sweeps,
+  DoS attempts, or other suspicious volume.
+rationale: |
+  Basic threat-detection is the ASA's built-in volumetric IDS.
+  It is essentially free (counter-based) and surfaces real-time
+  alerts during attacks-in-progress that other systems often
+  miss until post-hoc log review.
+impact: |
+  Active-attack signal goes undetected; no early warning of
+  scan / sweep / DoS activity terminating at the firewall.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.1.1"
+  nist: ["SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.threat_detection_basic"
+  equals: true
+on_fail:
+  message: "threat-detection basic-threat is not enabled."
+  remediation_cli: |
+    configure terminal
+     threat-detection basic-threat
+     threat-detection scanning-threat
+     threat-detection statistics
+    end
+    write memory
+fixtures:
+  positive: fixtures/threat_detection.compliant.txt
+  negative: fixtures/threat_detection.violating.txt

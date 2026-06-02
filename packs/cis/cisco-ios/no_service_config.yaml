@@ -1,0 +1,32 @@
+id: cisco.ios.cis.2.2.11
+title: "Disable `service config` (no boot-time network config retrieval)"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no service config` must be set. With `service config` enabled,
+  the device pulls auto-config from a network server at boot — a
+  classic supply-chain attack vector.
+rationale: |
+  A rogue server reachable at boot-time can push attacker-supplied
+  config (or empty config that drops AAA). This is the
+  pre-Smart-Install equivalent.
+impact: |
+  Configuration takeover at next reboot; persistence across
+  device replacement.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.11"
+  nist: ["CM-3", "CM-7"]
+  cwe: [346]
+query:
+  path: "$.hardening.service_config"
+  equals: false
+on_fail:
+  message: "`service config` is enabled."
+  remediation_cli: |
+    configure terminal
+     no service config
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_svc_config.compliant.txt
+  negative: fixtures/no_svc_config.violating.txt

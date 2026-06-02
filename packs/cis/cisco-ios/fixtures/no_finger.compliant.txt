@@ -1,0 +1,5 @@
+version 17.9
+hostname compliant-sw
+no service finger
+no ip finger
+end

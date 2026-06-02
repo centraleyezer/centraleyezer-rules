@@ -1,0 +1,9 @@
+version 17.9
+hostname compliant
+!
+interface GigabitEthernet1/0/1
+ switchport mode access
+ storm-control broadcast level 5.00
+ storm-control multicast level 10.00
+!
+end

@@ -1,0 +1,35 @@
+id: cisco.nxos.cis.7.4.1
+title: "NX-OS `dot1x system-auth-control` must be enabled"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `dot1x system-auth-control` must be enabled globally so
+  per-port 802.1X authentication can take effect on access
+  ports. Without the global switch, per-interface dot1x
+  stanzas are inert.
+rationale: |
+  802.1X is the standard port-level network access control —
+  it ties physical port admission to user/machine identity.
+  Without `system-auth-control`, every access port is open by
+  default to any device that plugs in.
+impact: |
+  Per-port 802.1X stanzas have no effect; ports remain open
+  to any L2 device.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.4.1"
+  nist: ["AC-3", "IA-3"]
+  cwe: [284]
+query:
+  path: "$.hardening.nxos_dot1x_auth_control"
+  equals: true
+on_fail:
+  message: "dot1x system-auth-control is not enabled."
+  remediation_cli: |
+    configure terminal
+     feature dot1x
+     dot1x system-auth-control
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/dot1x_auth.compliant.txt
+  negative: fixtures/dot1x_auth.violating.txt

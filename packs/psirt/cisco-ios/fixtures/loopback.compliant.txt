@@ -1,0 +1,7 @@
+version 17.9
+hostname compliant
+!
+interface Loopback0
+ ip address 10.255.255.1 255.255.255.255
+!
+end

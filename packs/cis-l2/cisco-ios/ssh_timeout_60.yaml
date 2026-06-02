@@ -1,0 +1,31 @@
+id: cisco.ios.cis-l2.3.6.13
+title: "L2: `ip ssh time-out` must be ≤ 60 seconds"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip ssh time-out <N>` must be ≤ 60 (L1 allows up to 120).
+  Tightens the unauthenticated-session lifetime.
+rationale: |
+  L1 protects against the worst — long-lived unauthenticated
+  sockets. L2 cuts the budget further so SSH-flood attacks
+  cost the device fewer slots per unit time.
+impact: |
+  Larger pool of unauthenticated SSH sockets pending; SSH-
+  flood resistance reduced.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 3.6.13"
+  nist: ["SC-5", "AC-17"]
+  cwe: [400]
+query:
+  path: "$.hardening.ssh_timeout"
+  in: [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
+on_fail:
+  message: "ip ssh time-out is not set ≤ 60 seconds."
+  remediation_cli: |
+    configure terminal
+     ip ssh time-out 60
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_ssh_timeout.compliant.txt
+  negative: fixtures/l2_ssh_timeout.violating.txt

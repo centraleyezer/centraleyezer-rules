@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220623
+title: "The Cisco switch must enforce 802.1X for endpoint identification before granting LAN access."
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Without 802.1X (dot1x system-auth-control), the switch admits any device on a physically reachable port — bypassing identity-based segmentation.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Switch L2S STIG. CAT I finding.
+  See V-220623 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-220623 on the device's POA&M.
+references:
+  stig: ["V-220623"]
+  cci:
+    - "CCI-000778"
+query:
+  path: "$.hardening.dot1x_system_auth_control"
+  equals: true
+on_fail:
+  message: "Cisco IOS L2S STIG V-220623 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220623.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/dot1x_global.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/dot1x_global.violating.txt

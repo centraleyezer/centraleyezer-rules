@@ -1,0 +1,27 @@
+id: cisco.nxos.stig.v-220305
+title: "The NX-OS switch must enable the NTP feature for clock synchronisation."
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  NTP is required for accurate audit-record timestamps across the fleet.
+rationale: |
+  Sourced from the DISA Cisco NX-OS Switch NDM STIG. CAT II finding.
+  See V-220305 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220305 on the device's POA&M.
+references:
+  stig: ["V-220305"]
+  cci:
+    - "CCI-001891"
+query:
+  path: "$.features[*]"
+  in: ["ntp"]
+on_fail:
+  message: "Cisco NX-OS STIG V-220305 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220305.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-nxos/fixtures/feature_ntp.compliant.txt
+  negative: ../../cis/cisco-nxos/fixtures/feature_ntp.violating.txt

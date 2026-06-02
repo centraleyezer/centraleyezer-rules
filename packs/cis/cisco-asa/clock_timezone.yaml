@@ -1,0 +1,34 @@
+id: cisco.asa.cis.6.6.1
+title: "ASA `clock timezone` must be set explicitly"
+severity: low
+vendors: [cisco-asa]
+description: |
+  `clock timezone <NAME> <OFFSET>` must be explicitly
+  configured (ideally to UTC) so log timestamps carry an
+  unambiguous timezone — not the default of UTC-printed-as-
+  local-system-time-with-no-offset.
+rationale: |
+  Cross-region incident analysis is impossible when logs
+  arrive with ambiguous timezone semantics. Pinning to UTC
+  on all devices is the standard practice; any explicit
+  timezone is preferable to none.
+impact: |
+  Log timestamps timezone-ambiguous; cross-region forensics
+  hard.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.6.1"
+  nist: ["AU-8"]
+  cwe: []
+query:
+  path: "$.hardening.asa_clock_timezone"
+  exists: true
+on_fail:
+  message: "clock timezone is not explicitly set."
+  remediation_cli: |
+    configure terminal
+     clock timezone UTC 0
+    end
+    write memory
+fixtures:
+  positive: fixtures/clock_tz.compliant.txt
+  negative: fixtures/clock_tz.violating.txt

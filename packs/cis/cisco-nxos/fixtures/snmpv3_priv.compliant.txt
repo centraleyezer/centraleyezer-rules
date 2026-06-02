@@ -1,0 +1,4 @@
+!Command: show running-config
+version 9.3(8)
+switchname nxos-clean
+snmp-server user opmon network-operator auth sha 0xabc priv aes-128 0xdef

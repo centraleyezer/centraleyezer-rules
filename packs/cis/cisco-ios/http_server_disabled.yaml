@@ -1,0 +1,30 @@
+id: cisco.ios.cis.2.2.1
+title: "Disable the HTTP server (use HTTPS only)"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  The cleartext HTTP management server must be disabled. If web-based
+  management is required, only the secure HTTPS server is acceptable.
+rationale: |
+  HTTP transmits the management session, including credentials and
+  config snippets, in cleartext.
+impact: |
+  On-path observation of admin credentials and configuration changes.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.1"
+  nist: ["AC-17", "SC-8"]
+  cwe: [319]
+query:
+  path: "$.services.http_server"
+  equals: false
+on_fail:
+  message: "HTTP server is enabled (use HTTPS only)."
+  remediation_cli: |
+    configure terminal
+     no ip http server
+     ip http secure-server
+    end
+    write memory
+fixtures:
+  positive: fixtures/http_off.compliant.txt
+  negative: fixtures/http_off.violating.txt

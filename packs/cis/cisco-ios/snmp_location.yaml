@@ -1,0 +1,30 @@
+id: cisco.ios.cis.3.3.8
+title: "Set snmp-server location"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `snmp-server location` must be configured so SNMP polling clients
+  + log aggregators can attribute alerts to a physical / logical
+  location without out-of-band lookup.
+rationale: |
+  In an outage, the first question is "where is this device?".
+  An empty location MIB stalls the incident response loop.
+impact: |
+  Slower MTTR; misattributed alerts.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.3.2"
+  nist: ["CM-8"]
+  cwe: []
+query:
+  path: "$.snmp.location"
+  matches: "."
+on_fail:
+  message: "snmp-server location is not configured."
+  remediation_cli: |
+    configure terminal
+     snmp-server location DC1-RackA-U12
+    end
+    write memory
+fixtures:
+  positive: fixtures/snmp_location.compliant.txt
+  negative: fixtures/snmp_location.violating.txt

@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant
+flow record NETZER-REC
+end

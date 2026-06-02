@@ -1,0 +1,32 @@
+id: cisco.nxos.cis-l2.1.5.10
+title: "L2: NX-OS `radius-server timeout` must be ≤ 3"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `radius-server timeout <N>` must be ≤ 3 (L2-round-1 was ≤ 5,
+  L1 was ≤ 10). Tightest cap.
+rationale: |
+  Same logic as the round-1 L2 rule — halve the worst-case
+  login wait during RADIUS outage one more time. 3s × 3
+  retransmits = 9s worst-case; ops won't notice the
+  difference but a sustained outage doesn't compound into
+  multi-minute stalls.
+impact: |
+  Longer management-plane stalls during RADIUS outage.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — L2 1.5.10"
+  nist: ["AC-2", "CP-2"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_radius_timeout"
+  in: [1, 2, 3]
+on_fail:
+  message: "radius-server timeout is not set ≤ 3."
+  remediation_cli: |
+    configure terminal
+     radius-server timeout 3
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/l2_rtto3.compliant.txt
+  negative: fixtures/l2_rtto3.violating.txt

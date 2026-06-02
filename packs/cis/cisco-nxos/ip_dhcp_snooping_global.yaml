@@ -1,0 +1,36 @@
+id: cisco.nxos.cis.7.5.2
+title: "NX-OS `ip dhcp snooping` must be enabled globally"
+severity: high
+vendors: [cisco-nx-os]
+description: |
+  `ip dhcp snooping` must be enabled globally after `feature
+  dhcp`. This is the foundation L2 protection: it builds the
+  per-VLAN binding table that DAI and IP Source Guard rely on,
+  and rejects unauthorized DHCP servers.
+rationale: |
+  Without global DHCP snooping, an attacker who plugs in a
+  rogue DHCP server can poison every newly-DHCP'd host on the
+  segment — overriding default gateway, DNS, and NTP. Snooping
+  caps DHCP-server replies to trusted ports.
+impact: |
+  Rogue-DHCP attacks succeed unattended; no binding table for
+  DAI / IPSG.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.5.2"
+  nist: ["SC-7", "AC-4"]
+  cwe: [345]
+query:
+  path: "$.hardening.nxos_ip_dhcp_snooping"
+  equals: true
+on_fail:
+  message: "ip dhcp snooping is not enabled globally."
+  remediation_cli: |
+    configure terminal
+     feature dhcp
+     ip dhcp snooping
+     ip dhcp snooping vlan 1-1000
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/nxos_dhcp_snoop.compliant.txt
+  negative: fixtures/nxos_dhcp_snoop.violating.txt

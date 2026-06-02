@@ -1,0 +1,39 @@
+id: cisco.ios.cis-l2.1.3.7
+title: "L2: EXEC banner must be configured"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `banner exec <DELIM><text><DELIM>` must be present. Shown
+  after successful authentication, before the EXEC prompt —
+  the right place for operator-context notices (device role,
+  last-modified, support contact).
+rationale: |
+  Auditors increasingly check for the "three-banner" set
+  (MOTD + login + exec). The EXEC banner is also where
+  device-specific operational notes (e.g. "this is a
+  PRODUCTION device" or "maintenance window WEDS 0200-0400")
+  live to prime operators before they type a command.
+impact: |
+  Post-login operator context is absent; less-experienced
+  operators may take prod-incident actions on a lab device
+  (or vice versa).
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 1.3.7"
+  nist: ["AC-8"]
+  cwe: []
+query:
+  path: "$.banners.exec"
+  exists: true
+on_fail:
+  message: "EXEC banner is not configured."
+  remediation_cli: |
+    configure terminal
+     banner exec ^
+       *** PRODUCTION DEVICE ***
+       Verify change-control before configuration changes.
+     ^
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_banner_exec.compliant.txt
+  negative: fixtures/l2_banner_exec.violating.txt

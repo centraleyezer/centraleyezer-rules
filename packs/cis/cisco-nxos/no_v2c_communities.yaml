@@ -1,0 +1,34 @@
+id: cisco.nxos.cis.3.3.3
+title: "NX-OS must use SNMPv3 only — no v1/v2c communities"
+severity: high
+vendors: [cisco-nx-os]
+description: |
+  NX-OS must not have any `snmp-server community` lines configured.
+  Only SNMPv3 (`snmp-server user`) is acceptable.
+rationale: |
+  v1/v2c community strings are sent in cleartext on every poll.
+  v3 with auth+priv encrypts both the auth handshake and the
+  payload. Disabling v1/v2c eliminates the cleartext exposure.
+impact: |
+  Recovery of community strings from any captured SNMP packet;
+  passive enumeration of the management plane.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 3.3.3"
+  nist: ["IA-7", "SC-8"]
+  cwe: [319]
+query:
+  path: "$.snmp.communities[0]"
+  exists: false
+on_fail:
+  message: "NX-OS has at least one v1/v2c SNMP community configured."
+  remediation_cli: |
+    configure terminal
+     ! Remove every v1/v2c community:
+     no snmp-server community <NAME>
+     ! Use SNMPv3 only:
+     snmp-server user opmon network-operator auth sha PHRASE priv aes-128 PHRASE
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/no_v2c.compliant.txt
+  negative: fixtures/no_v2c.violating.txt

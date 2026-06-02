@@ -1,0 +1,32 @@
+id: cisco.asa.cis-l2.1.2.9
+title: "L2: ASA `password-policy lifetime` must be ≤ 30 days"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `password-policy lifetime <N>` must be ≤ 30 (L2-round-1
+  was ≤ 60). Strictest rotation cadence for ASA local users.
+rationale: |
+  30-day rotation is the strictest enterprise tier (used for
+  highly-privileged perimeter device accounts). At this
+  cadence the leaked-backup-via-stale-cred attack window
+  shrinks to weeks.
+impact: |
+  Local-password exposure window extends to months between
+  rotations.
+references:
+  cis: "CIS Cisco ASA Benchmark — L2 1.2.9"
+  nist: ["IA-5"]
+  cwe: [262]
+query:
+  path: "$.hardening.asa_pwd_policy_lifetime"
+  in: [7, 14, 21, 30]
+on_fail:
+  message: "password-policy lifetime is not ≤ 30 days."
+  remediation_cli: |
+    configure terminal
+     password-policy lifetime 30
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_asa_life30.compliant.txt
+  negative: fixtures/l2_asa_life30.violating.txt

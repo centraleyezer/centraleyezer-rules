@@ -1,0 +1,33 @@
+id: cisco.ios.cis.3.3.2
+title: "`ipv6 cef` must be enabled when IPv6 is in use"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ipv6 cef` must be configured so IPv6 traffic uses
+  Cisco Express Forwarding — the IPv6 sibling of the IPv4
+  `ip cef` rule (2.2.12 / 3.3.1).
+rationale: |
+  Without IPv6 CEF, IPv6 packets are process-switched —
+  burning control-plane CPU on transit traffic AND disabling
+  IPv6 uRPF, IPv6 NetFlow, and other hardware-accelerated
+  IPv6 security features.
+impact: |
+  IPv6 security features (uRPF, NetFlow) inoperative;
+  control-plane CPU under IPv6 transit load.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.3.2"
+  nist: ["SC-5", "SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.ipv6_cef"
+  equals: true
+on_fail:
+  message: "ipv6 cef is not enabled."
+  remediation_cli: |
+    configure terminal
+     ipv6 cef
+    end
+    write memory
+fixtures:
+  positive: fixtures/ipv6_cef.compliant.txt
+  negative: fixtures/ipv6_cef.violating.txt

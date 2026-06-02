@@ -1,0 +1,6 @@
+version 17.9
+hostname compliant
+line vty 0 4
+ transport input ssh
+ transport preferred none
+end

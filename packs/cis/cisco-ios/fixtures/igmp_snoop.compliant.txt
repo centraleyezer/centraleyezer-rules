@@ -1,0 +1,9 @@
+!
+! IGMP snooping at default (enabled) — STIG L2S V-220637 satisfied.
+! No `no ip igmp snooping` line present.
+!
+hostname sw-l2-igmp-compliant
+!
+spanning-tree mode rapid-pvst
+!
+end

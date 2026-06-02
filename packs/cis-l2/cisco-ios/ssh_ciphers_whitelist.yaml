@@ -1,0 +1,35 @@
+id: cisco.ios.cis-l2.3.6.10
+title: "L2: SSH ciphers must be on the modern allow-list (AES-CTR / AES-GCM only)"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Stricter than the CIS L1 deny-list rule. Every cipher listed
+  in `ip ssh server algorithm encryption` must be one of:
+  `aes256-gcm`, `aes128-gcm`, `aes256-ctr`, `aes128-ctr`.
+  Any CBC-mode cipher (vulnerable to BEAST / Lucky13 class
+  attacks) or 3DES is a failure.
+rationale: |
+  L1 forbids the worst (3DES). L2 mandates the modern set so
+  legacy *-cbc ciphers can't slip into a config "for compat".
+  OpenSSH 8.5+ defaults to CTR/GCM-only; any device that
+  doesn't match is interop-fragile AND has weaker crypto.
+impact: |
+  CBC-mode ciphers acceptable to the SSH server; modern
+  clients negotiate them when present.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 3.6.10"
+  nist: ["SC-13"]
+  cwe: [327]
+query:
+  path: "$.crypto.ssh_ciphers[*]"
+  in: ["aes256-gcm@openssh.com", "aes128-gcm@openssh.com", "aes256-ctr", "aes128-ctr", "aes192-ctr"]
+on_fail:
+  message: "SSH cipher list contains entries outside the CTR/GCM allow-list."
+  remediation_cli: |
+    configure terminal
+     ip ssh server algorithm encryption aes256-gcm@openssh.com aes256-ctr aes128-ctr
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_ssh_ciphers.compliant.txt
+  negative: fixtures/l2_ssh_ciphers.violating.txt

@@ -1,0 +1,33 @@
+id: cisco.asa.cis.5.1.4
+title: "ASA IPsec security-association lifetime must be ≤ 3600 seconds"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `crypto ipsec security-association lifetime seconds N` must be
+  ≤ 3600 (1 hour). The default of 28800 (8 hours) is too long
+  for modern threat models.
+rationale: |
+  Shorter SA lifetimes limit the data volume encrypted with any
+  one key — bounding the impact of a key-recovery attack. CIS L1
+  + Cisco hardening guidance converge on 1 hour as the upper
+  bound for production VPNs.
+impact: |
+  Larger blast radius if a session key is recovered; more data
+  exposed to long-term-passive-capture decryption attacks.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.1.4"
+  nist: ["SC-13"]
+  cwe: []
+query:
+  path: "$.hardening.asa_ipsec_lifetime"
+  in: [60, 120, 300, 600, 900, 1200, 1800, 2400, 3000, 3600]
+on_fail:
+  message: "crypto ipsec SA lifetime is not set to ≤ 3600 seconds."
+  remediation_cli: |
+    configure terminal
+     crypto ipsec security-association lifetime seconds 3600
+    end
+    write memory
+fixtures:
+  positive: fixtures/ipsec_lifetime.compliant.txt
+  negative: fixtures/ipsec_lifetime.violating.txt

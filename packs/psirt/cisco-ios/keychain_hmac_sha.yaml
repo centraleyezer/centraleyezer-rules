@@ -1,0 +1,39 @@
+id: cisco.ios.psirt.keychain_hmac_sha
+title: "Key chains must use `cryptographic-algorithm hmac-sha-256` (or stronger)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  When a key chain is defined for routing-protocol or other
+  authentication, at least one key entry must use
+  `cryptographic-algorithm hmac-sha-256` (or sha-384 / sha-512).
+  Older `md5` keychains are vulnerable to known
+  collision-class attacks.
+rationale: |
+  Routing-protocol authentication keys are used as MAC
+  inputs. MD5 has been broken for MAC collision resistance
+  in academic and applied settings since the late 2000s.
+  HMAC-SHA-256 is the modern minimum.
+impact: |
+  Routing-protocol authentication uses MD5-based MACs —
+  vulnerable to forged-route attacks under modern collision
+  research.
+references:
+  cis: ""
+  nist: ["SC-13"]
+  cwe: [327, 916]
+query:
+  path: "$.hardening.key_chain_hmac_sha"
+  equals: true
+on_fail:
+  message: "No key chain entry uses cryptographic-algorithm hmac-sha-2xx."
+  remediation_cli: |
+    configure terminal
+     key chain NETZER-KEYS
+      key 1
+       cryptographic-algorithm hmac-sha-256
+       key-string <STRONG>
+    end
+    write memory
+fixtures:
+  positive: fixtures/kc_hmac.compliant.txt
+  negative: fixtures/kc_hmac.violating.txt

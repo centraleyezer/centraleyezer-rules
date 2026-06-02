@@ -1,0 +1,33 @@
+id: cisco.ios.cis.6.1.2
+title: "Drop packets with IP options set"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip options drop` must be configured. The device must silently
+  drop transit packets carrying IP options (LSRR, SSRR, Record
+  Route, Timestamp).
+rationale: |
+  IP options are a documented evasion vector — many ACLs and
+  middleboxes match on the first 20 bytes of the IP header and
+  miss policy violations carried in options. Dropping options at
+  ingress closes the bypass.
+impact: |
+  Policy bypass for source-routed / record-route traffic;
+  enumeration via Timestamp.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 6.1.2"
+  nist: ["SC-7"]
+  cwe: [346]
+query:
+  path: "$.hardening.ip_options_drop"
+  equals: true
+on_fail:
+  message: "ip options drop is not configured."
+  remediation_cli: |
+    configure terminal
+     ip options drop
+    end
+    write memory
+fixtures:
+  positive: fixtures/ipopts.compliant.txt
+  negative: fixtures/ipopts.violating.txt

@@ -1,0 +1,35 @@
+id: cisco.ios.cis.9.2.1
+title: "HSRP groups must use authentication"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+applies_when:
+  features: [hsrp]
+description: |
+  When HSRP is configured (`standby X ...`), every group must
+  authenticate (`standby X authentication md5 key-chain ...` or
+  `standby X authentication X-string`).
+rationale: |
+  An attacker on the same L2 segment can become the active HSRP
+  router (highest priority + preempt) and route all traffic
+  destined for the virtual gateway. Authentication eliminates
+  the takeover path.
+impact: |
+  First-hop gateway takeover; full-traffic MITM on the VLAN.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 9.2.1"
+  nist: ["AC-3", "IA-2", "SC-7"]
+  cwe: [346]
+query:
+  path: "$.routing.hsrp.authenticated"
+  equals: true
+on_fail:
+  message: "HSRP is enabled but at least one group lacks authentication."
+  remediation_cli: |
+    configure terminal
+     interface Vlan10
+      standby 10 authentication md5 key-chain HSRP-KEYS
+    end
+    write memory
+fixtures:
+  positive: fixtures/hsrp_auth.compliant.txt
+  negative: fixtures/hsrp_auth.violating.txt

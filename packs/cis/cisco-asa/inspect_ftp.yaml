@@ -1,0 +1,37 @@
+id: cisco.asa.cis.6.3.6
+title: "ASA `inspect ftp` must be enabled in the global policy"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `inspect ftp` must be configured in the global policy-map
+  so the ASA's FTP application-layer gateway opens the
+  ephemeral data-channel pin-holes safely — and applies its
+  FTP protocol-validation logic to prevent control-channel
+  injection attacks.
+rationale: |
+  Without `inspect ftp`, the operator has to manually open
+  the entire ephemeral port range, which defeats the firewall.
+  Inspection also catches malformed FTP that's been used in
+  historical evasion attacks.
+impact: |
+  FTP data-channel pin-holes either non-functional (no ALG)
+  or wide-open (manual port range).
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.3.2"
+  nist: ["SC-7", "SI-3"]
+  cwe: []
+query:
+  path: "$.hardening.asa_inspect_ftp"
+  equals: true
+on_fail:
+  message: "inspect ftp is not enabled."
+  remediation_cli: |
+    configure terminal
+     policy-map global_policy
+      class inspection_default
+       inspect ftp
+    end
+    write memory
+fixtures:
+  positive: fixtures/inspect_ftp.compliant.txt
+  negative: fixtures/inspect_ftp.violating.txt

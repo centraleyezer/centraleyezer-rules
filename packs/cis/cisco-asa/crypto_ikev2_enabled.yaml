@@ -1,0 +1,34 @@
+id: cisco.asa.cis.5.1.2
+title: "ASA must enable IKEv2 for IPsec VPN"
+severity: high
+vendors: [cisco-asa]
+description: |
+  `crypto ikev2 enable <interface>` must be configured on at
+  least one interface. IKEv2 is the modern replacement for
+  IKEv1 and is the only acceptable IKE version on new VPN
+  deployments per Cisco's hardening guidance.
+rationale: |
+  IKEv2 has cleaner state machine, better DDoS resistance, and
+  supports modern cipher suites natively. IKEv1 has multiple
+  historical RCE / memory-disclosure CVEs and is deprecated.
+impact: |
+  Continued exposure to IKEv1-specific CVEs; weaker default
+  cipher suites; harder to interop with modern peers.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.1.2"
+  nist: ["SC-8", "SC-13"]
+  cwe: [327]
+query:
+  path: "$.hardening.asa_crypto_ikev2_enabled"
+  equals: true
+on_fail:
+  message: "crypto ikev2 enable is not configured."
+  remediation_cli: |
+    configure terminal
+     crypto ikev2 enable outside
+     no crypto ikev1 enable outside
+    end
+    write memory
+fixtures:
+  positive: fixtures/ikev2.compliant.txt
+  negative: fixtures/ikev2.violating.txt

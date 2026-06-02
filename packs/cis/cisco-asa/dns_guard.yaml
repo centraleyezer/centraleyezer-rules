@@ -1,0 +1,31 @@
+id: cisco.asa.cis.6.3.1
+title: "Enable ASA DNS guard"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `dns-guard` must be configured. DNS Guard tears down DNS
+  connections after the first response, preventing DNS-based
+  exfiltration / cache poisoning via the firewall.
+rationale: |
+  Without DNS Guard, a DNS query established through the ASA
+  can be reused for an attacker-supplied second response —
+  enabling DNS-tunneling and cache-poisoning attacks.
+impact: |
+  DNS-tunneling exfiltration; cross-server cache poisoning.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.3.1"
+  nist: ["SC-7", "SI-4"]
+  cwe: [345]
+query:
+  path: "$.hardening.asa_dns_guard"
+  equals: true
+on_fail:
+  message: "ASA dns-guard is not enabled."
+  remediation_cli: |
+    configure terminal
+     dns-guard
+    end
+    write memory
+fixtures:
+  positive: fixtures/dns_guard.compliant.txt
+  negative: fixtures/dns_guard.violating.txt

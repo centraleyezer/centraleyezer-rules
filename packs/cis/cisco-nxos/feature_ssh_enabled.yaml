@@ -1,0 +1,33 @@
+id: cisco.nxos.cis.3.6.3
+title: "NX-OS `feature ssh` must be enabled"
+severity: high
+vendors: [cisco-nx-os]
+description: |
+  `feature ssh` must be enabled — without it, the only
+  remote-management option is Telnet, and `feature telnet` is
+  explicitly forbidden by hardening guidance.
+rationale: |
+  NX-OS gates SSH behind `feature ssh`. If the operator
+  forgets it after factory reset, the device is reachable only
+  via Telnet (or console). Confirming the feature is the
+  precondition check for every other SSH-related rule.
+impact: |
+  No SSH server available; management access falls back to
+  Telnet or console-only.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 3.6.3"
+  nist: ["AC-17", "SC-8"]
+  cwe: [319]
+query:
+  path: "$.features[*]"
+  in: ["ssh"]
+on_fail:
+  message: "feature ssh is not enabled."
+  remediation_cli: |
+    configure terminal
+     feature ssh
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/feature_ssh.compliant.txt
+  negative: fixtures/feature_ssh.violating.txt

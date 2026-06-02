@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220806
+title: "The Cisco ASA must not permit legacy / weak crypto algorithms."
+severity: high
+vendors: [cisco-asa]
+description: |
+  DES / 3DES / RC4 / MD5-HMAC are deprecated and forbidden in STIG-baselined networks.
+rationale: |
+  Sourced from the DISA Cisco ASA VPN STIG. CAT I finding.
+  See V-220806 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-220806 on the device's POA&M.
+references:
+  stig: ["V-220806"]
+  cci:
+    - "CCI-002450"
+query:
+  path: "$.hardening.asa_permit_weak_crypto"
+  equals: false
+on_fail:
+  message: "STIG V-220806 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220806.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/no_weak_crypto.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/no_weak_crypto.violating.txt

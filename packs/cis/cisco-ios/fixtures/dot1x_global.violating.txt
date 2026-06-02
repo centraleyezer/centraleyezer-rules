@@ -1,0 +1,11 @@
+!
+! No `dot1x system-auth-control` — 802.1X authentication not enabled.
+!
+hostname sw-l2-dot1x-violating
+!
+aaa new-model
+!
+interface GigabitEthernet1/0/1
+ switchport mode access
+!
+end

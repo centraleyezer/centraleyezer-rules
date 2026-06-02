@@ -1,0 +1,34 @@
+id: cisco.ios.cis.2.1.7
+title: "Restrict SSH authentication to public-key (where supported)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip ssh server algorithm authentication publickey,keyboard`
+  must be configured so the SSH server prefers / allows only
+  public-key (or keyboard-interactive for AAA prompts) — not
+  cleartext password.
+rationale: |
+  Public-key authentication is not subject to password brute-force.
+  Combined with TACACS+ / RADIUS (`keyboard-interactive`), it
+  provides per-user attribution without static credentials on the
+  wire.
+impact: |
+  Continued exposure to password-brute-force on SSH; weaker
+  per-user audit chain.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.1.7"
+  nist: ["IA-2", "IA-5"]
+  cwe: [307, 521]
+query:
+  path: "$.crypto.ssh_auth_methods[*]"
+  in: ["publickey"]
+on_fail:
+  message: "SSH server does not restrict authentication to public-key."
+  remediation_cli: |
+    configure terminal
+     ip ssh server algorithm authentication publickey keyboard
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssh_pubkey.compliant.txt
+  negative: fixtures/ssh_pubkey.violating.txt

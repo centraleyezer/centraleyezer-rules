@@ -1,0 +1,32 @@
+id: cisco.ios.cis.3.3.5
+title: "Enable SNMP traps"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `snmp-server enable traps` must be configured (with at least
+  one trap class enabled) so the NMS receives asynchronous event
+  notifications instead of relying on polling alone.
+rationale: |
+  Polling has latency; traps push events the moment they happen
+  (link state changes, config changes, AAA events, etc.).
+impact: |
+  Delayed detection of network events; audit gap during high-
+  volume change windows.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.3.5"
+  nist: ["AU-2", "AU-6"]
+  cwe: []
+query:
+  path: "$.snmp.traps_enabled"
+  equals: true
+on_fail:
+  message: "snmp-server enable traps is not configured."
+  remediation_cli: |
+    configure terminal
+     snmp-server enable traps config
+     snmp-server enable traps snmp authentication linkdown linkup
+    end
+    write memory
+fixtures:
+  positive: fixtures/snmp_traps.compliant.txt
+  negative: fixtures/snmp_traps.violating.txt

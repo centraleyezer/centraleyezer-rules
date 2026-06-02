@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220157
+title: "The Cisco router must rate-limit ICMP unreachable responses."
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Unrate-limited ICMP unreachable generation is a known control-plane DoS amplifier.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router NDM STIG. CAT III finding.
+  See V-220157 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220157 on the device's POA&M.
+references:
+  stig: ["V-220157"]
+  cci:
+    - "CCI-001095"
+query:
+  path: "$.hardening.ip_icmp_rate_limit"
+  equals: true
+on_fail:
+  message: "Cisco IOS STIG V-220157 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220157.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/icmp_rl.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/icmp_rl.violating.txt

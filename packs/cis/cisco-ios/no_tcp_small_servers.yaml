@@ -1,0 +1,29 @@
+id: cisco.ios.cis.2.2.4
+title: "Disable TCP small servers"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  The TCP small-servers ports (echo/7, discard/9, chargen/19,
+  daytime/13) must be disabled.
+rationale: |
+  Same rationale as UDP small servers — these ports are legacy
+  diagnostics with no defensible production use.
+impact: |
+  Amplification / reflection vector exposed; resource exhaustion.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.4"
+  nist: ["CM-7", "SC-5"]
+  cwe: [406]
+query:
+  path: "$.hardening.tcp_small_servers"
+  equals: false
+on_fail:
+  message: "`service tcp-small-servers` is enabled."
+  remediation_cli: |
+    configure terminal
+     no service tcp-small-servers
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_tcp_small.compliant.txt
+  negative: fixtures/no_tcp_small.violating.txt

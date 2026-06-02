@@ -1,0 +1,36 @@
+id: cisco.ios.psirt.ssh_kex_modern
+title: "SSH key-exchange must include a modern algorithm (ECDH or Curve25519)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip ssh server algorithm kex` must include at least one
+  modern algorithm — `ecdh-sha2-nistp256`,
+  `ecdh-sha2-nistp384`, `ecdh-sha2-nistp521`, or
+  `curve25519-sha256`. Devices that only advertise legacy
+  `diffie-hellman-group14-sha1` and friends fail to negotiate
+  with modern clients.
+rationale: |
+  OpenSSH 9.x default key-exchange list no longer accepts
+  SHA-1-based DH groups by default. A device that only
+  advertises legacy KEX is both a NIST 800-57 deprecation
+  candidate and an interop failure waiting to happen.
+impact: |
+  Modern SSH clients refuse to connect; SHA-1-DH-only crypto
+  surface remains where they do.
+references:
+  cis: ""
+  nist: ["SC-13"]
+  cwe: [327]
+query:
+  path: "$.crypto.ssh_kex[*]"
+  in: ["ecdh-sha2-nistp256", "ecdh-sha2-nistp384", "ecdh-sha2-nistp521", "curve25519-sha256", "curve25519-sha256@libssh.org"]
+on_fail:
+  message: "SSH key-exchange does not include a modern algorithm."
+  remediation_cli: |
+    configure terminal
+     ip ssh server algorithm kex ecdh-sha2-nistp521 ecdh-sha2-nistp384 ecdh-sha2-nistp256 diffie-hellman-group14-sha1
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssh_kex_modern.compliant.txt
+  negative: fixtures/ssh_kex_modern.violating.txt

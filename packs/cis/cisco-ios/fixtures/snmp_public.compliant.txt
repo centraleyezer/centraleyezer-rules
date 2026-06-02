@@ -1,0 +1,8 @@
+! Compliant — no SNMP community named "public"
+version 17.9
+hostname compliant-sw
+!
+snmp-server community s3cret-ro-2026 RO
+snmp-server user opmon ADMINS v3 auth sha 0 secret-auth priv aes256 0 secret-priv
+!
+end

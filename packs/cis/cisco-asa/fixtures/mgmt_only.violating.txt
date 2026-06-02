@@ -1,0 +1,9 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-dirty
+!
+interface GigabitEthernet0/0
+ nameif outside
+ security-level 0
+ ip address 198.51.100.2 255.255.255.0
+!

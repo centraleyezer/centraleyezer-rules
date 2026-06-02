@@ -1,0 +1,33 @@
+id: cisco.ios.cis.7.3.4
+title: "ip arp inspection log-buffer entries must be ≥ 1024"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip arp inspection log-buffer entries <N>` must be sized
+  with N ≥ 1024. The IOS default of 32 fills in under a second
+  during a real ARP attack and silently drops further events.
+rationale: |
+  Dynamic ARP Inspection logging is the forensic trail for
+  ARP-poisoning attacks. A 32-entry buffer overflows almost
+  immediately and the SOC sees only "ARP inspection found
+  violations" without the per-violation evidence.
+impact: |
+  ARP-attack forensic trail lost; only aggregate counter
+  visible.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.3.4"
+  nist: ["AU-4", "SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.arp_inspect_log_buffer_entries"
+  in: [1024, 2048, 4096, 8192, 16384, 32768]
+on_fail:
+  message: "ip arp inspection log-buffer entries is not set ≥ 1024."
+  remediation_cli: |
+    configure terminal
+     ip arp inspection log-buffer entries 1024
+    end
+    write memory
+fixtures:
+  positive: fixtures/arp_log_buf.compliant.txt
+  negative: fixtures/arp_log_buf.violating.txt

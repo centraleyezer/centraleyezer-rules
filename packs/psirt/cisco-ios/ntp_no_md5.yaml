@@ -1,0 +1,34 @@
+id: cisco.ios.psirt.ntp_no_md5
+title: "NTP keys must use SHA-1 or better (not MD5)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  When NTP authentication is configured, `ntp authentication-key`
+  must use SHA-1 or stronger — not MD5. NTPv4 supports SHA-1
+  natively on modern IOS releases.
+rationale: |
+  MD5 was deprecated for cryptographic use by NIST 800-131A. Its
+  use anywhere — including NTP authentication where the attack
+  model is somewhat narrow — is a documented finding under PCI
+  DSS 4.0 and FIPS 140-3.
+impact: |
+  Compliance findings; long-term offline cryptanalysis of NTP
+  authenticator.
+references:
+  cis: ""
+  nist: ["SC-13"]
+  cwe: [327]
+query:
+  path: "$.ntp.uses_md5"
+  equals: false
+on_fail:
+  message: "NTP authentication key uses MD5."
+  remediation_cli: |
+    configure terminal
+     no ntp authentication-key 1 md5 <OLD-KEY>
+     ntp authentication-key 1 sha1 <NEW-KEY>
+    end
+    write memory
+fixtures:
+  positive: fixtures/ntp_sha.compliant.txt
+  negative: fixtures/ntp_sha.violating.txt

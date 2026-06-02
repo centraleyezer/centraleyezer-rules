@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220700
+title: "The Cisco ASA must not use legacy 'fixup' inspection; modern MPF inspect rules are required."
+severity: medium
+vendors: [cisco-asa]
+description: |
+  Legacy fixup syntax bypasses MPF policy ordering and is forbidden by current STIG.
+rationale: |
+  Sourced from the DISA Cisco ASA Firewall STIG. CAT II finding.
+  See V-220700 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220700 on the device's POA&M.
+references:
+  stig: ["V-220700"]
+  cci:
+    - "CCI-000366"
+query:
+  path: "$.hardening.asa_legacy_fixup"
+  equals: false
+on_fail:
+  message: "STIG V-220700 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220700.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/no_fixup.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/no_fixup.violating.txt

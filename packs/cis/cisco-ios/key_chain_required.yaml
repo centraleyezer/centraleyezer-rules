@@ -1,0 +1,38 @@
+id: cisco.ios.cis.9.3.1
+title: "Routing-protocol authentication must use a key chain"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  At least one `key chain X` stanza must be defined when a
+  routing protocol is configured with authentication. Key chains
+  support rotation (per-key send/accept lifetimes), HMAC-SHA-256
+  on modern IOS, and cleaner audit than inline keys.
+rationale: |
+  Inline routing-protocol keys (`ip ospf message-digest-key 1
+  md5 KEY`) hard-code the key in the config and break on
+  rotation. Key chains separate the key material from the
+  binding, support overlapping send/accept windows, and let
+  operators rotate without dropping adjacency.
+impact: |
+  Routing-protocol key rotation requires adjacency-down windows;
+  no per-key lifecycle controls.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 9.3.1"
+  nist: ["IA-5"]
+  cwe: []
+query:
+  path: "$.hardening.key_chain_count"
+  in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "No `key chain` stanza is defined."
+  remediation_cli: |
+    configure terminal
+     key chain OSPF-KEYS
+      key 1
+       cryptographic-algorithm hmac-sha-256
+       key-string <STRONG>
+    end
+    write memory
+fixtures:
+  positive: fixtures/keychain.compliant.txt
+  negative: fixtures/keychain.violating.txt

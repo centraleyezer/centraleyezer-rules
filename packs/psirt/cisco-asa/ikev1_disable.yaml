@@ -1,0 +1,32 @@
+id: cisco.asa.psirt.ikev1.disable
+title: "Avoid IKEv1 (use IKEv2) — ASA hardening guidance"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  Cisco's ASA hardening guidance and multiple PSIRT advisories
+  (cisco-sa-20160916-ikev1, cisco-sa-20180328-asa1) recommend
+  retiring IKEv1 in favor of IKEv2 for all new VPN deployments.
+rationale: |
+  IKEv1 has multiple historical RCE / memory-disclosure CVEs;
+  IKEv2 is more rigorously specified, simpler to implement, and
+  supports modern crypto.
+impact: |
+  Continued exposure to IKEv1-specific implementation bugs;
+  weaker default cipher suites.
+references:
+  cis: ""
+  nist: ["SC-8", "SC-13"]
+  cwe: [327]
+query:
+  path: "$.vpn.ipsec_enabled"
+  equals: false
+on_fail:
+  message: "ASA IPsec/IKEv1 surface is enabled."
+  remediation_cli: |
+    ! Migrate all crypto map entries to IKEv2:
+    !  crypto ikev2 enable outside
+    !  no crypto ikev1 enable outside
+    write memory
+fixtures:
+  positive: fixtures/ikev1.compliant.txt
+  negative: fixtures/ikev1.violating.txt

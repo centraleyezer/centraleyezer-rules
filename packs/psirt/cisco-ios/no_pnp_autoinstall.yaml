@@ -1,0 +1,35 @@
+id: cisco.ios.psirt.no_pnp_autoinstall
+title: "Disable PnP / autoinstall on in-service devices"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Cisco PnP autoinstall must be disabled once a device has been
+  initially provisioned. The protocol accepts configuration from
+  whichever DHCP-discovered server responds first; a rogue DHCP
+  server on the same broadcast domain can push attacker-supplied
+  config.
+rationale: |
+  cisco-sa-20170629-pnp and follow-on advisories documented
+  multiple PnP-related authentication bypass + RCE issues.
+  Leaving the agent enabled on a production device is a long
+  tail of risk for a feature that only matters at first-boot.
+impact: |
+  Configuration push from a rogue PnP / DHCP option-43 source;
+  CVE exposure during PnP advisory windows.
+references:
+  cis: "Overlaps cisco.ios.cis.2.2.10"
+  nist: ["CM-3", "CM-7"]
+  cwe: [284, 346]
+query:
+  path: "$.hardening.pnp_startup"
+  equals: false
+on_fail:
+  message: "PnP autoinstall profile is enabled."
+  remediation_cli: |
+    configure terminal
+     no pnp profile pnp-zero-touch
+    end
+    write memory
+fixtures:
+  positive: fixtures/pnp.compliant.txt
+  negative: fixtures/pnp.violating.txt

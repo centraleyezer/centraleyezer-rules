@@ -1,0 +1,28 @@
+id: cisco.asa.stig.v-220411
+title: "The Cisco ASA must use SNMPv3 with authPriv for SNMP management."
+severity: high
+vendors: [cisco-asa]
+description: |
+  At least one SNMPv3 user with authPriv must exist when SNMP is in use.
+rationale: |
+  Sourced from the DISA Cisco ASA NDM STIG. CAT I finding.
+  See V-220411 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-220411 on the device's POA&M.
+references:
+  stig: ["V-220411"]
+  cci:
+    - "CCI-001967"
+    - "CCI-002418"
+query:
+  path: "$.hardening.asa_snmpv3_user_count"
+  in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "Cisco ASA STIG V-220411 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220411.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/asa_snmpv3.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/asa_snmpv3.violating.txt

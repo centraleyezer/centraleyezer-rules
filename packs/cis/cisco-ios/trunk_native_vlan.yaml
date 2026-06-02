@@ -1,0 +1,35 @@
+id: cisco.ios.cis.7.4.3
+title: "Trunk ports must not use native VLAN 1"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Every `switchport mode trunk` interface must explicitly set a
+  non-1 native VLAN with `switchport trunk native vlan X`.
+rationale: |
+  Native VLAN 1 traffic is sent untagged on the trunk. An
+  attacker who knows the native VLAN can VLAN-hop by emitting
+  double-tagged frames whose outer tag matches the native. Using
+  a dedicated unused VLAN as native makes the attack require
+  prior config knowledge.
+impact: |
+  VLAN-hopping via double-encapsulation; cross-VLAN reachability
+  from an attacker on a trunk-adjacent segment.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.4.3"
+  nist: ["SC-7"]
+  cwe: [284]
+query:
+  path: "$.hardening.trunk_uses_default_native1"
+  equals: false
+on_fail:
+  message: "At least one trunk interface uses native VLAN 1 (or no explicit native)."
+  remediation_cli: |
+    configure terminal
+     interface GigabitEthernet1/0/24
+      switchport trunk native vlan 999
+      switchport trunk allowed vlan remove 1
+    end
+    write memory
+fixtures:
+  positive: fixtures/trunk_native.compliant.txt
+  negative: fixtures/trunk_native.violating.txt

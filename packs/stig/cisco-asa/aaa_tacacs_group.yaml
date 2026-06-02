@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220407
+title: "The Cisco ASA must define an aaa-server TACACS+ group for management."
+severity: medium
+vendors: [cisco-asa]
+description: |
+  Centralised TACACS+ is required for STIG-compliant per-command authorisation and audit.
+rationale: |
+  Sourced from the DISA Cisco ASA NDM STIG. CAT II finding.
+  See V-220407 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220407 on the device's POA&M.
+references:
+  stig: ["V-220407"]
+  cci:
+    - "CCI-000213"
+query:
+  path: "$.hardening.asa_aaa_server_tacacs"
+  equals: true
+on_fail:
+  message: "Cisco ASA STIG V-220407 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220407.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/aaa_tac.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/aaa_tac.violating.txt

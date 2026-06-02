@@ -1,0 +1,33 @@
+id: cisco.ios.cis.5.1.5
+title: "Logging origin-id must be set (hostname recommended)"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `logging origin-id hostname` (or `logging origin-id ip` /
+  `logging origin-id string <name>`) must be configured so syslog
+  messages carry a stable device identifier in addition to the
+  source IP.
+rationale: |
+  When devices share NAT'd source addresses (common for
+  out-of-band management subnets), the syslog server can't tell
+  them apart without an explicit origin-id.
+impact: |
+  Log entries from multiple devices share an indistinguishable
+  source IP; per-device correlation fails.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 5.1.5"
+  nist: ["AU-3", "AU-9"]
+  cwe: []
+query:
+  path: "$.logging.origin_id"
+  matches: "."
+on_fail:
+  message: "logging origin-id is not configured."
+  remediation_cli: |
+    configure terminal
+     logging origin-id hostname
+    end
+    write memory
+fixtures:
+  positive: fixtures/logging_origin.compliant.txt
+  negative: fixtures/logging_origin.violating.txt

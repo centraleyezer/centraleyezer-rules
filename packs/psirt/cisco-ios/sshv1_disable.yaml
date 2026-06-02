@@ -1,0 +1,33 @@
+id: cisco.ios.psirt.sshv1.disable
+title: "Refuse SSH protocol version 1 (Cisco hardening guide)"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  The Cisco IOS SSH server must be pinned to SSH version 2.
+  SSHv1 has known protocol weaknesses and is permitted only by
+  the legacy `1.99` fallback when version 2 isn't explicitly set.
+rationale: |
+  From the Cisco Guide to Harden Cisco IOS Devices: "SSHv1 is
+  insecure and should not be used." Lab and field tests show v1
+  downgrade is the most common cause of credential exposure on
+  devices that nominally support SSH.
+impact: |
+  Downgrade attack against management sessions; credential
+  recovery from passively captured traffic.
+references:
+  cis: "Overlaps cisco.ios.cis.2.1.2"
+  nist: ["AC-17", "SC-23"]
+  cwe: [327]
+query:
+  path: "$.services.ssh_version"
+  equals: 2
+on_fail:
+  message: "SSH version is not pinned to 2 (Cisco hardening guide)."
+  remediation_cli: |
+    configure terminal
+     ip ssh version 2
+    end
+    write memory
+fixtures:
+  positive: fixtures/sshv2.compliant.txt
+  negative: fixtures/sshv2.violating.txt

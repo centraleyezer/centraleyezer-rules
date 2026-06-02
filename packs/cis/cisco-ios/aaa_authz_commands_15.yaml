@@ -1,0 +1,34 @@
+id: cisco.ios.cis.1.2.5
+title: "aaa authorization commands 15 default must be configured"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `aaa authorization commands 15 default group <X> local` must
+  be configured so privileged-mode commands are authorized
+  against TACACS+/RADIUS (with local fallback) — not just
+  enabled by enable-secret membership.
+rationale: |
+  Without command authorization, anyone who has the enable
+  secret can issue every privileged command. Command
+  authorization lets you grant operators specific subsets of
+  privileged commands per user, with central audit.
+impact: |
+  No per-user constraint on which privileged commands are
+  allowed.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.2.5"
+  nist: ["AC-3", "AC-6"]
+  cwe: [284]
+query:
+  path: "$.aaa.authz_commands_15"
+  equals: true
+on_fail:
+  message: "aaa authorization commands 15 default is not configured."
+  remediation_cli: |
+    configure terminal
+     aaa authorization commands 15 default group tacacs+ local
+    end
+    write memory
+fixtures:
+  positive: fixtures/authz_cmd15.compliant.txt
+  negative: fixtures/authz_cmd15.violating.txt

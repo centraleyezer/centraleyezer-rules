@@ -1,0 +1,35 @@
+id: cisco.ios.cis-l2.1.1.16
+title: "L2: At least 3 local users (primary admin + emergency + audit)"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  At least 3 local `username` accounts must be defined: a
+  primary admin, an emergency break-glass, and a separate
+  audit / monitoring account.
+rationale: |
+  L1 (≥ 2) handles the break-glass case. L2 adds a separate
+  read-only audit account so operators don't use the
+  privileged break-glass for routine monitoring (which is
+  the most common reason it gets exposed).
+impact: |
+  Operators reuse the privileged break-glass for routine
+  monitoring; key separation between roles is fuzzy.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 1.1.16"
+  nist: ["AC-2", "AC-6"]
+  cwe: []
+query:
+  path: "$.hardening.local_user_count"
+  in: [3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "Fewer than 3 local user accounts are defined."
+  remediation_cli: |
+    configure terminal
+     username netzer-admin    privilege 15 algorithm-type scrypt secret <X>
+     username netzer-emergency privilege 15 algorithm-type scrypt secret <Y>
+     username netzer-monitor   privilege  1 algorithm-type scrypt secret <Z>
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_users3.compliant.txt
+  negative: fixtures/l2_users3.violating.txt

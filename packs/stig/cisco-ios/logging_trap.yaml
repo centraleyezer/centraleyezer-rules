@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220139.syslog_level
+title: "The Cisco router must forward audit events to a centralised log host at informational severity or finer."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Off-box log aggregation is mandatory; the syslog severity threshold must permit informational events at minimum.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router NDM STIG. CAT II finding.
+  See V-220139 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220139 on the device's POA&M.
+references:
+  stig: ["V-220139"]
+  cci:
+    - "CCI-001851"
+query:
+  path: "$.logging.level"
+  in: [informational, debugging]
+on_fail:
+  message: "Cisco IOS STIG V-220139 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220139.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/logging_trap.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/logging_trap.violating.txt

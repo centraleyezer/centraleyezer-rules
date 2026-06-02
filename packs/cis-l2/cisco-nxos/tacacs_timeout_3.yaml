@@ -1,0 +1,29 @@
+id: cisco.nxos.cis-l2.1.5.11
+title: "L2: NX-OS `tacacs-server timeout` must be ≤ 3"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `tacacs-server timeout <N>` must be ≤ 3. Sibling of the
+  RADIUS L2-round-2 rule.
+rationale: |
+  Same operational logic — tightest cap on per-attempt login
+  stall during TACACS+ outage.
+impact: |
+  Longer management-plane stalls during TACACS+ outage.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — L2 1.5.11"
+  nist: ["AC-2", "CP-2"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_tacacs_timeout"
+  in: [1, 2, 3]
+on_fail:
+  message: "tacacs-server timeout is not set ≤ 3."
+  remediation_cli: |
+    configure terminal
+     tacacs-server timeout 3
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/l2_ttto3.compliant.txt
+  negative: fixtures/l2_ttto3.violating.txt

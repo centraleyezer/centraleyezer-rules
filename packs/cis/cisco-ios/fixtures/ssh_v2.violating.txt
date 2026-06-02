@@ -1,0 +1,6 @@
+version 12.4
+hostname legacy-sw
+!
+! ip ssh version not set — falls back to 1.99 (both v1 and v2 permitted)
+!
+end

@@ -1,0 +1,27 @@
+id: cisco.nxos.stig.v-220310
+title: "The NX-OS switch must close SSH connections that fail to authenticate within 60 seconds."
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  A bounded grace time prevents half-open SSH sessions from being used to exhaust resources.
+rationale: |
+  Sourced from the DISA Cisco NX-OS Switch NDM STIG. CAT III finding.
+  See V-220310 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220310 on the device's POA&M.
+references:
+  stig: ["V-220310"]
+  cci:
+    - "CCI-001133"
+query:
+  path: "$.hardening.nxos_ssh_login_grace_time"
+  in: [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
+on_fail:
+  message: "Cisco NX-OS STIG V-220310 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220310.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-nxos/fixtures/ssh_grace.compliant.txt
+  negative: ../../cis/cisco-nxos/fixtures/ssh_grace.violating.txt

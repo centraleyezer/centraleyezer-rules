@@ -1,0 +1,13 @@
+version 17.9
+hostname compliant-sw
+!
+ip access-list standard MGMT_IN
+ permit 10.0.0.0 0.0.0.255
+ deny any log
+!
+line vty 0 15
+ access-class MGMT_IN in
+ transport input ssh
+ exec-timeout 5 0
+!
+end

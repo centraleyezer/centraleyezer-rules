@@ -1,0 +1,33 @@
+id: cisco.asa.cis.2.2.1
+title: "ASA SSL/TLS minimum version must be TLS 1.2 or higher"
+severity: high
+vendors: [cisco-asa]
+description: |
+  `ssl server-version` must be configured to `tlsv1.2` or
+  `tlsv1.3`. TLS 1.0 and 1.1 are deprecated by RFC 8996 and
+  forbidden by every modern compliance regime.
+rationale: |
+  TLS 1.0/1.1 have known cryptographic weaknesses (BEAST, POODLE
+  cipher-suite issues) and are not allowed by PCI DSS 4.0, FIPS
+  140-3, NIST 800-52r2.
+impact: |
+  Downgraded TLS sessions; compliance findings against ASDM,
+  AnyConnect VPN, and management-plane SSL.
+references:
+  cis: "CIS Cisco ASA Benchmark — 2.2.1"
+  nist: ["SC-8", "SC-13", "SC-23"]
+  cwe: [327, 326]
+query:
+  path: "$.crypto.tls_min_version"
+  in: ["tlsv1.2", "tlsv1.3"]
+on_fail:
+  message: "ASA SSL min-version is below TLS 1.2."
+  remediation_cli: |
+    configure terminal
+     ssl server-version tlsv1.2
+     ssl client-version tlsv1.2
+    end
+    write memory
+fixtures:
+  positive: fixtures/tls.compliant.txt
+  negative: fixtures/tls.violating.txt

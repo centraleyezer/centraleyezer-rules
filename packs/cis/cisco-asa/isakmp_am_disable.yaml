@@ -1,0 +1,35 @@
+id: cisco.asa.cis.5.1.10
+title: "ASA `crypto isakmp am-disable` must be configured"
+severity: high
+vendors: [cisco-asa]
+description: |
+  `crypto isakmp am-disable` must be present. IKEv1 Aggressive
+  Mode exchanges the responder's PSK hash in cleartext on the
+  third message — directly enabling offline PSK cracking. AM
+  has no place on any modern VPN endpoint.
+rationale: |
+  IKEv1 Aggressive Mode is a 15+-year-old broken design.
+  Multiple commercial and open-source tools (ike-scan,
+  psk-crack) trivially extract the PSK hash from a captured
+  AM exchange and brute-force it offline. The only safe
+  posture is "AM disabled".
+impact: |
+  Aggressive Mode IKE-PSK harvesting is possible from any
+  network position that can initiate IKE to the ASA.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.1.10"
+  nist: ["SC-8", "SC-13"]
+  cwe: [327]
+query:
+  path: "$.hardening.asa_isakmp_am_disable"
+  equals: true
+on_fail:
+  message: "crypto isakmp am-disable is not configured."
+  remediation_cli: |
+    configure terminal
+     crypto isakmp am-disable
+    end
+    write memory
+fixtures:
+  positive: fixtures/isakmp_am.compliant.txt
+  negative: fixtures/isakmp_am.violating.txt

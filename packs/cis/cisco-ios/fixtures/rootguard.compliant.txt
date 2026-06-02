@@ -1,0 +1,9 @@
+version 17.9
+hostname compliant
+!
+interface GigabitEthernet1/0/24
+ switchport mode trunk
+ switchport trunk native vlan 999
+ spanning-tree guard root
+!
+end

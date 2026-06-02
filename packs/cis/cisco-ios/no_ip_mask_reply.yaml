@@ -1,0 +1,29 @@
+id: cisco.ios.cis.4.2.3
+title: "Disable ICMP mask-reply"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  IP mask-reply must be disabled. The router must not respond to
+  ICMP mask-request packets.
+rationale: |
+  Mask replies leak subnet topology to anyone who can ping the
+  device.
+impact: |
+  Reconnaissance: attacker maps subnets without authentication.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 4.2.3"
+  nist: ["SC-7"]
+  cwe: [200]
+query:
+  path: "$.hardening.ip_mask_reply"
+  equals: false
+on_fail:
+  message: "ICMP mask-reply is enabled."
+  remediation_cli: |
+    configure terminal
+     no ip mask-reply
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_mask_reply.compliant.txt
+  negative: fixtures/no_mask_reply.violating.txt

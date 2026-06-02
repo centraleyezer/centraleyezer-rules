@@ -1,0 +1,35 @@
+id: cisco.ios.cis.8.2.4
+title: "`ip flow-export source` must be set"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip flow-export source <INTERFACE>` must be configured so
+  outbound NetFlow packets always source from a deterministic
+  IP address — typically the management Loopback. Without it,
+  the source IP depends on routing.
+rationale: |
+  Collector-side filters and host-allowlists depend on the
+  source IP of incoming flow records being stable. A device
+  whose flow source IP varies will be intermittently
+  classified as "rogue" by the collector. Source-interface
+  pinning fixes this.
+impact: |
+  NetFlow collector loses records intermittently; source-IP
+  varies across routing reconvergence.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 8.2.4"
+  nist: ["AU-2", "SC-7"]
+  cwe: []
+query:
+  path: "$.hardening.ip_flow_export_source"
+  exists: true
+on_fail:
+  message: "ip flow-export source is not configured."
+  remediation_cli: |
+    configure terminal
+     ip flow-export source Loopback0
+    end
+    write memory
+fixtures:
+  positive: fixtures/flow_src.compliant.txt
+  negative: fixtures/flow_src.violating.txt

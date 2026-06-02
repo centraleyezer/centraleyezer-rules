@@ -1,0 +1,42 @@
+id: cisco.ios.psirt.no_ospf_md5
+title: "OSPF should not use MD5 keys (prefer HMAC-SHA-256)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+applies_when:
+  features: [ospf]
+description: |
+  When OSPF authentication is configured, the key MUST NOT use
+  MD5. Modern IOS / IOS-XE supports HMAC-SHA-256 via key chains
+  (`cryptographic-algorithm hmac-sha-256`); that's the
+  recommended algorithm.
+rationale: |
+  MD5 is collision-vulnerable and deprecated by NIST 800-131A
+  for digital signatures and key derivation. Cisco's
+  hardening guide for OSPF authentication explicitly recommends
+  HMAC-SHA-256 over MD5 on platforms that support it.
+impact: |
+  Long-term offline cryptanalysis of OSPF authenticator;
+  predictable upgrade-driven compliance findings.
+references:
+  cis: ""
+  nist: ["SC-13"]
+  cwe: [327]
+query:
+  path: "$.routing.ospf.uses_md5"
+  equals: false
+on_fail:
+  message: "OSPF uses MD5 keys; migrate to HMAC-SHA-256."
+  remediation_cli: |
+    configure terminal
+     key chain OSPF-KEYS
+      key 1
+       cryptographic-algorithm hmac-sha-256
+       key-string <STRONG>
+    !
+     interface GigabitEthernet0/0
+      ip ospf authentication key-chain OSPF-KEYS
+    end
+    write memory
+fixtures:
+  positive: fixtures/ospf_md5.compliant.txt
+  negative: fixtures/ospf_md5.violating.txt

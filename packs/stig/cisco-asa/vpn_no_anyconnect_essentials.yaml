@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220808
+title: "The Cisco ASA must not run AnyConnect Essentials (replaced by AnyConnect Premium)."
+severity: low
+vendors: [cisco-asa]
+description: |
+  AnyConnect Essentials lacks the posture-assessment and advanced features required by current STIG baselines.
+rationale: |
+  Sourced from the DISA Cisco ASA VPN STIG. CAT III finding.
+  See V-220808 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220808 on the device's POA&M.
+references:
+  stig: ["V-220808"]
+  cci:
+    - "CCI-000366"
+query:
+  path: "$.hardening.asa_anyconnect_essentials"
+  equals: false
+on_fail:
+  message: "STIG V-220808 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220808.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/anyconnect_ess.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/anyconnect_ess.violating.txt

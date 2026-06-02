@@ -1,0 +1,36 @@
+id: cisco.nxos.cis.7.8.1
+title: "NX-OS `service unsupported-transceiver` must NOT be configured"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `service unsupported-transceiver` must NOT be present. This
+  command lets NX-OS use third-party (non-Cisco) optical
+  transceivers — useful for some operators but increases
+  troubleshooting ambiguity and weakens the TAC-supported
+  baseline.
+rationale: |
+  Devices that accept unsupported transceivers in production
+  end up with mixed Cisco / third-party optics whose
+  failure modes aren't covered by TAC. Avail/security impact
+  is operator-judgment; CIS lists it as a deviation worth
+  flagging for review.
+impact: |
+  Third-party optics accepted; TAC support and DOM
+  diagnostics may be unreliable.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.8.1"
+  nist: ["CM-7", "CM-2"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_unsupported_transceiver"
+  equals: false
+on_fail:
+  message: "service unsupported-transceiver is enabled."
+  remediation_cli: |
+    configure terminal
+     no service unsupported-transceiver
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/no_xcvr.compliant.txt
+  negative: fixtures/no_xcvr.violating.txt

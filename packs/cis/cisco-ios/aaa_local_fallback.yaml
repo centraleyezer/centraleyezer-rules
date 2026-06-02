@@ -1,0 +1,32 @@
+id: cisco.ios.cis.1.1.9
+title: "AAA authentication must include local fallback"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  The AAA login method list must end in `local` so the device
+  remains manageable when every TACACS+ / RADIUS server is
+  unreachable.
+rationale: |
+  Without a local fallback, an AAA outage locks every
+  administrator out of every device simultaneously — exactly when
+  you need to be able to log in to fix things.
+impact: |
+  Operational lockout during AAA infrastructure incident; manual
+  console-with-physical-access recovery required per device.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.1.9"
+  nist: ["AC-2", "CP-2"]
+  cwe: []
+query:
+  path: "$.aaa.local_fallback"
+  equals: true
+on_fail:
+  message: "AAA login method list lacks a local fallback."
+  remediation_cli: |
+    configure terminal
+     aaa authentication login default group tacacs+ local
+    end
+    write memory
+fixtures:
+  positive: fixtures/aaa_local_fallback.compliant.txt
+  negative: fixtures/aaa_local_fallback.violating.txt

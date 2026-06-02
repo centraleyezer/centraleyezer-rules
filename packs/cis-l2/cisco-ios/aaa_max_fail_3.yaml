@@ -1,0 +1,32 @@
+id: cisco.ios.cis-l2.1.2.13
+title: "L2: `aaa local authentication attempts max-fail` must be ≤ 3"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `aaa local authentication attempts max-fail <N>` must be
+  ≤ 3 (L1 was ≤ 5). Tighter lockout against credential-
+  spray attacks on local accounts.
+rationale: |
+  Brute-force budget per account drops to 3 attempts. Modern
+  password-spray tooling typically tries 3-5 candidates per
+  account; capping at 3 forces real attack noise.
+impact: |
+  Larger per-account brute-force budget; password-spray
+  attacks have more headroom.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 1.2.13"
+  nist: ["AC-7"]
+  cwe: [307]
+query:
+  path: "$.aaa.max_login_attempts"
+  in: [1, 2, 3]
+on_fail:
+  message: "aaa local authentication attempts max-fail is not ≤ 3."
+  remediation_cli: |
+    configure terminal
+     aaa local authentication attempts max-fail 3
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_max_fail.compliant.txt
+  negative: fixtures/l2_max_fail.violating.txt

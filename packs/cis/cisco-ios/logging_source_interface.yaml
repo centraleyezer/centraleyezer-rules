@@ -1,0 +1,34 @@
+id: cisco.ios.cis.5.1.4
+title: "Logging must use a fixed source-interface (Loopback recommended)"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `logging source-interface LoopbackN` must be configured so every
+  syslog packet emits from a stable address SIEM filtering and
+  ACL rules can pin on.
+rationale: |
+  Without a fixed source-interface, syslog packets leave from
+  whichever egress interface is closest to the syslog server.
+  When routing changes (link flap, BGP reconverge) the source
+  address changes too — which makes SIEM correlation and per-
+  device ACLs unreliable.
+impact: |
+  SIEM rules and syslog server ACLs that key on source IP go
+  stale during routing events.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 5.1.4"
+  nist: ["AU-9"]
+  cwe: []
+query:
+  path: "$.logging.source_interface"
+  matches: "."
+on_fail:
+  message: "logging source-interface is not configured."
+  remediation_cli: |
+    configure terminal
+     logging source-interface Loopback0
+    end
+    write memory
+fixtures:
+  positive: fixtures/logging_src.compliant.txt
+  negative: fixtures/logging_src.violating.txt

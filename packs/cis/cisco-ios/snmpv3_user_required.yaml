@@ -1,0 +1,35 @@
+id: cisco.ios.cis.4.3.3
+title: "At least one SNMPv3 user (authPriv) must be defined"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  At least one `snmp-server user <NAME> <GROUP> v3 auth ... priv
+  ...` must be configured so the device offers SNMPv3 with
+  per-user authentication and encryption rather than relying
+  on legacy community strings (v1/v2c).
+rationale: |
+  SNMPv1/v2c communities are shared strings sent in cleartext.
+  SNMPv3 with authPriv provides per-user identity, message
+  authentication, and encryption. Modern hardening guides
+  treat v3 as mandatory and v1/v2c as deprecated.
+impact: |
+  Device monitorable only via shared cleartext community
+  strings.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 4.3.3"
+  nist: ["SC-8", "IA-3", "AC-3"]
+  cwe: [319]
+query:
+  path: "$.hardening.snmpv3_user_count"
+  in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "No SNMPv3 user is defined."
+  remediation_cli: |
+    configure terminal
+     snmp-server group NETZER-GRP v3 priv
+     snmp-server user nsuser NETZER-GRP v3 auth sha <AUTH> priv aes 256 <PRIV>
+    end
+    write memory
+fixtures:
+  positive: fixtures/snmpv3_user.compliant.txt
+  negative: fixtures/snmpv3_user.violating.txt

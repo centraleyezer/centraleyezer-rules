@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220804
+title: "The Cisco ASA must set ISAKMP identity to address or hostname."
+severity: low
+vendors: [cisco-asa]
+description: |
+  Default identity may emit FQDN or auto-id that fingerprints the device; STIG requires the explicit setting.
+rationale: |
+  Sourced from the DISA Cisco ASA VPN STIG. CAT III finding.
+  See V-220804 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220804 on the device's POA&M.
+references:
+  stig: ["V-220804"]
+  cci:
+    - "CCI-000366"
+query:
+  path: "$.hardening.asa_isakmp_identity"
+  in: ["address", "hostname"]
+on_fail:
+  message: "STIG V-220804 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220804.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/isakmp_id.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/isakmp_id.violating.txt

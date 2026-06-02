@@ -1,0 +1,31 @@
+id: cisco.ios.cis.6.1.1
+title: "Disable IP source routing"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  IP source routing must be disabled. Source-routed packets are a
+  classic vector for spoofing and bypassing routing-based ACLs.
+rationale: |
+  Source routing lets an attacker dictate the path a packet takes,
+  enabling spoofed traffic to reach internal segments that should
+  be reachable only via a specific gateway.
+impact: |
+  Bypass of network segmentation; ingress of spoofed traffic into
+  trusted zones.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 6.1.1"
+  nist: ["SC-7"]
+  cwe: [346]
+query:
+  path: "$.services.ip_source_route"
+  equals: false
+on_fail:
+  message: "IP source routing is enabled."
+  remediation_cli: |
+    configure terminal
+     no ip source-route
+    end
+    write memory
+fixtures:
+  positive: fixtures/source_route.compliant.txt
+  negative: fixtures/source_route.violating.txt

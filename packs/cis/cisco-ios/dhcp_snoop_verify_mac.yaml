@@ -1,0 +1,35 @@
+id: cisco.ios.cis.7.5.2
+title: "`ip dhcp snooping verify mac-address` must be enabled"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip dhcp snooping verify mac-address` must be configured.
+  With verify-mac-address on, the switch drops DHCP packets
+  whose source MAC doesn't match the chaddr field — defeating
+  one common DHCP-spoofing variant.
+rationale: |
+  Without mac-address verification, an attacker can spoof DHCP
+  requests using arbitrary chaddr values to claim leases for
+  victim MACs (depleting a pool or claiming a specific lease).
+  Verify-mac-address binds the L2 source to the L3 lease
+  request.
+impact: |
+  DHCP starvation / spoofing attacks succeed despite snooping
+  being on.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.5.2"
+  nist: ["SC-7", "AC-4"]
+  cwe: [345]
+query:
+  path: "$.hardening.dhcp_snoop_verify_mac"
+  equals: true
+on_fail:
+  message: "ip dhcp snooping verify mac-address is not enabled."
+  remediation_cli: |
+    configure terminal
+     ip dhcp snooping verify mac-address
+    end
+    write memory
+fixtures:
+  positive: fixtures/dhcp_verify_mac.compliant.txt
+  negative: fixtures/dhcp_verify_mac.violating.txt

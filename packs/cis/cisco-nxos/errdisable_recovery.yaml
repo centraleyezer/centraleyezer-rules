@@ -1,0 +1,38 @@
+id: cisco.nxos.cis.7.3.1
+title: "NX-OS errdisable recovery must be configured"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  At least one `errdisable recovery cause <X>` or `errdisable
+  recovery interval N` line must be configured so ports
+  shut by security events (BPDU guard, port-security violation,
+  etc.) can recover automatically after the configured
+  interval.
+rationale: |
+  Without recovery, every port-security violation requires
+  manual operator intervention. With recovery enabled, the
+  port re-enables itself after the interval — defending
+  against transient false positives without leaving the port
+  dark indefinitely.
+impact: |
+  Operationally manageable security events (transient BPDU
+  storms, brief port-security flaps) require manual recovery
+  per port.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.3.1"
+  nist: ["SC-5"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_errdisable_recovery"
+  equals: true
+on_fail:
+  message: "No errdisable recovery configuration is present."
+  remediation_cli: |
+    configure terminal
+     errdisable recovery cause bpduguard
+     errdisable recovery interval 300
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/errdisable.compliant.txt
+  negative: fixtures/errdisable.violating.txt

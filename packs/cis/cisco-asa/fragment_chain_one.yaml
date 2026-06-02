@@ -1,0 +1,36 @@
+id: cisco.asa.cis.6.2.1
+title: "ASA `fragment chain 1` must be configured (no fragment reassembly)"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `fragment chain 1 <interface>` must be configured on the
+  outside interface so the ASA does NOT attempt to reassemble
+  IP fragments at all. Fragmented traffic is then dropped
+  rather than reassembled — eliminating the entire class of
+  fragmentation-based IPS-evasion attacks.
+rationale: |
+  IPS-evasion via fragment overlap (Ptacek/Newsham, RFC-3128
+  variants) is a long-running class of attack. The cleanest
+  defense at the L3 firewall is "no reassembly" — Modern
+  endpoints don't legitimately need fragmented IP on the
+  WAN-side.
+impact: |
+  Continued exposure to fragmentation-overlap IPS-evasion
+  attacks.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.2.1"
+  nist: ["SC-7"]
+  cwe: [444]
+query:
+  path: "$.hardening.asa_fragment_chain_limit"
+  in: [1]
+on_fail:
+  message: "fragment chain 1 is not configured."
+  remediation_cli: |
+    configure terminal
+     fragment chain 1 outside
+    end
+    write memory
+fixtures:
+  positive: fixtures/fragment_chain.compliant.txt
+  negative: fixtures/fragment_chain.violating.txt

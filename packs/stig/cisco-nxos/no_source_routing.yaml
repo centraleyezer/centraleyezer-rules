@@ -1,0 +1,27 @@
+id: cisco.nxos.stig.v-220314
+title: "The NX-OS switch must drop IP packets containing source-route options."
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  Source-routed packets bypass downstream security devices; STIG forbids them globally.
+rationale: |
+  Sourced from the DISA Cisco NX-OS Switch NDM STIG. CAT II finding.
+  See V-220314 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220314 on the device's POA&M.
+references:
+  stig: ["V-220314"]
+  cci:
+    - "CCI-002403"
+query:
+  path: "$.hardening.nxos_ip_source_route_off"
+  equals: true
+on_fail:
+  message: "Cisco NX-OS STIG V-220314 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220314.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-nxos/fixtures/no_src_route.compliant.txt
+  negative: ../../cis/cisco-nxos/fixtures/no_src_route.violating.txt

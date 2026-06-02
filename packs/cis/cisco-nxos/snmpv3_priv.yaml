@@ -1,0 +1,31 @@
+id: cisco.nxos.cis.3.3.2
+title: "SNMPv3 users must use auth + priv"
+severity: high
+vendors: [cisco-nx-os]
+description: |
+  Every SNMPv3 user must have both auth (SHA/SHA-256+) AND priv
+  (AES-128 or stronger) configured. authNoPriv and noAuthNoPriv
+  modes are forbidden.
+rationale: |
+  Without `priv`, SNMPv3 traffic is signed but in cleartext —
+  community-string equivalent for an on-path attacker.
+impact: |
+  Interface counter / route-table disclosure; potential
+  configuration disclosure depending on view bindings.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 3.3.2"
+  nist: ["IA-7", "SC-8", "SC-13"]
+  cwe: [319]
+query:
+  path: "$.snmp.v3_users[*].priv_algo"
+  matches: "."
+on_fail:
+  message: "At least one SNMPv3 user lacks a priv algorithm."
+  remediation_cli: |
+    configure terminal
+     snmp-server user opmon network-operator auth sha PHRASE priv aes-128 PHRASE
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/snmpv3_priv.compliant.txt
+  negative: fixtures/snmpv3_priv.violating.txt

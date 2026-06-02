@@ -1,0 +1,6 @@
+version 15.2
+hostname legacy
+router bgp 65000
+ neighbor 10.0.0.2 remote-as 65001
+ neighbor 10.0.0.2 password 7 ABCDEF
+end

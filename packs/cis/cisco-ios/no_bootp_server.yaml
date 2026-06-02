@@ -1,0 +1,29 @@
+id: cisco.ios.cis.2.2.5
+title: "Disable the BOOTP server"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  The IP BOOTP server must be disabled.
+rationale: |
+  Modern networks use DHCP, not BOOTP. The BOOTP server allows
+  unauthenticated devices to retrieve boot images from the router.
+impact: |
+  Unauthenticated firmware retrieval; potential staging point for
+  network-boot abuse.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.5"
+  nist: ["CM-7"]
+  cwe: [284]
+query:
+  path: "$.services.bootp"
+  equals: false
+on_fail:
+  message: "ip bootp server is enabled."
+  remediation_cli: |
+    configure terminal
+     no ip bootp server
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_bootp.compliant.txt
+  negative: fixtures/no_bootp.violating.txt

@@ -1,0 +1,33 @@
+id: cisco.ios.cis-l2.3.6.16
+title: "L2: `ip ssh dh min size` must be ≥ 4096"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip ssh dh min size <N>` must be ≥ 4096. The L1 baseline
+  (≥ 2048) is fine for current threats but is on the same
+  NIST retirement curve as 2048-bit RSA.
+rationale: |
+  When SSH falls back to DH key exchange (older clients), the
+  minimum acceptable DH group size determines whether
+  Logjam-class precomputation is feasible. 4096-bit DH groups
+  are well past any feasible precomputation budget.
+impact: |
+  Smaller DH groups acceptable as a fallback; weaker against
+  long-term cryptanalysis.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 3.6.16"
+  nist: ["SC-13"]
+  cwe: [326]
+query:
+  path: "$.crypto.ssh_dh_min_size"
+  in: [4096, 8192]
+on_fail:
+  message: "ip ssh dh min size is below 4096."
+  remediation_cli: |
+    configure terminal
+     ip ssh dh min size 4096
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_dh_min.compliant.txt
+  negative: fixtures/l2_dh_min.violating.txt

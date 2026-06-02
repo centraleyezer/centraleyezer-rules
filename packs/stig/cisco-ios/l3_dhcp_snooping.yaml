@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220633
+title: "The Cisco switch must enable DHCP snooping on user VLANs."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  DHCP snooping blocks rogue DHCP servers and builds the binding table required by Dynamic ARP Inspection / IP Source Guard.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Switch L3 STIG. CAT II finding.
+  See V-220633 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220633 on the device's POA&M.
+references:
+  stig: ["V-220633"]
+  cci:
+    - "CCI-002385"
+query:
+  path: "$.hardening.dhcp_snooping"
+  equals: true
+on_fail:
+  message: "STIG V-220633 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220633.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/dhcp_snoop.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/dhcp_snoop.violating.txt

@@ -1,0 +1,6 @@
+version 12.4
+hostname legacy-sw
+!
+! No NTP server configured.
+!
+end

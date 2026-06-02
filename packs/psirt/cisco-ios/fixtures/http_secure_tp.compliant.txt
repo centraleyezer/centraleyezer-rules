@@ -1,0 +1,5 @@
+version 17.9
+hostname compliant
+ip http secure-server
+ip http secure-trustpoint NETZER
+end

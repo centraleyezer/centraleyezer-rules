@@ -1,0 +1,32 @@
+id: cisco.nxos.cis.1.2.7
+title: "NX-OS `aaa accounting default` must be configured"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `aaa accounting default group <X>` must be configured so
+  command and login events are sent to TACACS+/RADIUS for
+  central audit.
+rationale: |
+  Without accounting, NX-OS only retains local syslog —
+  rotated within the switch and lost on reload. Central
+  accounting is the forensic trail that survives the device.
+impact: |
+  No central audit of operator command activity; forensic
+  trail is local-only and rotates.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.2.7"
+  nist: ["AU-2", "AU-3", "AU-12"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_aaa_acct_default"
+  equals: true
+on_fail:
+  message: "aaa accounting default group is not configured."
+  remediation_cli: |
+    configure terminal
+     aaa accounting default group tacacs+
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/nxos_acct.compliant.txt
+  negative: fixtures/nxos_acct.violating.txt

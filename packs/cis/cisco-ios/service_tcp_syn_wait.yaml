@@ -1,0 +1,31 @@
+id: cisco.ios.cis.3.2.3
+title: "Configure `service tcp-syn-wait`"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `service tcp-syn-wait` must be configured so the device drops
+  half-open TCP connections after a bounded wait, mitigating
+  SYN-flood-style state exhaustion on the device itself.
+rationale: |
+  Without a SYN-wait timeout, the TCP stack on the device can
+  accumulate half-open connections that consume control-plane
+  memory until the device runs out.
+impact: |
+  Control-plane TCP-state exhaustion under volumetric SYN attack.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.2.3"
+  nist: ["SC-5"]
+  cwe: [400]
+query:
+  path: "$.hardening.service_tcp_syn_wait"
+  equals: true
+on_fail:
+  message: "service tcp-syn-wait is not enabled."
+  remediation_cli: |
+    configure terminal
+     service tcp-syn-wait 60
+    end
+    write memory
+fixtures:
+  positive: fixtures/syn_wait.compliant.txt
+  negative: fixtures/syn_wait.violating.txt

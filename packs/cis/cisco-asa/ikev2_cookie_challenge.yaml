@@ -1,0 +1,33 @@
+id: cisco.asa.cis.5.1.8
+title: "ASA `crypto ikev2 cookie-challenge` must be enabled"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `crypto ikev2 cookie-challenge always` (or `cookie-challenge
+  <threshold>`) must be configured. Cookie-challenge is the
+  IKEv2 anti-flood mechanism that requires the initiator to
+  prove reachability before the responder allocates state.
+rationale: |
+  Without cookie-challenge, an attacker can send floods of
+  forged INIT_SA requests and force the ASA to allocate IKE
+  half-open state per request. Cookie-challenge offloads the
+  cost to the (possibly forged) initiator.
+impact: |
+  IKEv2 half-open-state exhaustion under SA-flood attack.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.1.8"
+  nist: ["SC-5"]
+  cwe: [400]
+query:
+  path: "$.hardening.asa_cookie_challenge"
+  equals: true
+on_fail:
+  message: "crypto ikev2 cookie-challenge is not enabled."
+  remediation_cli: |
+    configure terminal
+     crypto ikev2 cookie-challenge always
+    end
+    write memory
+fixtures:
+  positive: fixtures/cookie_challenge.compliant.txt
+  negative: fixtures/cookie_challenge.violating.txt

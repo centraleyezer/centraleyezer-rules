@@ -1,0 +1,7 @@
+version 12.4
+hostname legacy-rtr
+!
+line vty 0 4
+ transport input telnet
+!
+end

@@ -1,0 +1,10 @@
+!
+! MLS QoS globally enabled — STIG L2S V-220625 bandwidth management.
+!
+hostname sw-l2-mlsqos-compliant
+!
+mls qos
+!
+spanning-tree mode rapid-pvst
+!
+end

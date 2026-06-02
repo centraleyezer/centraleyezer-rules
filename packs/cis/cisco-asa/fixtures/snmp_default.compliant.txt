@@ -1,0 +1,4 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-clean
+snmp-server community s3cret-ro-2026

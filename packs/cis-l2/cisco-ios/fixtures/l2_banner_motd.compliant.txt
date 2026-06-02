@@ -1,0 +1,6 @@
+version 17.9
+hostname compliant
+banner motd ^
+AUTHORIZED ACCESS ONLY
+^
+end

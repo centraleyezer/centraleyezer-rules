@@ -1,0 +1,35 @@
+id: cisco.asa.cis.1.2.3
+title: "ASA local priv-15 user accounts must be ≤ 5"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  The number of local `username ... privilege 15` accounts on
+  the ASA must be ≤ 5. Local accounts are the AAA-fallback
+  credential set; every one of them is a long-term shared
+  secret on every backup.
+rationale: |
+  Local priv-15 accounts bypass AAA, are stored in the running
+  config, and end up in every backup. Limiting the count
+  enforces the discipline that only documented break-glass
+  accounts should be local — operators should authenticate via
+  AAA, not via shared local creds.
+impact: |
+  Many parallel local priv-15 accounts; harder to audit who
+  has emergency-mode access.
+references:
+  cis: "CIS Cisco ASA Benchmark — 1.2.3"
+  nist: ["AC-2", "AC-6"]
+  cwe: [284]
+query:
+  path: "$.hardening.asa_priv15_count"
+  in: [0, 1, 2, 3, 4, 5]
+on_fail:
+  message: "More than 5 local privilege-15 users are defined."
+  remediation_cli: |
+    configure terminal
+     no username <EXTRA-ACCOUNT>
+    end
+    write memory
+fixtures:
+  positive: fixtures/priv15.compliant.txt
+  negative: fixtures/priv15.violating.txt

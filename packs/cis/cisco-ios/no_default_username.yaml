@@ -1,0 +1,34 @@
+id: cisco.ios.cis.1.3.2
+title: "No default usernames (admin / cisco / root / user)"
+severity: critical
+vendors: [cisco-ios, cisco-ios-xe, cisco-nx-os, cisco-asa]
+description: |
+  Local user accounts must not use default / guessable names
+  (admin, cisco, root, user, guest, support).
+rationale: |
+  Default account names are the first thing every brute-force
+  tool tries. Their presence at minimum doubles the attacker's
+  success rate even with strong passwords.
+impact: |
+  Increased brute-force success rate; phishing pretexting
+  ("hi, I'm cisco support, log in as 'cisco'…").
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.3.2"
+  nist: ["IA-2", "IA-5"]
+  cwe: [798, 521]
+query:
+  path: "$.users[*].name"
+  in: ["admin", "cisco", "root", "user", "guest", "support"]
+  not: true
+on_fail:
+  message: "A default / guessable username is configured."
+  remediation_cli: |
+    configure terminal
+     no username admin
+     no username cisco
+     username <ORG-SPECIFIC-NAME> privilege 1 secret <STRONG>
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_default_user.compliant.txt
+  negative: fixtures/no_default_user.violating.txt

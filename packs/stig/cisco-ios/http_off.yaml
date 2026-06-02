@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-215823.http_off
+title: "The Cisco router must disable the unencrypted HTTP management server."
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  The IOS HTTP server transmits authentication tokens and command output in cleartext and must be disabled.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router NDM STIG. CAT I finding.
+  See V-215823 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-215823 on the device's POA&M.
+references:
+  stig: ["V-215823"]
+  cci:
+    - "CCI-000382"
+query:
+  path: "$.services.http_server"
+  equals: false
+on_fail:
+  message: "Cisco IOS STIG V-215823 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-215823.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/http_off.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/http_off.violating.txt

@@ -1,0 +1,40 @@
+id: cisco.ios.cis.8.1.1
+title: "Configure Control Plane Policing (CoPP)"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  A `control-plane` policy must be configured so traffic destined
+  to the device CPU (BGP, OSPF, SSH, SNMP, ICMP, ARP) is rate-
+  limited per class. This is the device-CPU equivalent of a
+  per-class QoS policy on a data-plane interface.
+rationale: |
+  Without CoPP, a single misbehaving source (or attacker) can
+  saturate the device CPU with ICMP / ARP / SSH brute-force and
+  starve legitimate control-plane traffic. Multiple Cisco PSIRT
+  advisories list "lack of CoPP" as an exacerbating factor.
+impact: |
+  Control-plane denial of service from a single source; legitimate
+  routing protocol adjacencies flap.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 8.1.1"
+  nist: ["SC-5", "SC-7"]
+  cwe: [400]
+query:
+  path: "$.hardening.copp_configured"
+  equals: true
+on_fail:
+  message: "Control Plane Policing (CoPP) is not configured."
+  remediation_cli: |
+    configure terminal
+     class-map match-any COPP-CRITICAL
+      match access-group name COPP-CRITICAL-ACL
+     policy-map COPP-POLICY
+      class COPP-CRITICAL
+       police rate 5000 pps conform-action transmit exceed-action drop
+     control-plane
+      service-policy input COPP-POLICY
+    end
+    write memory
+fixtures:
+  positive: fixtures/copp.compliant.txt
+  negative: fixtures/copp.violating.txt

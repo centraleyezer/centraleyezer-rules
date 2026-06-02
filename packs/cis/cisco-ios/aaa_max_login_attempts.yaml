@@ -1,0 +1,31 @@
+id: cisco.ios.cis.1.1.10
+title: "AAA local-authentication max-fail must be set (≤ 5)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `aaa local authentication attempts max-fail N` must be set to
+  ≤ 5. After N consecutive failed authentications against the
+  local user database, the account is locked.
+rationale: |
+  Pairs with `login block-for` (which throttles connection rate)
+  to add account-level lockout. Without it, the only brake on
+  local-user brute-force is the rate limit.
+impact: |
+  Unbounded local-account brute-force per connection-rate budget.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.1.10"
+  nist: ["AC-7", "IA-5"]
+  cwe: [307]
+query:
+  path: "$.aaa.max_login_attempts"
+  in: [1, 2, 3, 4, 5]
+on_fail:
+  message: "aaa local authentication attempts max-fail is not set to ≤ 5."
+  remediation_cli: |
+    configure terminal
+     aaa local authentication attempts max-fail 5
+    end
+    write memory
+fixtures:
+  positive: fixtures/aaa_maxfail.compliant.txt
+  negative: fixtures/aaa_maxfail.violating.txt

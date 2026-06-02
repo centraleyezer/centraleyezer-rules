@@ -1,0 +1,32 @@
+id: cisco.nxos.cis.1.5.2
+title: "NX-OS `tacacs-server timeout` must be bounded (≤ 10s)"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `tacacs-server timeout <N>` must be configured with N ≤ 10
+  so a TACACS+ outage doesn't stall logins beyond the local
+  fallback's tolerance.
+rationale: |
+  Same operational hazard as the RADIUS variant: long TACACS
+  timeouts compound into multi-minute login stalls during
+  TACACS outages, defeating the local-fallback design.
+impact: |
+  Long management-plane stalls during transient TACACS+
+  outages.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.5.2"
+  nist: ["AC-2", "CP-2"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_tacacs_timeout"
+  in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "tacacs-server timeout is not set ≤ 10 seconds."
+  remediation_cli: |
+    configure terminal
+     tacacs-server timeout 5
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/tacacs_to.compliant.txt
+  negative: fixtures/tacacs_to.violating.txt

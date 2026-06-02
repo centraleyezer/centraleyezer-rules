@@ -1,0 +1,31 @@
+id: cisco.ios.cis.2.1.5
+title: "SSH authentication-retries must be ≤ 3"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip ssh authentication-retries` caps how many bad-password
+  attempts a single SSH connection may make before the device
+  drops it. CIS L1 sets the bar at 3.
+rationale: |
+  Default of 3 is acceptable; higher (or unbounded) values open a
+  per-connection brute-force window.
+impact: |
+  Sustained credential brute-force from a single TCP session
+  without triggering connection-rate alerts.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.1.5"
+  nist: ["AC-7", "IA-5"]
+  cwe: [307]
+query:
+  path: "$.hardening.ssh_retries"
+  in: [1, 2, 3]
+on_fail:
+  message: "ip ssh authentication-retries is not set to ≤ 3."
+  remediation_cli: |
+    configure terminal
+     ip ssh authentication-retries 3
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssh_retries.compliant.txt
+  negative: fixtures/ssh_retries.violating.txt

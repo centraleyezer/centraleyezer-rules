@@ -1,0 +1,34 @@
+id: cisco.ios.cis.8.1.2
+title: "logging facility must be set explicitly"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `logging facility <FACILITY>` must be explicitly configured
+  so syslog messages carry a known facility tag at the
+  collector — and so any change away from the default is
+  audit-visible.
+rationale: |
+  IOS's default facility (`local7`) collides with several
+  third-party syslog conventions on shared collectors. A
+  device pinned to a known facility (e.g. local6) makes the
+  per-device filtering at the collector deterministic.
+impact: |
+  Syslog facility tag undefined; collector-side filtering may
+  silently miss or misroute messages.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 8.1.2"
+  nist: ["AU-3"]
+  cwe: []
+query:
+  path: "$.logging.facility"
+  exists: true
+on_fail:
+  message: "logging facility is not explicitly configured."
+  remediation_cli: |
+    configure terminal
+     logging facility local6
+    end
+    write memory
+fixtures:
+  positive: fixtures/log_facility.compliant.txt
+  negative: fixtures/log_facility.violating.txt

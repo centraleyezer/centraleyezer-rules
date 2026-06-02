@@ -1,0 +1,9 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-dirty
+username admin1 privilege 15 password $sha512$a pbkdf2
+username admin2 privilege 15 password $sha512$b pbkdf2
+username admin3 privilege 15 password $sha512$c pbkdf2
+username admin4 privilege 15 password $sha512$d pbkdf2
+username admin5 privilege 15 password $sha512$e pbkdf2
+username admin6 privilege 15 password $sha512$f pbkdf2

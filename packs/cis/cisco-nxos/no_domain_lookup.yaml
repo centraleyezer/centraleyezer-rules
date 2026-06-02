@@ -1,0 +1,31 @@
+id: cisco.nxos.cis.2.1.4
+title: "NX-OS: disable `ip domain-lookup`"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `no ip domain-lookup` must be configured on NX-OS unless the
+  device has a defined DNS server reachable from the management
+  VRF.
+rationale: |
+  Broadcast DNS lookup from a management-plane operator typo
+  leaks the typed string into the management VLAN; attackers
+  on the same segment can answer.
+impact: |
+  Slow CLI; broadcast DNS leakage on the management network.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 2.1.4"
+  nist: ["CM-7"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_domain_lookup_off"
+  equals: true
+on_fail:
+  message: "ip domain-lookup is enabled (default)."
+  remediation_cli: |
+    configure terminal
+     no ip domain-lookup
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/nxos_no_domain_lookup.compliant.txt
+  negative: fixtures/nxos_no_domain_lookup.violating.txt

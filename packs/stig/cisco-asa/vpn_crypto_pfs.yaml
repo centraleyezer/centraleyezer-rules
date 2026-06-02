@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220805
+title: "The Cisco ASA crypto map must require Perfect Forward Secrecy."
+severity: medium
+vendors: [cisco-asa]
+description: |
+  Without PFS, compromise of one IPsec key leaks every prior session. STIG mandates PFS on every crypto map.
+rationale: |
+  Sourced from the DISA Cisco ASA VPN STIG. CAT II finding.
+  See V-220805 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220805 on the device's POA&M.
+references:
+  stig: ["V-220805"]
+  cci:
+    - "CCI-002421"
+query:
+  path: "$.hardening.asa_crypto_map_pfs"
+  equals: true
+on_fail:
+  message: "STIG V-220805 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220805.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/crypto_pfs.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/crypto_pfs.violating.txt

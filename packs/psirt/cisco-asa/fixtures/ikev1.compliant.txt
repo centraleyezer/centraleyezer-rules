@@ -1,0 +1,4 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-ikev2-only
+! No crypto ikev1 enable lines.

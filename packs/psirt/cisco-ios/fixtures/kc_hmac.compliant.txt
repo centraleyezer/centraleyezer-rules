@@ -1,0 +1,7 @@
+version 17.9
+hostname compliant
+key chain NETZER-KEYS
+ key 1
+  cryptographic-algorithm hmac-sha-256
+  key-string something
+end

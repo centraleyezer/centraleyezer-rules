@@ -1,0 +1,35 @@
+id: cisco.asa.cis.2.1.1
+title: "Disable Telnet on ASA"
+severity: critical
+vendors: [cisco-asa]
+description: |
+  No `telnet <subnet> <mask> <interface>` lines may be configured.
+  ASA telnet is cleartext.
+rationale: |
+  Telnet transmits credentials and session data without
+  encryption. SSH is the only acceptable remote-management
+  protocol for the ASA.
+impact: |
+  Full administrative compromise from any cleartext-observable
+  vantage point on the inside / management VRF.
+references:
+  cis: "CIS Cisco ASA Benchmark — 2.1.1"
+  nist: ["AC-17", "IA-2", "SC-8"]
+  cwe: [319]
+query:
+  path: "$.services.telnet"
+  equals: false
+on_fail:
+  message: "ASA telnet listener is enabled."
+  remediation_cli: |
+    configure terminal
+     ! list current telnet entries
+     show running-config telnet
+     ! remove each one
+     no telnet 0.0.0.0 0.0.0.0 outside
+     no telnet 10.0.0.0 255.255.255.0 inside
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_telnet.compliant.txt
+  negative: fixtures/no_telnet.violating.txt

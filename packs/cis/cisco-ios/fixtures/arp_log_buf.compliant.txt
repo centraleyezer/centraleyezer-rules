@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant
+ip arp inspection log-buffer entries 1024
+end

@@ -1,0 +1,33 @@
+id: cisco.ios.cis.7.3.1
+title: "Enable DHCP snooping globally"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip dhcp snooping` must be enabled globally + on appropriate
+  VLANs so the switch builds a binding table of legitimate DHCP
+  leases and drops rogue DHCP server traffic on untrusted ports.
+rationale: |
+  Without DHCP snooping, a rogue DHCP server on any access port
+  can hand out attacker-controlled default gateway / DNS values to
+  every host that requests a lease — full traffic-redirect MITM.
+impact: |
+  L2-scope MITM via DHCP option poisoning.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.3.1"
+  nist: ["SC-7", "AC-4"]
+  cwe: [346]
+query:
+  path: "$.hardening.dhcp_snooping"
+  equals: true
+on_fail:
+  message: "DHCP snooping is not enabled."
+  remediation_cli: |
+    configure terminal
+     ip dhcp snooping
+     ip dhcp snooping vlan 10,20,30
+     no ip dhcp snooping information option
+    end
+    write memory
+fixtures:
+  positive: fixtures/dhcp_snoop.compliant.txt
+  negative: fixtures/dhcp_snoop.violating.txt

@@ -1,0 +1,35 @@
+id: cisco.nxos.cis.1.4.3
+title: "NX-OS `aaa user default-role` must be disabled"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `no aaa user default-role` (or `aaa user default-role
+  disable`) must be configured so users that authenticate
+  without a configured role on the remote AAA server get NO
+  access, rather than defaulting to `network-operator`.
+rationale: |
+  With the NX-OS default behaviour, an authenticated user
+  without an explicit role assignment is granted
+  `network-operator` — which can read most configuration
+  including credential material. Failing closed is the
+  hardening default.
+impact: |
+  Authenticated-but-unassigned users get read access to most
+  of the configuration.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.4.3"
+  nist: ["AC-3", "AC-6"]
+  cwe: [284]
+query:
+  path: "$.hardening.nxos_user_default_role_disable"
+  equals: true
+on_fail:
+  message: "aaa user default-role is not disabled."
+  remediation_cli: |
+    configure terminal
+     no aaa user default-role
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/default_role.compliant.txt
+  negative: fixtures/default_role.violating.txt

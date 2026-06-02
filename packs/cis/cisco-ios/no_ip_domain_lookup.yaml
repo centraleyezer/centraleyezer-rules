@@ -1,0 +1,33 @@
+id: cisco.ios.cis.2.2.19
+title: "Disable `ip domain-lookup` unless DNS source-interface is set"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no ip domain-lookup` must be configured. When a router has
+  domain lookup enabled but no DNS servers, every typo on the
+  console produces a multi-second broadcast DNS attempt that
+  blocks the terminal.
+rationale: |
+  Beyond the operator-experience nuisance, an attacker on the
+  same broadcast domain can answer those DNS broadcasts and
+  influence routing decisions. Production network devices that
+  do not need to resolve names should have lookup disabled.
+impact: |
+  Slow CLI on typos; broadcast DNS leakage on the management VLAN.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.19"
+  nist: ["CM-7"]
+  cwe: []
+query:
+  path: "$.hardening.no_ip_domain_lookup"
+  equals: true
+on_fail:
+  message: "ip domain-lookup is enabled (default)."
+  remediation_cli: |
+    configure terminal
+     no ip domain-lookup
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_domain_lookup.compliant.txt
+  negative: fixtures/no_domain_lookup.violating.txt

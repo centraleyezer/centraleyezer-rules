@@ -1,0 +1,32 @@
+id: cisco.ios.psirt.no_ipv6_source_route
+title: "Disable IPv6 source routing (Cisco hardening guide)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no ipv6 source-route` must be in effect. IPv6 source-routed
+  packets allow the sender to specify the path, bypassing routing-
+  policy based segmentation.
+rationale: |
+  Same threat model as IPv4 source routing; the IPv6 RH0 header
+  was deprecated by RFC 5095 for exactly this reason. Cisco's
+  hardening guide recommends explicit disable.
+impact: |
+  Spoofed-source IPv6 traffic enters trusted zones via attacker-
+  chosen path; segmentation bypass.
+references:
+  cis: "Cisco hardening guide §6"
+  nist: ["SC-7"]
+  cwe: [346]
+query:
+  path: "$.hardening.ipv6_source_route"
+  equals: false
+on_fail:
+  message: "IPv6 source routing is enabled (default)."
+  remediation_cli: |
+    configure terminal
+     no ipv6 source-route
+    end
+    write memory
+fixtures:
+  positive: fixtures/ipv6_srcroute.compliant.txt
+  negative: fixtures/ipv6_srcroute.violating.txt

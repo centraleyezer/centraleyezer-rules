@@ -1,0 +1,33 @@
+id: cisco.nxos.cis.1.7.1
+title: "NX-OS `terminal session-timeout` must be ≤ 15 minutes"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `terminal session-timeout <N>` must be configured with N ≤ 15
+  so idle CLI sessions are closed automatically rather than
+  left logged in indefinitely.
+rationale: |
+  An operator who walks away mid-session leaves a privileged
+  CLI accessible to anyone with physical or remote access to
+  the terminal. The default NX-OS timeout (5 minutes) is fine;
+  long timeouts (hours) defeat the protection.
+impact: |
+  Abandoned privileged sessions persist; physical-access
+  attackers can take over the open session.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.7.1"
+  nist: ["AC-11", "AC-12"]
+  cwe: [613]
+query:
+  path: "$.hardening.nxos_term_session_timeout"
+  in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+on_fail:
+  message: "terminal session-timeout is not set ≤ 15 minutes."
+  remediation_cli: |
+    configure terminal
+     terminal session-timeout 10
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/term_to.compliant.txt
+  negative: fixtures/term_to.violating.txt

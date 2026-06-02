@@ -1,0 +1,32 @@
+id: cisco.nxos.cis.9.2.1
+title: "NX-OS OSPF area must use authentication"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  When OSPF is configured, at least one `area X authentication`
+  (preferably `message-digest`) line must be present so OSPF
+  LSAs are signed.
+rationale: |
+  Unauthenticated OSPF accepts LSAs from any device on the
+  segment — a classic route-poisoning vector for any attacker
+  on the same L2 broadcast domain as the OSPF speakers.
+impact: |
+  OSPF route-poisoning from any L2-adjacent attacker.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 9.2.1"
+  nist: ["AC-3", "IA-2", "SC-8"]
+  cwe: [294]
+query:
+  path: "$.hardening.nxos_ospf_auth"
+  equals: true
+on_fail:
+  message: "OSPF area authentication is not configured."
+  remediation_cli: |
+    configure terminal
+     router ospf 100
+      area 0 authentication message-digest
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/nxos_ospf_auth.compliant.txt
+  negative: fixtures/nxos_ospf_auth.violating.txt

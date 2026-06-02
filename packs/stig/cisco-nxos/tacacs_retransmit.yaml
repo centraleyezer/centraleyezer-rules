@@ -1,0 +1,27 @@
+id: cisco.nxos.stig.v-220313
+title: "The NX-OS switch must cap TACACS+ retransmissions at 5."
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  Bounded retransmit prevents AAA-loss from amplifying into a sustained control-plane burst.
+rationale: |
+  Sourced from the DISA Cisco NX-OS Switch NDM STIG. CAT III finding.
+  See V-220313 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220313 on the device's POA&M.
+references:
+  stig: ["V-220313"]
+  cci:
+    - "CCI-000764"
+query:
+  path: "$.hardening.nxos_tacacs_retransmit"
+  in: [1, 2, 3, 4, 5]
+on_fail:
+  message: "Cisco NX-OS STIG V-220313 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220313.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-nxos/fixtures/tacacs_rt.compliant.txt
+  negative: ../../cis/cisco-nxos/fixtures/tacacs_rt.violating.txt

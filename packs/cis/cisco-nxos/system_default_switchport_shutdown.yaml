@@ -1,0 +1,32 @@
+id: cisco.nxos.cis.7.1.1
+title: "NX-OS `system default switchport shutdown` must be enabled"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `system default switchport shutdown` must be configured so
+  newly-added interfaces are administratively shut by default —
+  explicit `no shutdown` required to activate.
+rationale: |
+  Without it, every newly-cabled port comes up active and joins
+  the default VLAN. With it, the operator MUST explicitly turn
+  the port on, eliminating the "just cabled it, it joined the
+  network" surprise.
+impact: |
+  Unintended L2 reachability from newly-installed cabling.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.1.1"
+  nist: ["CM-7", "SC-7"]
+  cwe: [284]
+query:
+  path: "$.hardening.nxos_sys_default_switchport_shutdown"
+  equals: true
+on_fail:
+  message: "system default switchport shutdown is not configured."
+  remediation_cli: |
+    configure terminal
+     system default switchport shutdown
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/sys_default_shut.compliant.txt
+  negative: fixtures/sys_default_shut.violating.txt

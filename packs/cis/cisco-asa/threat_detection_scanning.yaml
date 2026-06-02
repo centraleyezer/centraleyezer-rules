@@ -1,0 +1,32 @@
+id: cisco.asa.cis.6.1.2
+title: "Enable ASA threat-detection scanning-threat"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `threat-detection scanning-threat` (optionally with `shun`)
+  must be enabled. The ASA tracks per-source connection-rate
+  anomalies and emits scan-detected alerts.
+rationale: |
+  Scan detection catches reconnaissance early — the phase
+  before any real attack. Without it, the ASA logs each blocked
+  packet individually with no aggregated alert.
+impact: |
+  Slow / distributed scan activity goes unaggregated; reconnaissance
+  passes unnoticed until exploitation begins.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.1.2"
+  nist: ["SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.threat_detection_scanning"
+  equals: true
+on_fail:
+  message: "threat-detection scanning-threat is not enabled."
+  remediation_cli: |
+    configure terminal
+     threat-detection scanning-threat
+    end
+    write memory
+fixtures:
+  positive: fixtures/td_scanning.compliant.txt
+  negative: fixtures/td_scanning.violating.txt

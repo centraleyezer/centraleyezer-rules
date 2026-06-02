@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220416
+title: "The Cisco ASA must authenticate SSH management via an AAA group."
+severity: high
+vendors: [cisco-asa]
+description: |
+  SSH login must hit the centralised AAA server, not local users — required for STIG-compliant audit chain.
+rationale: |
+  Sourced from the DISA Cisco ASA NDM STIG. CAT I finding.
+  See V-220416 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-220416 on the device's POA&M.
+references:
+  stig: ["V-220416"]
+  cci:
+    - "CCI-000213"
+query:
+  path: "$.hardening.asa_auth_ssh_group"
+  equals: true
+on_fail:
+  message: "Cisco ASA STIG V-220416 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220416.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/auth_ssh_group.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/auth_ssh_group.violating.txt

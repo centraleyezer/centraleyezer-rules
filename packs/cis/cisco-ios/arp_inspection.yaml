@@ -1,0 +1,31 @@
+id: cisco.ios.cis.7.3.2
+title: "Enable Dynamic ARP Inspection"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip arp inspection vlan <list>` must be enabled so the switch
+  validates ARP packets against the DHCP-snooping binding table
+  and drops spoofed entries.
+rationale: |
+  ARP cache poisoning is the foundational L2 MITM technique. DAI
+  is the device-side mitigation; without it, every L2-adjacent
+  attacker can re-route traffic.
+impact: |
+  Trivial L2 MITM on access segments.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.3.2"
+  nist: ["SC-7", "AC-4"]
+  cwe: [346]
+query:
+  path: "$.hardening.arp_inspection"
+  equals: true
+on_fail:
+  message: "Dynamic ARP Inspection is not enabled."
+  remediation_cli: |
+    configure terminal
+     ip arp inspection vlan 10,20,30
+    end
+    write memory
+fixtures:
+  positive: fixtures/dai.compliant.txt
+  negative: fixtures/dai.violating.txt

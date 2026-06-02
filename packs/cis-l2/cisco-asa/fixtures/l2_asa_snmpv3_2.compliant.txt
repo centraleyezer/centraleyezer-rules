@@ -1,0 +1,6 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-clean
+snmp-server group MON v3 priv
+snmp-server user mon-a MON v3 auth sha a priv aes 256 p
+snmp-server user mon-b MON v3 auth sha b priv aes 256 q

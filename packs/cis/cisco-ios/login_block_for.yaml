@@ -1,0 +1,30 @@
+id: cisco.ios.cis.1.1.6
+title: "Configure login block-for rate-limit"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `login block-for X attempts Y within Z` must be set to throttle
+  failed authentication attempts and lock out brute-force sources.
+rationale: |
+  Without this, an attacker can keep retrying credentials at line
+  rate; with it, the device drops further attempts for X seconds
+  after Y failures within Z seconds.
+impact: |
+  Unbounded credential brute-force surface.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.1.6"
+  nist: ["AC-7"]
+  cwe: [307]
+query:
+  path: "$.hardening.login_max_fails"
+  in: [1, 2, 3, 4, 5, 6]
+on_fail:
+  message: "login block-for / max-attempts is not configured."
+  remediation_cli: |
+    configure terminal
+     login block-for 120 attempts 3 within 60
+    end
+    write memory
+fixtures:
+  positive: fixtures/login_block.compliant.txt
+  negative: fixtures/login_block.violating.txt

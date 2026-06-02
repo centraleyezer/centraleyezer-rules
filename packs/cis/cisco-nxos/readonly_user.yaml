@@ -1,0 +1,35 @@
+id: cisco.nxos.cis.1.4.4
+title: "NX-OS must have at least one network-operator (read-only) user"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  At least one `username ... role network-operator` account
+  must be defined so day-to-day operations (read-only
+  monitoring) can use a non-privileged account.
+rationale: |
+  When every operator account is `network-admin`, operators
+  default to privileged access — and any session compromise
+  becomes a configuration-change incident. A
+  network-operator-role account gives day-to-day
+  show-command operations a path that can't change
+  configuration.
+impact: |
+  No least-privilege path for monitoring; every operator
+  uses a privileged account by default.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.4.4"
+  nist: ["AC-6", "AC-2"]
+  cwe: [250]
+query:
+  path: "$.hardening.nxos_readonly_user_count"
+  in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "No network-operator (read-only) user is defined."
+  remediation_cli: |
+    configure terminal
+     username netzer-monitor password <X> role network-operator
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/nxos_ro_user.compliant.txt
+  negative: fixtures/nxos_ro_user.violating.txt

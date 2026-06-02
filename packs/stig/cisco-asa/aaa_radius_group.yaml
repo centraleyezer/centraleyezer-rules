@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220408
+title: "The Cisco ASA must define an aaa-server RADIUS group for VPN authentication."
+severity: low
+vendors: [cisco-asa]
+description: |
+  Remote-access VPN authentication must be centralised; a RADIUS group must be defined.
+rationale: |
+  Sourced from the DISA Cisco ASA NDM STIG. CAT III finding.
+  See V-220408 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220408 on the device's POA&M.
+references:
+  stig: ["V-220408"]
+  cci:
+    - "CCI-000213"
+query:
+  path: "$.hardening.asa_aaa_radius"
+  equals: true
+on_fail:
+  message: "Cisco ASA STIG V-220408 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220408.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/aaa_radius.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/aaa_radius.violating.txt

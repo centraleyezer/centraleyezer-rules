@@ -1,0 +1,36 @@
+id: cisco.asa.cis.5.5.1
+title: "ASA `dynamic-access-policy-record` (DAP) must be defined"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  At least one `dynamic-access-policy-record <NAME>` stanza
+  must be present so the ASA evaluates per-session posture /
+  endpoint attributes before granting AnyConnect access —
+  rather than relying solely on credential validity.
+rationale: |
+  Without DAP, an AnyConnect client that passes auth gets full
+  group-policy access regardless of endpoint posture (OS
+  patch level, AV state, certificate presence). DAP is the
+  posture-decision layer that gates access on what the
+  endpoint is and not just who is logging in.
+impact: |
+  No endpoint-posture gate on remote-access VPN; valid
+  credentials grant full access from any device.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.5.1"
+  nist: ["AC-3", "AC-19", "IA-3"]
+  cwe: [284]
+query:
+  path: "$.hardening.asa_dap_record"
+  equals: true
+on_fail:
+  message: "No dynamic-access-policy-record is defined."
+  remediation_cli: |
+    configure terminal
+     dynamic-access-policy-record DfltAccessPolicy
+      action continue
+    end
+    write memory
+fixtures:
+  positive: fixtures/dap.compliant.txt
+  negative: fixtures/dap.violating.txt

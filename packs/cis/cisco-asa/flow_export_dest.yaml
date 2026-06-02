@@ -1,0 +1,33 @@
+id: cisco.asa.cis.8.1.1
+title: "ASA `flow-export destination` (NSEL) must be configured"
+severity: low
+vendors: [cisco-asa]
+description: |
+  `flow-export destination <interface> <collector> <port>`
+  must be configured so the ASA exports per-flow records (NSEL
+  / NetFlow v9) to the central flow collector for traffic
+  visibility and forensics.
+rationale: |
+  NSEL is the per-flow audit trail. Without it, the ASA
+  retains only syslog (which is rotated) and `show conn`
+  (which is real-time only). Flow-export gives the SOC
+  retroactive query power over what crossed the firewall.
+impact: |
+  No central, queryable record of flows through the firewall.
+references:
+  cis: "CIS Cisco ASA Benchmark — 8.1.1"
+  nist: ["AU-2", "SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.asa_flow_export_dest"
+  equals: true
+on_fail:
+  message: "flow-export destination (NSEL) is not configured."
+  remediation_cli: |
+    configure terminal
+     flow-export destination outside 10.0.0.1 2055
+    end
+    write memory
+fixtures:
+  positive: fixtures/flow_export.compliant.txt
+  negative: fixtures/flow_export.violating.txt

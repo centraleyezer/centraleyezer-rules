@@ -1,0 +1,34 @@
+id: cisco.asa.cis.2.3.3
+title: "ASA `crypto ca permit-weak-crypto` must NOT be configured"
+severity: high
+vendors: [cisco-asa]
+description: |
+  `crypto ca permit-weak-crypto` must NOT be present. The
+  option re-enables acceptance of MD5-signed certificates,
+  SHA-1-signed root CAs, and weak RSA keys that modern ASA
+  images reject by default.
+rationale: |
+  This is an explicit knob to weaken PKI validation — the
+  default rejects MD5/SHA-1 signed certs because they're
+  considered broken. Enabling it is a documented operational
+  workaround that should not survive into production.
+impact: |
+  PKI validation accepts MD5/SHA-1 signed certs and weak RSA
+  keys; certificate-trust-chain attacks possible.
+references:
+  cis: "CIS Cisco ASA Benchmark — 2.3.3"
+  nist: ["SC-13", "SC-17"]
+  cwe: [327]
+query:
+  path: "$.hardening.asa_permit_weak_crypto"
+  equals: false
+on_fail:
+  message: "crypto ca permit-weak-crypto is configured."
+  remediation_cli: |
+    configure terminal
+     no crypto ca permit-weak-crypto
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_weak_crypto.compliant.txt
+  negative: fixtures/no_weak_crypto.violating.txt

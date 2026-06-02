@@ -1,0 +1,33 @@
+id: cisco.nxos.cis.8.1.1
+title: "NX-OS Control Plane Policing (`copp profile`) must be applied"
+severity: high
+vendors: [cisco-nx-os]
+description: |
+  `copp profile [strict|moderate|lenient|dense]` must be
+  configured. NX-OS ships with no CoPP profile applied by
+  default; the operator must opt in.
+rationale: |
+  Without CoPP, an attacker who can reach the control plane
+  (SSH, SNMP, ICMP, BGP, OSPF) can saturate the supervisor CPU
+  and starve legitimate control-plane traffic — including the
+  routing protocols holding the data plane together.
+impact: |
+  Estate-wide adjacency-flap cascade from a single control-plane
+  flooding source.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 8.1.1"
+  nist: ["SC-5", "SC-7"]
+  cwe: [400]
+query:
+  path: "$.hardening.nxos_copp_profile"
+  in: ["strict", "moderate", "lenient", "dense"]
+on_fail:
+  message: "No copp profile is applied."
+  remediation_cli: |
+    configure terminal
+     copp profile strict
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/nxos_copp.compliant.txt
+  negative: fixtures/nxos_copp.violating.txt

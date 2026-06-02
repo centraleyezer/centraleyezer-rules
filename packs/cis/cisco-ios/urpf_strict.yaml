@@ -1,0 +1,35 @@
+id: cisco.ios.cis.3.2.6
+title: "uRPF strict (`ip verify unicast source reachable-via rx`) must be configured"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip verify unicast source reachable-via rx` (uRPF strict
+  mode) must be configured on at least one interface so the
+  router drops packets whose source address is not reachable
+  via the interface they arrived on.
+rationale: |
+  uRPF strict is the standard anti-spoofing primitive at L3
+  edges. It defeats RFC 2827 (BCP38) source-address spoofing
+  attacks — including the ones that enable reflection /
+  amplification attacks.
+impact: |
+  Router can be used to launch / relay source-spoofed traffic
+  (BCP38 non-compliant).
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.2.6"
+  nist: ["SC-5", "SC-7"]
+  cwe: [290]
+query:
+  path: "$.hardening.urpf_strict"
+  equals: true
+on_fail:
+  message: "uRPF strict mode is not configured."
+  remediation_cli: |
+    configure terminal
+     interface GigabitEthernet0/0
+      ip verify unicast source reachable-via rx
+    end
+    write memory
+fixtures:
+  positive: fixtures/urpf.compliant.txt
+  negative: fixtures/urpf.violating.txt

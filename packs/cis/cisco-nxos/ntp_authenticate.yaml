@@ -1,0 +1,33 @@
+id: cisco.nxos.cis.4.1.2
+title: "Authenticate NTP on NX-OS"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  NX-OS must authenticate its NTP servers (`ntp authenticate` +
+  `ntp server X.X.X.X key N`).
+rationale: |
+  Unauthenticated NTP allows a network-on-path attacker to skew
+  device time, breaking certificate validation, TACACS+, Kerberos,
+  and forensic timelines.
+impact: |
+  Cryptographic timing collapse; mis-correlated audit logs.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 4.1.2"
+  nist: ["AU-8", "SC-13"]
+  cwe: [294]
+query:
+  path: "$.ntp.authenticated"
+  equals: true
+on_fail:
+  message: "NX-OS NTP servers are not authenticated."
+  remediation_cli: |
+    configure terminal
+     ntp authentication-key 1 md5 SECRET
+     ntp authenticate
+     ntp trusted-key 1
+     ntp server 10.0.0.10 key 1
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/ntp_auth.compliant.txt
+  negative: fixtures/ntp_auth.violating.txt

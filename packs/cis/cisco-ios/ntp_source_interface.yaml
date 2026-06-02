@@ -1,0 +1,32 @@
+id: cisco.ios.cis.4.1.5
+title: "NTP must use a fixed source-interface (Loopback recommended)"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe, cisco-nx-os]
+description: |
+  `ntp source LoopbackN` must be configured so outbound NTP
+  packets emit from a stable address.
+rationale: |
+  Time-source IP appears in upstream NTP server ACLs. When the
+  source IP changes (because routing fails over to a different
+  egress interface), the device falls out of the trusted-source
+  ACL and stops getting accurate time silently.
+impact: |
+  Silent NTP authentication failure during routing events;
+  unnoticed clock drift afterwards.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 4.1.5"
+  nist: ["AU-8"]
+  cwe: []
+query:
+  path: "$.ntp.source_interface"
+  matches: "."
+on_fail:
+  message: "ntp source-interface is not configured."
+  remediation_cli: |
+    configure terminal
+     ntp source Loopback0
+    end
+    write memory
+fixtures:
+  positive: fixtures/ntp_source.compliant.txt
+  negative: fixtures/ntp_source.violating.txt

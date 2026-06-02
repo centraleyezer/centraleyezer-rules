@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220646
+title: "The Cisco switch must not use VLAN 1 as the native VLAN on any 802.1q trunk link."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Untagged frames on the trunk are mapped to the native VLAN; using VLAN 1 enables double-tagging attacks (VLAN hopping).
+rationale: |
+  Sourced from the DISA Cisco IOS XE Switch L2S STIG (CISC-L2-* control family).
+  CAT II finding. See V-220646 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220646 on the device's POA&M.
+references:
+  stig: ["V-220646"]
+  cci:
+    - "CCI-000366"
+query:
+  path: "$.hardening.trunk_uses_default_native1"
+  equals: false
+on_fail:
+  message: "Cisco IOS L2S STIG V-220646 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220646.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/trunk_native.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/trunk_native.violating.txt

@@ -1,0 +1,34 @@
+id: cisco.ios.cis.4.1.6
+title: "NTP must use `ntp server` only — `ntp peer` is forbidden"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  No `ntp peer <X>` line may appear. NTP peer associations
+  create symmetric trust between two NTP daemons — useful in
+  a hand-built fan-out tree, dangerous because each peer can
+  slew the other's clock.
+rationale: |
+  Several NTP-time-attack CVEs (CVE-2014-9295 and related)
+  exploited peer-mode amplification. Symmetric peering also
+  means a compromised peer can move the local clock. Modern
+  hardening guides prefer asymmetric `ntp server` only.
+impact: |
+  Clock-skew amplification attacks via NTP peer mode.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 4.1.6"
+  nist: ["AU-8"]
+  cwe: [345]
+query:
+  path: "$.hardening.ntp_peer_used"
+  equals: false
+on_fail:
+  message: "ntp peer is configured (use ntp server instead)."
+  remediation_cli: |
+    configure terminal
+     no ntp peer <X>
+     ntp server <X>
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_ntp_peer.compliant.txt
+  negative: fixtures/no_ntp_peer.violating.txt

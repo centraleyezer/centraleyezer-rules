@@ -1,0 +1,10 @@
+version 17.9
+hostname compliant
+!
+interface GigabitEthernet1/0/1
+ switchport mode access
+ switchport access vlan 10
+ switchport port-security
+ spanning-tree bpduguard enable
+!
+end

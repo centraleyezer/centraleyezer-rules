@@ -1,0 +1,31 @@
+id: cisco.asa.cis.6.4.1
+title: "ASA `dhcprelay timeout` must be set (≤ 60 seconds)"
+severity: low
+vendors: [cisco-asa]
+description: |
+  When DHCP relay is configured, `dhcprelay timeout <N>` must
+  be set with N ≤ 60 so a stalled upstream DHCP server doesn't
+  tie up relay state indefinitely.
+rationale: |
+  Long DHCP-relay timeouts let an attacker exhaust relay state
+  by sending forged DISCOVER messages — a DoS against the L3
+  relay path. A bounded timeout caps state lifetime.
+impact: |
+  DHCP-relay state-table exhaustion under DHCP-flood attack.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.4.1"
+  nist: ["SC-5"]
+  cwe: [400]
+query:
+  path: "$.hardening.asa_dhcp_relay_timeout"
+  in: [1, 2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
+on_fail:
+  message: "dhcprelay timeout is not set ≤ 60 seconds."
+  remediation_cli: |
+    configure terminal
+     dhcprelay timeout 60
+    end
+    write memory
+fixtures:
+  positive: fixtures/dhcprelay_to.compliant.txt
+  negative: fixtures/dhcprelay_to.violating.txt

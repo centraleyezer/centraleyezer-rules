@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220900
+title: "The Cisco ASA must enable basic threat detection."
+severity: medium
+vendors: [cisco-asa]
+description: |
+  Basic threat detection surfaces ACL drop bursts and scan signatures that are first-line attack indicators.
+rationale: |
+  Sourced from the DISA Cisco ASA IDPS STIG. CAT II finding.
+  See V-220900 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220900 on the device's POA&M.
+references:
+  stig: ["V-220900"]
+  cci:
+    - "CCI-001253"
+query:
+  path: "$.hardening.threat_detection_basic"
+  equals: true
+on_fail:
+  message: "STIG V-220900 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220900.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/threat_detection.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/threat_detection.violating.txt

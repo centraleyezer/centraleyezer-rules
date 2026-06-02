@@ -1,0 +1,612 @@
+# CMMC Level 2 / NIST 800-171 r2 practice mapping overlay.
+#
+# Each entry maps a Netzer rule id to one or more 800-171 practice IDs
+# (which are CMMC L2 practices verbatim). The evaluator stamps these
+# onto findings as references.cmmc / references.nist_800_171.
+#
+# Practice families used:
+#   3.1  — Access Control
+#   3.3  — Audit and Accountability
+#   3.4  — Configuration Management
+#   3.5  — Identification and Authentication
+#   3.13 — System and Communications Protection
+#   3.14 — System and Information Integrity
+#
+# Bulk-generated using the same topic classifier as the PCI-DSS overlay.
+# See packs/pci-dss/v4/overlay.yaml for the classifier rationale.
+
+mappings:
+  - rule: cisco.asa.cis-l2.1.3.3
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.asa.cis-l2.1.6.2
+    practices: [3.1.11]
+  - rule: cisco.asa.cis-l2.1.6.1
+    practices: [3.1.11]
+  - rule: cisco.asa.cis-l2.5.1.13
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis-l2.5.1.12
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis-l2.5.1.14
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis-l2.1.3.4
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.asa.cis-l2.1.2.9
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.asa.cis-l2.1.2.7
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.asa.cis-l2.1.2.6
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.asa.cis-l2.1.2.10
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.asa.cis-l2.4.3.3
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.asa.cis-l2.2.2.5
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis-l2.2.2.4
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.ios.cis-l2.1.2.13
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.cis-l2.1.3.7
+    practices: [3.1.9]
+  - rule: cisco.ios.cis-l2.1.3.6
+    practices: [3.1.9]
+  - rule: cisco.ios.cis-l2.1.3.5
+    practices: [3.1.9]
+  - rule: cisco.ios.cis-l2.1.1.15
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.ios.cis-l2.8.1.4
+    practices: [3.3.1, 3.3.2, 3.3.4, 3.3.5, 3.3.6, 3.3.8]
+  - rule: cisco.ios.cis-l2.8.1.5
+    practices: [3.3.1, 3.3.2, 3.3.4, 3.3.5, 3.3.6, 3.3.8]
+  - rule: cisco.ios.cis-l2.4.1.8
+    practices: [3.13.11, 3.13.16, 3.13.8, 3.3.7]
+  - rule: cisco.ios.cis-l2.1.1.14
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.ios.cis-l2.4.3.4
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.ios.cis-l2.3.6.10
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.ios.cis-l2.3.6.16
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.ios.cis-l2.3.6.12
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.ios.cis-l2.3.6.11
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.nxos.cis-l2.1.5.8
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.cis-l2.1.5.10
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.cis-l2.1.5.6
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.cis-l2.1.5.9
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.cis-l2.1.5.11
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.cis-l2.1.5.7
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.cis-l2.1.7.2
+    practices: [3.1.11]
+  - rule: cisco.nxos.cis-l2.1.7.3
+    practices: [3.1.11]
+  - rule: cisco.asa.cis.1.4.3
+    practices: [3.1.1, 3.1.2, 3.13.11, 3.13.8, 3.5.3]
+  - rule: cisco.asa.cis.1.4.2
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.asa.cis.1.3.1
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.asa.cis.1.3.2
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.asa.cis.1.1.1
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.asa.cis.1.4.4
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.asa.cis.1.4.1
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.asa.cis.6.6.1
+    practices: [3.3.7]
+  - rule: cisco.asa.cis.4.2.1
+    practices: [3.3.7]
+  - rule: cisco.asa.cis.1.4.5
+    practices: [3.1.11]
+  - rule: cisco.asa.cis.5.1.2
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.5.1.1
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.5.2.1
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.2.3.2
+    practices: [3.1.3, 3.13.1, 3.13.11, 3.13.16, 3.13.5, 3.13.8]
+  - rule: cisco.asa.cis.6.7.1
+    practices: [3.13.6, 3.14.6, 3.14.7]
+  - rule: cisco.asa.cis.1.2.1
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.asa.cis.5.4.1
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.5.1.8
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.5.1.3
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.5.1.6
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.5.1.9
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.5.1.7
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.5.1.4
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.5.1.11
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.5.1.10
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.5.2.2
+    practices: [3.1.9]
+  - rule: cisco.asa.cis.5.1.5
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.3.3.1
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.2.3.3
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.4.3.2
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.4.1.2
+    practices: [3.3.7]
+  - rule: cisco.asa.cis.1.2.6
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.asa.cis.1.2.4
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.asa.cis.1.2.5
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.asa.cis.4.3.1
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.2.1.4
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.2.1.5
+    practices: [3.1.11]
+  - rule: cisco.asa.cis.2.1.2
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.2.2.2
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.2.2.3
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.2.2.1
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.cis.2.3.1
+    practices: [3.1.3, 3.13.1, 3.13.11, 3.13.16, 3.13.5, 3.13.8]
+  - rule: cisco.ios.cis.1.1.8
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.cis.1.2.12
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.cis.1.2.6
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.cis.1.2.7
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.cis.1.2.8
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.cis.1.1.7
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.cis.1.2.5
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.cis.1.2.10
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.cis.1.1.9
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.cis.1.1.10
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.cis.1.1.1
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.cis.1.2.9
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.cis.7.4.2
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.7.4.1
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.7.4.6
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.5.3.1
+    practices: [3.3.4, 3.3.8]
+  - rule: cisco.ios.cis.7.3.4
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.7.3.2
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.9.1.2
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.9.1.4
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.1.4.2
+    practices: [3.1.11]
+  - rule: cisco.ios.cis.8.1.1
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.7.5.2
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.7.3.1
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.9.1.3
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.1.1.13
+    practices: [3.13.11, 3.13.16, 3.13.8, 3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.ios.cis.5.2.3
+    practices: [3.1.9]
+  - rule: cisco.ios.cis.1.4.1
+    practices: [3.1.11, 3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.2.2.1
+    practices: [3.13.11, 3.13.8]
+  - rule: cisco.ios.cis.2.2.24
+    practices: [3.1.1, 3.1.2, 3.13.11, 3.13.8, 3.5.3]
+  - rule: cisco.ios.cis.2.2.25
+    practices: [3.13.11, 3.13.8]
+  - rule: cisco.ios.cis.3.2.5
+    practices: [3.13.1, 3.13.5, 3.13.6]
+  - rule: cisco.ios.cis.10.1.3
+    practices: [3.13.1, 3.13.5, 3.13.6]
+  - rule: cisco.ios.cis.9.3.1
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.5.1.2
+    practices: [3.3.1, 3.3.2, 3.3.4, 3.3.5, 3.3.6, 3.3.8]
+  - rule: cisco.ios.cis.8.1.4
+    practices: [3.3.1, 3.3.2, 3.3.4, 3.3.5, 3.3.6, 3.3.8]
+  - rule: cisco.ios.cis.8.1.2
+    practices: [3.3.1, 3.3.2, 3.3.4, 3.3.5, 3.3.6, 3.3.8]
+  - rule: cisco.ios.cis.5.1.1
+    practices: [3.3.1, 3.3.2, 3.3.4, 3.3.5, 3.3.6, 3.3.8]
+  - rule: cisco.ios.cis.5.1.5
+    practices: [3.3.1, 3.3.2, 3.3.4, 3.3.5, 3.3.6, 3.3.8]
+  - rule: cisco.ios.cis.5.1.4
+    practices: [3.3.1, 3.3.2, 3.3.4, 3.3.5, 3.3.6, 3.3.8]
+  - rule: cisco.ios.cis.5.1.3
+    practices: [3.3.1, 3.3.2, 3.3.4, 3.3.5, 3.3.6, 3.3.8]
+  - rule: cisco.ios.cis.5.2.1
+    practices: [3.1.9]
+  - rule: cisco.ios.cis.1.1.6
+    practices: [3.1.8]
+  - rule: cisco.ios.cis.5.2.2
+    practices: [3.1.9]
+  - rule: cisco.ios.cis.7.4.5
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.3.3.7
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.ios.cis.2.2.2
+    practices: [3.4.6, 3.4.7, 3.4.8]
+  - rule: cisco.ios.cis.2.2.18
+    practices: [3.13.11, 3.13.8]
+  - rule: cisco.ios.cis.8.1.3
+    practices: [3.3.1, 3.3.2, 3.3.4, 3.3.5, 3.3.6, 3.3.8]
+  - rule: cisco.ios.cis.4.1.4
+    practices: [3.3.7]
+  - rule: cisco.ios.cis.4.1.6
+    practices: [3.3.7]
+  - rule: cisco.ios.cis.2.2.17
+    practices: [3.4.6, 3.4.7, 3.4.8]
+  - rule: cisco.ios.cis.2.2.11
+    practices: [3.4.6, 3.4.7, 3.4.8]
+  - rule: cisco.ios.cis.2.2.13
+    practices: [3.4.6, 3.4.7, 3.4.8]
+  - rule: cisco.ios.cis.4.1.7
+    practices: [3.3.7]
+  - rule: cisco.ios.cis.4.1.1
+    practices: [3.3.7]
+  - rule: cisco.ios.cis.4.1.5
+    practices: [3.3.7]
+  - rule: cisco.ios.cis.4.1.3
+    practices: [3.3.7]
+  - rule: cisco.ios.cis.9.1.1
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.9.1.5
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.1.2.1
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.ios.cis.1.1.11
+    practices: [3.13.11, 3.13.16, 3.13.8, 3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.ios.cis.1.2.2
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.ios.cis.1.2.11
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.cis.7.2.4
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.3.3.3
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.ios.cis.3.3.8
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.ios.cis.3.3.6
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.ios.cis.3.3.5
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.ios.cis.4.3.2
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.ios.cis.4.3.3
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.ios.cis.2.1.8
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.ios.cis.2.1.4
+    practices: [3.1.11]
+  - rule: cisco.ios.cis.2.1.2
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.ios.cis.7.2.2
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.2.1.1
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.7.4.3
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.3.2.6
+    practices: [3.13.1, 3.13.5, 3.13.6]
+  - rule: cisco.ios.cis.7.1.1
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.cis.2.1.3
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.nxos.cis.1.2.7
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.cis.1.4.2
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.cis.1.1.5
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.cis.7.5.3
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.nxos.cis.5.2.1
+    practices: [3.1.9]
+  - rule: cisco.nxos.cis.9.1.1
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.nxos.cis.4.2.2
+    practices: [3.3.7]
+  - rule: cisco.nxos.cis.4.2.1
+    practices: [3.3.7]
+  - rule: cisco.nxos.cis.8.1.1
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.nxos.cis.7.5.4
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.nxos.cis.7.4.1
+    practices: [3.1.16, 3.1.17, 3.5.1]
+  - rule: cisco.nxos.cis.7.5.1
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.nxos.cis.7.4.2
+    practices: [3.1.16, 3.1.17, 3.5.1]
+  - rule: cisco.nxos.cis.4.2.4
+    practices: [3.3.7]
+  - rule: cisco.nxos.cis.1.5.3
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.cis.7.6.2
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.nxos.cis.7.5.2
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.nxos.cis.5.1.2
+    practices: [3.3.1, 3.3.2, 3.3.4, 3.3.5, 3.3.6, 3.3.8]
+  - rule: cisco.nxos.cis.3.3.1
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.nxos.cis.7.5.5
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.nxos.cis.3.3.3
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.nxos.cis.4.1.2
+    practices: [3.3.7]
+  - rule: cisco.nxos.cis.4.1.3
+    practices: [3.3.7]
+  - rule: cisco.nxos.cis.9.2.1
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.nxos.cis.1.2.2
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.nxos.cis.1.2.1
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.nxos.cis.1.2.4
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.nxos.cis.1.5.4
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.cis.1.5.1
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.cis.3.3.2
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.nxos.cis.2.1.3
+    practices: [3.1.8]
+  - rule: cisco.nxos.cis.1.5.5
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.cis.1.5.2
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.cis.1.7.1
+    practices: [3.1.11]
+  - rule: cisco.nxos.cis.1.4.3
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.asa.psirt.cve-2018-0101.webvpn_rce
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.asa.psirt.cve-2018-0296.webvpn_dos
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.asa.psirt.cve-2018-15454.sip_dos
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.asa.psirt.cve-2020-3187.webvpn_traversal
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.asa.psirt.cve-2020-3259.anyconnect_info_disclosure
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.asa.psirt.cve-2022-20770.webvpn_dos
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.asa.psirt.ikev1.disable
+    practices: [3.13.11, 3.13.16, 3.13.8, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.arp_inspect_validate
+    practices: [3.1.3, 3.13.1, 3.13.5, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.clock_timezone_utc
+    practices: [3.3.7, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.cve-2017-12240.dhcp_relay_rce
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.cve-2017-3881.cmp_telnet_rce
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.cve-2018-0156.smi_dos
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.cve-2018-0171.smi_rce
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.ios-xe.psirt.cve-2019-12643.rest_auth_bypass
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.ios-xe.psirt.cve-2019-1862.webui_cmdinj
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.ios-xe.psirt.cve-2020-3161.webui_rce
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.cve-2023-20109.gdoi_rce
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.ios-xe.psirt.cve-2023-20198.webui_rce
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.enable_secret_not_md5
+    practices: [3.13.11, 3.13.16, 3.13.8, 3.4.6, 3.4.7, 3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.ios.psirt.http_secure_trustpoint
+    practices: [3.1.3, 3.13.1, 3.13.11, 3.13.16, 3.13.5, 3.13.8, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.keychain_hmac_sha
+    practices: [3.1.3, 3.13.1, 3.13.11, 3.13.16, 3.13.5, 3.13.8, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.loopback_required
+    practices: [3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.no_eigrp_auto_summary
+    practices: [3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.no_ip_rcmd_rcp
+    practices: [3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.no_ip_rcmd_rsh
+    practices: [3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.no_ipv6_source_route
+    practices: [3.13.1, 3.13.5, 3.13.6, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.no_mdns_gateway
+    practices: [3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.no_ospf_md5
+    practices: [3.1.3, 3.13.1, 3.13.11, 3.13.16, 3.13.5, 3.13.8, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.no_password_only_ssh
+    practices: [3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.no_pnp_autoinstall
+    practices: [3.4.6, 3.4.7, 3.4.8]
+  - rule: cisco.ios.psirt.no_service_nagle
+    practices: [3.4.6, 3.4.7, 3.4.8]
+  - rule: cisco.ios.psirt.no_ssh_3des
+    practices: [3.13.11, 3.13.16, 3.13.8, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.no_type7_passwords
+    practices: [3.4.6, 3.4.7, 3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.ios.psirt.ntp_no_md5
+    practices: [3.13.11, 3.13.16, 3.13.8, 3.3.7, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.smi.disable
+    practices: [3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.ssh_kex_modern
+    practices: [3.13.11, 3.13.16, 3.13.8, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.ssh_mac_sha2
+    practices: [3.13.11, 3.13.16, 3.13.8, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.sshv1.disable
+    practices: [3.13.11, 3.13.16, 3.13.8, 3.4.6, 3.4.7]
+  - rule: cisco.ios.psirt.weak_ssh_ciphers
+    practices: [3.13.11, 3.13.16, 3.13.8, 3.4.6, 3.4.7]
+  - rule: cisco.nxos.psirt.cve-2018-15399.nxapi_dos
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.nxos.psirt.cve-2024-20399.bash_cmdinj
+    practices: [3.14.1, 3.14.3, 3.4.6, 3.4.7]
+  - rule: cisco.asa.stig.v-220415
+    practices: [3.1.1, 3.1.2, 3.13.11, 3.13.8, 3.5.3]
+  - rule: cisco.asa.stig.v-220416
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.asa.stig.v-220408
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.asa.stig.v-220406
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.asa.stig.v-220407
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.asa.stig.v-220413
+    practices: [3.1.11]
+  - rule: cisco.asa.stig.v-220414
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.asa.stig.v-220706
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.asa.stig.v-220405
+    practices: [3.1.9]
+  - rule: cisco.asa.stig.v-220410
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.asa.stig.v-220412
+    practices: [3.3.7]
+  - rule: cisco.asa.stig.v-220409
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.asa.stig.v-220411
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.asa.stig.v-220402
+    practices: [3.1.11]
+  - rule: cisco.asa.stig.v-220400
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.stig.v-220805
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.stig.v-220807
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.stig.v-220802
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.stig.v-220801
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.stig.v-220803
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.stig.v-220804
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.stig.v-220800
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.stig.v-220806
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.asa.stig.v-220809
+    practices: [3.1.3, 3.13.1, 3.13.11, 3.13.16, 3.13.5, 3.13.8]
+  - rule: cisco.ios.stig.v-215854.aaa_enabled
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.ios.stig.v-215823.aux_disabled
+    practices: [3.4.6, 3.4.7, 3.4.8]
+  - rule: cisco.ios.stig.v-215823.http_off
+    practices: [3.13.11, 3.13.8]
+  - rule: cisco.ios.stig.v-220157
+    practices: [3.13.1, 3.13.5, 3.13.6]
+  - rule: cisco.ios.stig.v-220630.access_ports
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.stig.v-220601
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.stig.v-220633
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.stig.v-220630
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.stig.v-220604
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.stig.v-220139.syslog_level
+    practices: [3.3.1, 3.3.2, 3.3.4, 3.3.5, 3.3.6, 3.3.8]
+  - rule: cisco.ios.stig.v-215814
+    practices: [3.1.9]
+  - rule: cisco.ios.stig.v-215823.no_bootp
+    practices: [3.4.6, 3.4.7, 3.4.8]
+  - rule: cisco.ios.stig.v-215823.no_finger
+    practices: [3.4.6, 3.4.7, 3.4.8]
+  - rule: cisco.ios.stig.v-215823.no_pad
+    practices: [3.4.6, 3.4.7, 3.4.8]
+  - rule: cisco.ios.stig.v-215823.no_proxy_arp
+    practices: [3.13.1, 3.13.5, 3.13.6]
+  - rule: cisco.ios.stig.v-215823.no_source_route
+    practices: [3.13.1, 3.13.5, 3.13.6]
+  - rule: cisco.ios.stig.v-215838
+    practices: [3.3.7]
+  - rule: cisco.ios.stig.v-215826
+    practices: [3.5.10, 3.5.11, 3.5.7, 3.5.8, 3.5.9]
+  - rule: cisco.ios.stig.v-220500
+    practices: [3.1.3, 3.13.1, 3.13.11, 3.13.16, 3.13.5, 3.13.8]
+  - rule: cisco.ios.stig.v-220504
+    practices: [3.1.3, 3.13.1, 3.13.11, 3.13.16, 3.13.5, 3.13.8]
+  - rule: cisco.ios.stig.v-220506
+    practices: [3.13.1, 3.13.5, 3.13.6]
+  - rule: cisco.ios.stig.v-220503
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.ios.stig.v-215841.no_default
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.ios.stig.v-215842
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.ios.stig.v-215844
+    practices: [3.13.11, 3.13.16, 3.13.8]
+  - rule: cisco.ios.stig.v-215807.no_telnet
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.ios.stig.v-215807.vty_acl
+    practices: [3.1.3, 3.13.1, 3.13.5]
+  - rule: cisco.nxos.stig.v-220303
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.stig.v-220302
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.stig.v-220315
+    practices: [3.3.1, 3.3.2, 3.3.4, 3.3.5, 3.3.6, 3.3.8]
+  - rule: cisco.nxos.stig.v-220304
+    practices: [3.1.9]
+  - rule: cisco.nxos.stig.v-220314
+    practices: [3.13.1, 3.13.5, 3.13.6]
+  - rule: cisco.nxos.stig.v-220306
+    practices: [3.3.7]
+  - rule: cisco.nxos.stig.v-220305
+    practices: [3.3.7]
+  - rule: cisco.nxos.stig.v-220307
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.nxos.stig.v-220308
+    practices: [3.13.16, 3.13.8]
+  - rule: cisco.nxos.stig.v-220309
+    practices: [3.1.8]
+  - rule: cisco.nxos.stig.v-220313
+    practices: [3.1.1, 3.1.2, 3.5.3]
+  - rule: cisco.nxos.stig.v-220312
+    practices: [3.1.1, 3.1.2, 3.5.3]

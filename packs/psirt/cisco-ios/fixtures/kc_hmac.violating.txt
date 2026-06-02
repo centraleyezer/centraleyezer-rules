@@ -1,0 +1,6 @@
+version 15.2
+hostname legacy
+key chain LEGACY-KEYS
+ key 1
+  key-string something
+end

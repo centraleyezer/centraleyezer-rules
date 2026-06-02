@@ -1,0 +1,17 @@
+!
+! IP Source Guard enabled on user-facing interfaces.
+! `ip verify source` causes parser to set hardening.ip_source_guard=true.
+!
+hostname sw-l2-compliant
+!
+ip dhcp snooping
+ip dhcp snooping vlan 10,20,30
+!
+interface GigabitEthernet1/0/1
+ switchport mode access
+ switchport access vlan 10
+ ip verify source
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+end

@@ -1,0 +1,6 @@
+!Command: show running-config
+version 9.3(8)
+switchname nxos-clean
+role name noc-read-only
+  description NOC read-only role
+  rule 1 permit read

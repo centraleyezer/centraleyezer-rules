@@ -1,0 +1,4 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-clean
+crypto map outside_map 10 set pfs group14

@@ -1,0 +1,34 @@
+id: cisco.asa.cis.5.1.1
+title: "ASA crypto isakmp identity must be set explicitly"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `crypto isakmp identity` must be set explicitly to `address`
+  or `hostname` (not the default `auto`). Modern ASA versions
+  default to `auto` which picks based on packet content — not
+  always predictable across reboots.
+rationale: |
+  Predictable IKE identity is important for IPsec peers that
+  match remote-id against a known string in their crypto map.
+  `auto` can produce different identities under different network
+  conditions, breaking VPN re-key.
+impact: |
+  Intermittent VPN re-key failure; unpredictable peer-identity
+  matching.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.1.1"
+  nist: ["SC-13"]
+  cwe: []
+query:
+  path: "$.hardening.asa_isakmp_identity"
+  in: ["address", "hostname"]
+on_fail:
+  message: "ASA crypto isakmp identity is not explicitly set to address or hostname."
+  remediation_cli: |
+    configure terminal
+     crypto isakmp identity address
+    end
+    write memory
+fixtures:
+  positive: fixtures/isakmp_id.compliant.txt
+  negative: fixtures/isakmp_id.violating.txt

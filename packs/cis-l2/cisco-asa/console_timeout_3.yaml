@@ -1,0 +1,30 @@
+id: cisco.asa.cis-l2.1.6.2
+title: "L2: ASA `console timeout` must be ≤ 3 minutes"
+severity: low
+vendors: [cisco-asa]
+description: |
+  `console timeout <N>` must be ≤ 3 (L2-round-1 was ≤ 5,
+  L1 was ≤ 15). Aggressive auto-close.
+rationale: |
+  Matches the strictest workstation lock policies. Walking
+  away from a privileged console leaves the smallest
+  possible window for physical-access takeover.
+impact: |
+  Longer abandoned-console exposure window.
+references:
+  cis: "CIS Cisco ASA Benchmark — L2 1.6.2"
+  nist: ["AC-11", "AC-12"]
+  cwe: [613]
+query:
+  path: "$.hardening.console_timeout"
+  in: [1, 2, 3]
+on_fail:
+  message: "console timeout is not ≤ 3 minutes."
+  remediation_cli: |
+    configure terminal
+     console timeout 3
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_asa_cons3.compliant.txt
+  negative: fixtures/l2_asa_cons3.violating.txt

@@ -1,0 +1,34 @@
+id: cisco.ios.cis-l2.8.1.5
+title: "L2: `logging trap` level must be informational or stricter"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `logging trap <LEVEL>` must be `informational`, `warnings`,
+  `errors`, `critical`, `alerts`, or `emergencies`. `debugging`
+  (the looser ceiling) floods the central syslog with
+  high-volume per-packet messages.
+rationale: |
+  `debugging` (level 7) generates per-packet log entries on
+  many features — useful during a TAC case, disastrous in
+  production. `informational` (level 6) is the modern norm:
+  enough to investigate, not enough to drown the collector.
+impact: |
+  Syslog collector flooded with debug-level messages;
+  rolling buffers + retention shorten dramatically.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 8.1.5"
+  nist: ["AU-4"]
+  cwe: []
+query:
+  path: "$.logging.level"
+  in: ["informational", "warnings", "errors", "critical", "alerts", "emergencies"]
+on_fail:
+  message: "logging trap level is debugging (or unset)."
+  remediation_cli: |
+    configure terminal
+     logging trap informational
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_log_trap.compliant.txt
+  negative: fixtures/l2_log_trap.violating.txt

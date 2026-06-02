@@ -1,0 +1,32 @@
+id: cisco.ios.cis.2.2.3
+title: "Disable UDP small servers (echo / discard / chargen / daytime)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  The UDP small-servers ports (echo/7, discard/9, chargen/19,
+  daytime/13) must be disabled. They are amplification vectors
+  with no legitimate operational purpose.
+rationale: |
+  Each of these services is a DDoS amplifier (chargen has a >100x
+  amplification factor) and exposes the device to traffic-storm
+  abuse from spoofed sources.
+impact: |
+  Device participates in reflection / amplification attacks
+  against third parties; control-plane CPU exhaustion under load.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.3"
+  nist: ["CM-7", "SC-5"]
+  cwe: [406]
+query:
+  path: "$.hardening.udp_small_servers"
+  equals: false
+on_fail:
+  message: "`service udp-small-servers` is enabled."
+  remediation_cli: |
+    configure terminal
+     no service udp-small-servers
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_udp_small.compliant.txt
+  negative: fixtures/no_udp_small.violating.txt

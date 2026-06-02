@@ -1,0 +1,4 @@
+version 15.2
+hostname legacy
+ip ssh dh min size 2048
+end

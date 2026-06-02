@@ -1,0 +1,30 @@
+id: cisco.nxos.cis.4.1.3
+title: "NX-OS NTP must use a fixed source-interface"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `ntp source <interface>` must be configured so outbound NTP
+  emits from a stable address.
+rationale: |
+  Same rationale as IOS — upstream NTP server ACLs key on
+  source IP and break on routing changes if no source-interface
+  is pinned.
+impact: |
+  Silent NTP-source rejection during routing events.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 4.1.3"
+  nist: ["AU-8"]
+  cwe: []
+query:
+  path: "$.ntp.source_interface"
+  matches: "."
+on_fail:
+  message: "NX-OS ntp source-interface is not configured."
+  remediation_cli: |
+    configure terminal
+     ntp source 10.255.255.1
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/nxos_ntp_source.compliant.txt
+  negative: fixtures/nxos_ntp_source.violating.txt

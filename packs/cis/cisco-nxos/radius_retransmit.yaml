@@ -1,0 +1,32 @@
+id: cisco.nxos.cis.1.5.4
+title: "NX-OS `radius-server retransmit` must be bounded (≤ 5)"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `radius-server retransmit <N>` must be configured with
+  N ≤ 5 so a RADIUS outage doesn't stall login indefinitely
+  through compound retry × timeout.
+rationale: |
+  Each failed RADIUS attempt waits `timeout` seconds; the
+  retransmit count multiplies that. A retransmit of 30 with
+  a 10-second timeout means 5 minutes of stall per login
+  attempt — long enough that every operator gives up.
+impact: |
+  Long management-plane stalls during RADIUS outage.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.5.4"
+  nist: ["AC-2", "CP-2"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_radius_retransmit"
+  in: [1, 2, 3, 4, 5]
+on_fail:
+  message: "radius-server retransmit is not set ≤ 5."
+  remediation_cli: |
+    configure terminal
+     radius-server retransmit 3
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/radius_rt.compliant.txt
+  negative: fixtures/radius_rt.violating.txt

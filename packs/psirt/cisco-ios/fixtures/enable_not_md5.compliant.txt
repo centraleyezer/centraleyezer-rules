@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant
+enable secret 9 $9$ABCDEF
+end

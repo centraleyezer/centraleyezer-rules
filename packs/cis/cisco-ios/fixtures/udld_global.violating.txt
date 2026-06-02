@@ -1,0 +1,8 @@
+!
+! No `udld enable` / `udld aggressive` — one-way link protection absent.
+!
+hostname sw-l2-udld-violating
+!
+spanning-tree mode rapid-pvst
+!
+end

@@ -1,0 +1,32 @@
+id: cisco.ios.cis.3.2.4
+title: "`ip tcp synwait-time` must be bounded (≤ 30s)"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  When `service tcp-syn-wait` is configured, the bound must be
+  ≤ 30 seconds. Anything higher lets a SYN-flood tie up
+  half-open sockets longer than necessary.
+rationale: |
+  The default 30s synwait already grants attackers a long
+  window to keep half-open sockets pending. Higher values
+  multiply the resource cost of a SYN-flood — which is
+  precisely the threat this knob is meant to mitigate.
+impact: |
+  Larger TCP half-open table; lower SYN-flood threshold.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.2.4"
+  nist: ["SC-5"]
+  cwe: [400]
+query:
+  path: "$.hardening.service_tcp_syn_wait"
+  equals: true
+on_fail:
+  message: "service tcp-syn-wait is not configured (or value is unbounded)."
+  remediation_cli: |
+    configure terminal
+     ip tcp synwait-time 30
+    end
+    write memory
+fixtures:
+  positive: fixtures/syn_wait.compliant.txt
+  negative: fixtures/syn_wait.violating.txt

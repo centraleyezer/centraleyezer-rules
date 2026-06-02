@@ -1,0 +1,31 @@
+id: cisco.ios.cis.2.2.10
+title: "Disable PnP autoinstall once device is provisioned"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Cisco PnP (Plug-and-Play) autoinstall must be disabled on
+  in-service devices. It's intended for zero-touch onboarding only.
+rationale: |
+  PnP autoinstall accepts configuration from a discovered server
+  with no authentication of the server itself. If an attacker can
+  spoof DHCP option 43, they can push arbitrary config.
+impact: |
+  Configuration push from a rogue DHCP / PnP server on the
+  management VLAN.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.10"
+  nist: ["CM-7", "CM-3"]
+  cwe: [346]
+query:
+  path: "$.hardening.pnp_startup"
+  equals: false
+on_fail:
+  message: "PnP startup profile is enabled."
+  remediation_cli: |
+    configure terminal
+     no pnp profile pnp-zero-touch
+    end
+    write memory
+fixtures:
+  positive: fixtures/pnp.compliant.txt
+  negative: fixtures/pnp.violating.txt

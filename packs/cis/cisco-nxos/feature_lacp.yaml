@@ -1,0 +1,34 @@
+id: cisco.nxos.cis.7.6.1
+title: "NX-OS `feature lacp` must be enabled (no PAgP)"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `feature lacp` must be enabled so port-channels are
+  negotiated via IEEE 802.3ad LACP rather than via Cisco-
+  proprietary PAgP. Mixed environments and modern vendor
+  interop need LACP.
+rationale: |
+  PAgP is Cisco-proprietary and ages out in mixed-vendor
+  networks. LACP is the standard; enabling it explicitly is
+  the precondition for `channel-group N mode active` on
+  interfaces.
+impact: |
+  Port-channels cannot use LACP; reliance on PAgP for cross-
+  vendor or legacy interop fails.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.6.1"
+  nist: ["CP-2"]
+  cwe: []
+query:
+  path: "$.features[*]"
+  in: ["lacp"]
+on_fail:
+  message: "feature lacp is not enabled."
+  remediation_cli: |
+    configure terminal
+     feature lacp
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/feature_lacp.compliant.txt
+  negative: fixtures/feature_lacp.violating.txt

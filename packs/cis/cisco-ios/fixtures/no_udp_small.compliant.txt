@@ -1,0 +1,5 @@
+version 17.9
+hostname compliant-sw
+no service udp-small-servers
+no service tcp-small-servers
+end

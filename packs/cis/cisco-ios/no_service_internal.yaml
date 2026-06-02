@@ -1,0 +1,35 @@
+id: cisco.ios.cis.2.2.23
+title: "`no service internal` must be configured"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no service internal` must be in effect. The `service
+  internal` command exposes debug-only and TAC-only commands
+  (e.g. `show buffers leak`, `show platform internal`) that
+  should never be reachable from a normal exec on a production
+  device.
+rationale: |
+  `service internal` is the gateway to commands that bypass
+  normal safety checks — typically used by TAC engineers
+  during troubleshooting. Leaving it on in production exposes
+  diagnostic surface that has been a CVE source in the past.
+impact: |
+  TAC-only / debug-only commands reachable from operator EXEC;
+  expanded attack surface for privilege-escalation CVEs.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.23"
+  nist: ["CM-7"]
+  cwe: [284]
+query:
+  path: "$.hardening.no_service_internal"
+  equals: true
+on_fail:
+  message: "no service internal is not configured (or service internal is present)."
+  remediation_cli: |
+    configure terminal
+     no service internal
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_svc_internal.compliant.txt
+  negative: fixtures/no_svc_internal.violating.txt

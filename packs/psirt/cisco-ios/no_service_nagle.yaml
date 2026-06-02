@@ -1,0 +1,36 @@
+id: cisco.ios.psirt.no_service_nagle
+title: "`service nagle` must NOT be configured"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `service nagle` must NOT be present. The Nagle algorithm
+  for IOS Telnet/SSH coalesces small TCP segments — useful
+  on dial-up but counterproductive on modern interactive
+  sessions, where it stutters the cursor and makes screen
+  redraws visible.
+rationale: |
+  The CIS hardening discipline is "operational paper-cuts
+  matter": a stuttering CLI on incident response wastes
+  operator attention. The setting has no security value on
+  modern networks and removing it makes management sessions
+  responsive.
+impact: |
+  Interactive CLI session stutters; operator attention burn
+  during incidents.
+references:
+  cis: ""
+  nist: []
+  cwe: []
+query:
+  path: "$.hardening.service_nagle"
+  equals: false
+on_fail:
+  message: "service nagle is enabled."
+  remediation_cli: |
+    configure terminal
+     no service nagle
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_nagle.compliant.txt
+  negative: fixtures/no_nagle.violating.txt

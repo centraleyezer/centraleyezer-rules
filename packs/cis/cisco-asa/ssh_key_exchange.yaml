@@ -1,0 +1,31 @@
+id: cisco.asa.cis.2.1.4
+title: "ASA SSH key-exchange must use DH group 14 or stronger"
+severity: high
+vendors: [cisco-asa]
+description: |
+  `ssh key-exchange group dh-group14-sha1` (or stronger:
+  `dh-group14-sha256`, `ecdh-sha2-nistp256`, etc.) must be
+  configured. Groups 1 (1024-bit) and 5 are deprecated.
+rationale: |
+  DH group 1 / 5 key exchanges are below current cryptographic
+  strength. NSA's 2015 disclosure and academic Logjam research
+  documented practical attacks against group 1.
+impact: |
+  Recovery of session keys from passively captured SSH traffic.
+references:
+  cis: "CIS Cisco ASA Benchmark — 2.1.4"
+  nist: ["SC-13"]
+  cwe: [326]
+query:
+  path: "$.crypto.ssh_kex[*]"
+  in: ["dh-group14-sha1", "dh-group14-sha256", "ecdh-sha2-nistp256", "ecdh-sha2-nistp384", "ecdh-sha2-nistp521"]
+on_fail:
+  message: "ASA ssh key-exchange is not set to dh-group14 or stronger."
+  remediation_cli: |
+    configure terminal
+     ssh key-exchange group dh-group14-sha256
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssh_kex.compliant.txt
+  negative: fixtures/ssh_kex.violating.txt

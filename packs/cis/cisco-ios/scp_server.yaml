@@ -1,0 +1,30 @@
+id: cisco.ios.cis.2.2.9
+title: "Enable SCP server (replaces TFTP for image / config transfer)"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip scp server enable` must be configured so config + image
+  transfers happen over SSH-backed SCP rather than cleartext TFTP.
+rationale: |
+  TFTP has no auth and no transport encryption. SCP uses the
+  existing SSH session, so credentials are already enforced.
+impact: |
+  Continued operational reliance on TFTP exposes config + IOS
+  images in transit and at the source.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.9"
+  nist: ["AC-17", "SC-8"]
+  cwe: [319]
+query:
+  path: "$.services.scp_server"
+  equals: true
+on_fail:
+  message: "ip scp server is not enabled."
+  remediation_cli: |
+    configure terminal
+     ip scp server enable
+    end
+    write memory
+fixtures:
+  positive: fixtures/scp.compliant.txt
+  negative: fixtures/scp.violating.txt

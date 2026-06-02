@@ -1,0 +1,30 @@
+id: cisco.asa.cis-l2.1.2.7
+title: "L2: ASA `password-policy lifetime` must be ≤ 60 days"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `password-policy lifetime <N>` must be ≤ 60 (L1 was ≤ 365).
+  Tighter rotation cadence for local accounts.
+rationale: |
+  60-day rotation is the enterprise-norm for privileged
+  accounts. L1's 365-day ceiling is the legal/audit floor.
+impact: |
+  Longer window between forced password rotations on local
+  ASA accounts.
+references:
+  cis: "CIS Cisco ASA Benchmark — L2 1.2.7"
+  nist: ["IA-5"]
+  cwe: [262]
+query:
+  path: "$.hardening.asa_pwd_policy_lifetime"
+  in: [15, 30, 45, 60]
+on_fail:
+  message: "password-policy lifetime is not ≤ 60 days."
+  remediation_cli: |
+    configure terminal
+     password-policy lifetime 60
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_pwd_life.compliant.txt
+  negative: fixtures/l2_pwd_life.violating.txt

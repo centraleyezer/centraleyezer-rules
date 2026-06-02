@@ -1,0 +1,33 @@
+id: cisco.ios.cis.5.1.2
+title: "Logging buffered must be at least 16 KiB"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `logging buffered` must be enabled with at least 16384 bytes of
+  in-memory ring buffer so recent events survive a remote-syslog
+  outage long enough to land in subsequent retries.
+rationale: |
+  When the syslog destination is unreachable the device falls
+  back to the local buffer. A too-small buffer (or none at all)
+  loses events during exactly the outage windows operators most
+  need to investigate.
+impact: |
+  Audit-evidence loss during the precise window of greatest
+  forensic value.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 5.1.2"
+  nist: ["AU-4", "AU-5"]
+  cwe: [778]
+query:
+  path: "$.logging.buffer_size"
+  in: [16384, 32768, 65536, 131072, 262144, 524288, 1048576]
+on_fail:
+  message: "Logging buffered is not set or is < 16 KiB."
+  remediation_cli: |
+    configure terminal
+     logging buffered 65536 informational
+    end
+    write memory
+fixtures:
+  positive: fixtures/logging_buffered.compliant.txt
+  negative: fixtures/logging_buffered.violating.txt

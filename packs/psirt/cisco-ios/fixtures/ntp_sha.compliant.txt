@@ -1,0 +1,6 @@
+version 17.9
+hostname compliant
+ntp authentication-key 1 sha1 something
+ntp authenticate
+ntp server 10.0.0.10 key 1
+end

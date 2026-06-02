@@ -1,0 +1,8 @@
+version 17.9
+hostname compliant
+archive
+ log config
+  logging enable
+  notify syslog contenttype plaintext
+  hidekeys
+end

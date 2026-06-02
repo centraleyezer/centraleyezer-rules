@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220505
+title: "The Cisco router must disable CDP on interfaces facing untrusted networks."
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  CDP leaks device version, model and L3 addressing to anyone on the link; STIG forbids it on perimeter / WAN interfaces.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router RTR STIG. CAT III finding.
+  See V-220505 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220505 on the device's POA&M.
+references:
+  stig: ["V-220505"]
+  cci:
+    - "CCI-000381"
+query:
+  path: "$.services.cdp"
+  equals: false
+on_fail:
+  message: "STIG V-220505 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220505.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/no_cdp.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/no_cdp.violating.txt

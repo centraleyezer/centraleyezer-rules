@@ -1,0 +1,30 @@
+id: cisco.ios.cis.3.2.1
+title: "Enable service tcp-keepalives-in"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `service tcp-keepalives-in` must be enabled so the device
+  detects and drops orphaned inbound TCP sessions.
+rationale: |
+  Without keepalives, an SSH session whose client lost network
+  connectivity can persist for hours, holding privileged context
+  vulnerable to session hijack from a re-attached attacker.
+impact: |
+  Resource exhaustion + session hijack via stale connections.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.2.1"
+  nist: ["AC-12"]
+  cwe: [400]
+query:
+  path: "$.hardening.tcp_keepalives_in"
+  equals: true
+on_fail:
+  message: "service tcp-keepalives-in is not enabled."
+  remediation_cli: |
+    configure terminal
+     service tcp-keepalives-in
+    end
+    write memory
+fixtures:
+  positive: fixtures/keepalives.compliant.txt
+  negative: fixtures/keepalives.violating.txt

@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220639
+title: "The Cisco switch must enable UDLD globally to protect against one-way links."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  UDLD detects unidirectional fibre / SFP faults that STP cannot see and disables the affected link before it triggers a forwarding-loop.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Switch L2S STIG. CAT II finding.
+  See V-220639 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220639 on the device's POA&M.
+references:
+  stig: ["V-220639"]
+  cci:
+    - "CCI-000366"
+query:
+  path: "$.hardening.udld_enabled"
+  equals: true
+on_fail:
+  message: "Cisco IOS L2S STIG V-220639 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220639.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/udld_global.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/udld_global.violating.txt

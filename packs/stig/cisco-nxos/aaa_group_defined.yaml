@@ -1,0 +1,27 @@
+id: cisco.nxos.stig.v-220303
+title: "The NX-OS switch must define at least one TACACS+ / RADIUS AAA group for management."
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  Centralised AAA is mandatory; the switch must reference a configured TACACS+ or RADIUS group.
+rationale: |
+  Sourced from the DISA Cisco NX-OS Switch NDM STIG. CAT II finding.
+  See V-220303 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220303 on the device's POA&M.
+references:
+  stig: ["V-220303"]
+  cci:
+    - "CCI-000213"
+query:
+  path: "$.hardening.nxos_aaa_group_servers[0]"
+  exists: true
+on_fail:
+  message: "Cisco NX-OS STIG V-220303 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220303.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-nxos/fixtures/aaa_group.compliant.txt
+  negative: ../../cis/cisco-nxos/fixtures/aaa_group.violating.txt

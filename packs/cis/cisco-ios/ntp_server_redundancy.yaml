@@ -1,0 +1,35 @@
+id: cisco.ios.cis.4.1.7
+title: "At least 2 NTP servers must be configured (redundancy)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  At least 2 `ntp server <IP>` entries must be configured so
+  the device's clock stays disciplined if a single NTP
+  source fails or is hijacked.
+rationale: |
+  A single NTP source is a single point of failure for log
+  timestamps AND a single point of attack — a malicious
+  upstream can slew the clock unilaterally. Multiple sources
+  let the local NTP daemon detect and reject an outlier via
+  selection algorithms.
+impact: |
+  Single NTP source: timestamps drift if source fails; one
+  malicious upstream can move the local clock arbitrarily.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 4.1.7"
+  nist: ["AU-8", "CP-2"]
+  cwe: []
+query:
+  path: "$.hardening.ntp_server_count"
+  in: [2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "Fewer than 2 NTP servers configured."
+  remediation_cli: |
+    configure terminal
+     ntp server 10.0.0.1
+     ntp server 10.0.0.2
+    end
+    write memory
+fixtures:
+  positive: fixtures/ntp_redund.compliant.txt
+  negative: fixtures/ntp_redund.violating.txt

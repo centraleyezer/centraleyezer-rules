@@ -1,0 +1,32 @@
+id: cisco.ios.cis.4.1.3
+title: "Configure at least two NTP servers"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe, cisco-nx-os, cisco-asa]
+description: |
+  At least two NTP servers must be configured for time-source
+  redundancy.
+rationale: |
+  A single NTP server is a single point of failure for trusted
+  time. If that server is unreachable or compromised, certificate
+  validation, AAA, and log correlation all degrade silently.
+impact: |
+  Cryptographic operations and timeline forensics fall back to
+  the device's local clock — which can drift by minutes per day.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 4.1.3"
+  nist: ["AU-8", "CP-2"]
+  cwe: []
+query:
+  path: "$.ntp.servers[1]"
+  exists: true
+on_fail:
+  message: "Fewer than 2 NTP servers are configured."
+  remediation_cli: |
+    configure terminal
+     ntp server 10.0.0.10
+     ntp server 10.0.0.11
+    end
+    write memory
+fixtures:
+  positive: fixtures/ntp_two.compliant.txt
+  negative: fixtures/ntp_two.violating.txt

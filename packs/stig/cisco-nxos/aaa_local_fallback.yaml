@@ -1,0 +1,27 @@
+id: cisco.nxos.stig.v-220302
+title: "The NX-OS switch must define a local fallback so admins are not locked out when AAA is unreachable."
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  Local fallback prevents emergency lockout when the AAA server is down or partitioned.
+rationale: |
+  Sourced from the DISA Cisco NX-OS Switch NDM STIG. CAT II finding.
+  See V-220302 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220302 on the device's POA&M.
+references:
+  stig: ["V-220302"]
+  cci:
+    - "CCI-000764"
+query:
+  path: "$.aaa.local_fallback"
+  equals: true
+on_fail:
+  message: "Cisco NX-OS STIG V-220302 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220302.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-nxos/fixtures/aaa_local.compliant.txt
+  negative: ../../cis/cisco-nxos/fixtures/aaa_local.violating.txt

@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant
+snmp-server view NETZER-RO iso included
+end

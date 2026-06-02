@@ -1,0 +1,32 @@
+id: cisco.ios.cis-l2.3.6.17
+title: "L2: `ip ssh maxstartups` must be ≤ 3"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip ssh maxstartups <N>` must be ≤ 3 (L1 allows up to 10).
+  Tightens the pool of concurrent unauthenticated SSH
+  connections.
+rationale: |
+  Stricter L2 baseline against SSH-pool exhaustion. 3 covers
+  a reasonable concurrent-operator workload while making
+  flood attacks expensive.
+impact: |
+  Larger pool of concurrent unauthenticated SSH connections;
+  pool-exhaustion DoS easier.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 3.6.17"
+  nist: ["SC-5"]
+  cwe: [400]
+query:
+  path: "$.hardening.ip_ssh_maxstartups"
+  in: [1, 2, 3]
+on_fail:
+  message: "ip ssh maxstartups is not set ≤ 3."
+  remediation_cli: |
+    configure terminal
+     ip ssh maxstartups 3
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_maxstartups.compliant.txt
+  negative: fixtures/l2_maxstartups.violating.txt

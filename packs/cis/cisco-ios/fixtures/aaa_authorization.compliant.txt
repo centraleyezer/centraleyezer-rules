@@ -1,0 +1,7 @@
+version 17.9
+hostname compliant
+aaa new-model
+aaa authentication login default group tacacs+ local
+aaa authorization exec default group tacacs+ local
+tacacs-server host 10.0.0.1
+end

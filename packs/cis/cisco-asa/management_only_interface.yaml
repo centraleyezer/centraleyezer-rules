@@ -1,0 +1,38 @@
+id: cisco.asa.cis.7.1.1
+title: "ASA must have at least one management-only interface"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  At least one ASA interface must carry the `management-only`
+  keyword so traffic transiting that interface is restricted to
+  management plane.
+rationale: |
+  A dedicated management-only interface separates mgmt
+  traffic from data-plane traffic. Without it, every ASA
+  interface can carry both transit and management — which is
+  often what enabled in-band-exposure of ASDM and SSH to the
+  Internet at large.
+impact: |
+  ASDM / SSH listeners reachable from any interface; flat mgmt
+  surface.
+references:
+  cis: "CIS Cisco ASA Benchmark — 7.1.1"
+  nist: ["AC-4", "SC-7"]
+  cwe: [284]
+query:
+  path: "$.interfaces[*].management_only"
+  equals: true
+on_fail:
+  message: "No ASA interface is marked management-only."
+  remediation_cli: |
+    configure terminal
+     interface Management0/0
+      nameif management
+      security-level 100
+      ip address 10.0.0.1 255.255.255.0
+      management-only
+    end
+    write memory
+fixtures:
+  positive: fixtures/mgmt_only.compliant.txt
+  negative: fixtures/mgmt_only.violating.txt

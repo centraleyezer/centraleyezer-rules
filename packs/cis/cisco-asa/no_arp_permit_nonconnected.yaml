@@ -1,0 +1,35 @@
+id: cisco.asa.cis.7.2.2
+title: "ASA `arp permit-nonconnected` must NOT be configured"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `arp permit-nonconnected` must NOT be present. The option
+  lets the ASA accept and process ARP requests for IPs that
+  are NOT on a directly-connected subnet — an unusual setting
+  with a narrow legitimate use case and a wide attacker
+  benefit.
+rationale: |
+  With `arp permit-nonconnected`, an attacker on a directly
+  connected segment can elicit ARP responses for off-segment
+  IPs — useful for reconnaissance and certain L3 spoofing
+  attacks. The default (off) is the safe posture.
+impact: |
+  Off-segment ARP responses leak topology; off-subnet IP
+  spoofing surface widened.
+references:
+  cis: "CIS Cisco ASA Benchmark — 7.2.2"
+  nist: ["SC-7"]
+  cwe: [200]
+query:
+  path: "$.hardening.asa_arp_permit_nonconnected"
+  equals: false
+on_fail:
+  message: "arp permit-nonconnected is configured."
+  remediation_cli: |
+    configure terminal
+     no arp permit-nonconnected
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_arp_nonconn.compliant.txt
+  negative: fixtures/no_arp_nonconn.violating.txt

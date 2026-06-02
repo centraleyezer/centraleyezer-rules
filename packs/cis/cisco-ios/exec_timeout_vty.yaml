@@ -1,0 +1,32 @@
+id: cisco.ios.cis.1.4.1
+title: "VTY exec-timeout must be set (≤ 10 minutes)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Inactive VTY sessions must be disconnected after a bounded idle
+  period. CIS L1 recommends `exec-timeout 10 0` or shorter.
+rationale: |
+  Operator workstations get left unlocked; an abandoned session
+  inherits all the privilege of whoever opened it. Forced
+  disconnect bounds the exposure window.
+impact: |
+  Indefinite hijack of an unattended privileged session from a
+  shared workstation, hot-desk, or compromised jump-host.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.4.1"
+  nist: ["AC-11", "AC-12"]
+  cwe: [613]
+query:
+  path: "$.vty_lines[*].exec_timeout"
+  in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "VTY exec-timeout is not set to ≤ 10 minutes."
+  remediation_cli: |
+    configure terminal
+     line vty 0 15
+      exec-timeout 10 0
+    end
+    write memory
+fixtures:
+  positive: fixtures/exec_timeout.compliant.txt
+  negative: fixtures/exec_timeout.violating.txt

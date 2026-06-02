@@ -1,0 +1,32 @@
+id: cisco.nxos.cis.7.5.3
+title: "NX-OS Dynamic ARP Inspection must be enabled on user VLANs"
+severity: high
+vendors: [cisco-nx-os]
+description: |
+  `ip arp inspection vlan <LIST>` must be configured so DAI
+  validates ARP replies against the DHCP-snooping binding
+  table on user-access VLANs.
+rationale: |
+  DAI defeats ARP-poisoning (cain, ettercap, MitM6-style
+  attacks) by dropping ARP replies that don't match the
+  snooped DHCP binding. Without DAI, the L2 segment is
+  trivially MitM-able by anyone with port access.
+impact: |
+  ARP-poisoning MitM attacks succeed on user-access VLANs.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.5.3"
+  nist: ["SC-7", "AC-4"]
+  cwe: [294, 345]
+query:
+  path: "$.hardening.nxos_arp_inspection_vlan"
+  equals: true
+on_fail:
+  message: "ip arp inspection vlan is not configured."
+  remediation_cli: |
+    configure terminal
+     ip arp inspection vlan 100-200
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/nxos_dai.compliant.txt
+  negative: fixtures/nxos_dai.violating.txt

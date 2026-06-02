@@ -1,0 +1,31 @@
+id: cisco.nxos.cis.1.5.5
+title: "NX-OS `tacacs-server retransmit` must be bounded (≤ 5)"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `tacacs-server retransmit <N>` must be configured with
+  N ≤ 5 so a TACACS+ outage doesn't compound timeout × retry
+  into a multi-minute login stall.
+rationale: |
+  Same operational hazard as the RADIUS variant: high
+  retransmit counts × multi-second timeout = multi-minute
+  stall per login attempt during a TACACS outage.
+impact: |
+  Long management-plane stalls during TACACS+ outage.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.5.5"
+  nist: ["AC-2", "CP-2"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_tacacs_retransmit"
+  in: [1, 2, 3, 4, 5]
+on_fail:
+  message: "tacacs-server retransmit is not set ≤ 5."
+  remediation_cli: |
+    configure terminal
+     tacacs-server retransmit 3
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/tacacs_rt.compliant.txt
+  negative: fixtures/tacacs_rt.violating.txt

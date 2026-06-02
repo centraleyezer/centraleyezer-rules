@@ -1,0 +1,30 @@
+id: cisco.nxos.cis-l2.1.5.8
+title: "L2: NX-OS `radius-server retransmit` must be ≤ 3"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `radius-server retransmit <N>` must be ≤ 3 (L1 was ≤ 5).
+  Tighter cap on per-attempt × per-retransmit login stall.
+rationale: |
+  At 5s timeout × 3 retransmits, worst-case login wait is
+  15s. At L1's 5 retransmits, it was 25s. L2's tighter cap
+  is the modern norm.
+impact: |
+  Longer per-login-attempt stall during RADIUS outage.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — L2 1.5.8"
+  nist: ["AC-2", "CP-2"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_radius_retransmit"
+  in: [1, 2, 3]
+on_fail:
+  message: "radius-server retransmit is not set ≤ 3."
+  remediation_cli: |
+    configure terminal
+     radius-server retransmit 3
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/l2_radius_rt.compliant.txt
+  negative: fixtures/l2_radius_rt.violating.txt

@@ -1,0 +1,37 @@
+id: cisco.ios.cis.2.1.9
+title: "AUX line must be disabled"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  The AUX line (where present) must be locked down with `no exec`
+  + `transport input none`. The AUX port is intended for legacy
+  modem-attach scenarios that no longer apply in production.
+rationale: |
+  An enabled AUX port (especially with no password set) is a
+  classic Cisco-device backdoor. Many CVEs over the years have
+  involved AUX-port access bypassing the rest of the security
+  posture.
+impact: |
+  Out-of-band administrative access via modem or terminal
+  server; bypass of every VTY-bound ACL.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.1.9"
+  nist: ["AC-3", "AC-17"]
+  cwe: [284, 287]
+query:
+  path: "$.hardening.aux_line_disabled"
+  equals: true
+on_fail:
+  message: "AUX line is not explicitly disabled (`no exec` / `transport input none`)."
+  remediation_cli: |
+    configure terminal
+     line aux 0
+      no exec
+      transport input none
+      transport output none
+      no password
+    end
+    write memory
+fixtures:
+  positive: fixtures/aux.compliant.txt
+  negative: fixtures/aux.violating.txt

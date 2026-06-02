@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220412
+title: "The Cisco ASA must authenticate NTP messages."
+severity: medium
+vendors: [cisco-asa]
+description: |
+  Authenticated NTP prevents clock-skew attacks that would invalidate audit timestamps.
+rationale: |
+  Sourced from the DISA Cisco ASA NDM STIG. CAT II finding.
+  See V-220412 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220412 on the device's POA&M.
+references:
+  stig: ["V-220412"]
+  cci:
+    - "CCI-001891"
+query:
+  path: "$.ntp.authenticated"
+  equals: true
+on_fail:
+  message: "Cisco ASA STIG V-220412 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220412.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/ntp_auth.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/ntp_auth.violating.txt

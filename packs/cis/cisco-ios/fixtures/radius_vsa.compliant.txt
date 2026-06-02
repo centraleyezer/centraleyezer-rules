@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant
+radius-server vsa send accounting
+end

@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220404
+title: "The Cisco ASA must enforce strict host-key checking for outbound SSH."
+severity: low
+vendors: [cisco-asa]
+description: |
+  Strict host-key checking blocks silent man-in-the-middle when the device opens an outbound management session.
+rationale: |
+  Sourced from the DISA Cisco ASA NDM STIG. CAT III finding.
+  See V-220404 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220404 on the device's POA&M.
+references:
+  stig: ["V-220404"]
+  cci:
+    - "CCI-000366"
+query:
+  path: "$.hardening.asa_ssh_strict_host_key"
+  equals: true
+on_fail:
+  message: "Cisco ASA STIG V-220404 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220404.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/ssh_strict.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/ssh_strict.violating.txt

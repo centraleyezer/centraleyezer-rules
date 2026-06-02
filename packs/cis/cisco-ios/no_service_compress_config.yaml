@@ -1,0 +1,33 @@
+id: cisco.ios.cis.2.2.17
+title: "Disable `service compress-config`"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no service compress-config` must be set. The compress-config
+  feature is legacy and complicates incident-response config
+  retrieval.
+rationale: |
+  Compressed NVRAM configs can't be diff'd or grep'd in their
+  on-disk form. Forensic config-pull workflows assume plaintext.
+  The feature is also rarely tested by modern IOS releases.
+impact: |
+  Incident-response config retrieval requires extra
+  decompression step; minor confidentiality side effect
+  (compressed configs sometimes survive `write erase`).
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.17"
+  nist: ["CM-2"]
+  cwe: []
+query:
+  path: "$.hardening.service_compress_config"
+  equals: false
+on_fail:
+  message: "service compress-config is enabled."
+  remediation_cli: |
+    configure terminal
+     no service compress-config
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_compress.compliant.txt
+  negative: fixtures/no_compress.violating.txt

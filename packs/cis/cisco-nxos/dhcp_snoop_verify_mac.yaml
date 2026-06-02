@@ -1,0 +1,32 @@
+id: cisco.nxos.cis.7.5.4
+title: "NX-OS `ip dhcp snooping verify mac-address` must be enabled"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `ip dhcp snooping verify mac-address` must be configured.
+  This is the NX-OS sibling of the IOS rule — drop DHCP
+  packets whose source MAC doesn't match the chaddr field.
+rationale: |
+  Without verify-mac-address, an attacker can spoof DHCP
+  requests with arbitrary chaddr to claim leases or starve
+  the DHCP pool — even with snooping otherwise enabled.
+impact: |
+  DHCP starvation / spoofing attacks succeed despite
+  snooping.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.5.4"
+  nist: ["SC-7", "AC-4"]
+  cwe: [345]
+query:
+  path: "$.hardening.nxos_dhcp_snoop_verify_mac"
+  equals: true
+on_fail:
+  message: "ip dhcp snooping verify mac-address is not enabled."
+  remediation_cli: |
+    configure terminal
+     ip dhcp snooping verify mac-address
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/nxos_dhcp_verify_mac.compliant.txt
+  negative: fixtures/nxos_dhcp_verify_mac.violating.txt

@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220701
+title: "The Cisco ASA must inspect DNS traffic."
+severity: medium
+vendors: [cisco-asa]
+description: |
+  DNS inspection enforces message size limits and protects against amplification / tunnelling abuse.
+rationale: |
+  Sourced from the DISA Cisco ASA Firewall STIG. CAT II finding.
+  See V-220701 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220701 on the device's POA&M.
+references:
+  stig: ["V-220701"]
+  cci:
+    - "CCI-001094"
+query:
+  path: "$.hardening.asa_inspect_dns"
+  equals: true
+on_fail:
+  message: "STIG V-220701 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220701.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/inspect_dns.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/inspect_dns.violating.txt

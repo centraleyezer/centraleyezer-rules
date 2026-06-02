@@ -1,0 +1,31 @@
+id: cisco.nxos.cis-l2.1.1.11
+title: "L2: NX-OS network-admin (priv-15) users must be ≤ 3"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  Local network-admin / priv-15 accounts must be ≤ 3 (L1
+  was ≤ 5). Stricter cap.
+rationale: |
+  Tighter cap on the shared-credential surface in every
+  backup. 3 covers primary + emergency + one rotation slot;
+  more than that is operationally rare and audit-wise
+  noisier.
+impact: |
+  More long-term shared credentials in every config backup.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — L2 1.1.11"
+  nist: ["AC-2", "AC-6"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_priv15_count"
+  in: [0, 1, 2, 3]
+on_fail:
+  message: "More than 3 local NX-OS network-admin / priv-15 accounts."
+  remediation_cli: |
+    configure terminal
+     no username <EXTRA-ADMIN>
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/l2_priv15.compliant.txt
+  negative: fixtures/l2_priv15.violating.txt

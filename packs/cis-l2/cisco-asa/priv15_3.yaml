@@ -1,0 +1,30 @@
+id: cisco.asa.cis-l2.1.2.8
+title: "L2: ASA priv-15 user count must be ≤ 3"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  Local `username ... privilege 15` accounts ≤ 3 (L1 was ≤ 5).
+  Stricter cap on the shared-credential surface.
+rationale: |
+  Same logic as the NX-OS L2 priv-15 rule. 3 covers primary
+  + emergency + rotation slot.
+impact: |
+  More long-term privileged-credentials in every config
+  backup.
+references:
+  cis: "CIS Cisco ASA Benchmark — L2 1.2.8"
+  nist: ["AC-2", "AC-6"]
+  cwe: []
+query:
+  path: "$.hardening.asa_priv15_count"
+  in: [0, 1, 2, 3]
+on_fail:
+  message: "More than 3 local ASA priv-15 accounts."
+  remediation_cli: |
+    configure terminal
+     no username <EXTRA-ADMIN>
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_asa_priv15.compliant.txt
+  negative: fixtures/l2_asa_priv15.violating.txt

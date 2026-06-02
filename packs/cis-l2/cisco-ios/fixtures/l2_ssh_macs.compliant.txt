@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant
+ip ssh server algorithm mac hmac-sha2-512 hmac-sha2-256
+end

@@ -1,0 +1,5 @@
+version 17.9
+hostname compliant
+aaa new-model
+aaa authorization config-commands
+end

@@ -1,0 +1,5 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-with-ikev1
+crypto ikev1 enable outside
+crypto map MAP 10 set ikev1 transform-set ESP-AES-128-SHA

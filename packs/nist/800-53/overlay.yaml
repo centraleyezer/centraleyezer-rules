@@ -1,0 +1,575 @@
+# NIST 800-53 Rev 5 control mapping overlay.
+#
+# Each entry maps a Netzer rule id to one or more 800-53 controls.
+# The evaluator stamps these controls onto the finding's references.nist
+# field. Adding a new rule? Append an entry here so federal / regulated
+# customers see the control mapping in their reports.
+#
+# Control families used:
+#   AC — Access Control
+#   AU — Audit and Accountability
+#   CM — Configuration Management
+#   IA — Identification and Authentication
+#   SC — System and Communications Protection
+#   SI — System and Information Integrity
+
+mappings:
+  # ─── Cisco IOS / IOS-XE ─────────────────────────────────────────
+  - rule: cisco.ios.cis.1.1.1   # aaa new-model
+    controls: [AC-2, IA-2, IA-5]
+  - rule: cisco.ios.cis.1.1.6   # login block-for
+    controls: [AC-7, IA-5]
+  - rule: cisco.ios.cis.1.2.1   # password encryption type-8/9
+    controls: [IA-5, IA-7]
+  - rule: cisco.ios.cis.1.2.2   # password min-length
+    controls: [IA-5]
+  - rule: cisco.ios.cis.1.4.1   # vty exec-timeout
+    controls: [AC-11, AC-12]
+  - rule: cisco.ios.cis.2.1.1   # transport input ssh only
+    controls: [AC-17, IA-2, SC-8]
+  - rule: cisco.ios.cis.2.1.2   # ssh version 2
+    controls: [AC-17, SC-8, SC-23]
+  - rule: cisco.ios.cis.2.1.3   # vty access-class
+    controls: [AC-3, AC-17, SC-7]
+  - rule: cisco.ios.cis.2.1.4   # ssh time-out
+    controls: [AC-12, AC-7]
+  - rule: cisco.ios.cis.2.1.5   # ssh authentication-retries
+    controls: [AC-7, IA-5]
+  - rule: cisco.ios.cis.2.1.6   # rsa key modulus ≥ 2048
+    controls: [SC-13, SC-17]
+  - rule: cisco.ios.cis.2.2.1   # disable http server
+    controls: [AC-17, SC-8]
+  - rule: cisco.ios.cis.2.2.2   # disable finger
+    controls: [AC-3, CM-7]
+  - rule: cisco.ios.cis.2.2.3   # no udp-small-servers
+    controls: [CM-7, SC-5]
+  - rule: cisco.ios.cis.2.2.4   # no tcp-small-servers
+    controls: [CM-7, SC-5]
+  - rule: cisco.ios.cis.2.2.5   # no ip bootp server
+    controls: [CM-7]
+  - rule: cisco.ios.cis.3.1.1   # service timestamps log
+    controls: [AU-8]
+  - rule: cisco.ios.cis.3.2.1   # tcp-keepalives-in
+    controls: [AC-12]
+  - rule: cisco.ios.cis.3.2.2   # tcp-keepalives-out
+    controls: [AC-12, AU-4]
+  - rule: cisco.ios.cis.3.3.1   # default SNMP communities
+    controls: [AC-3, IA-2, SC-8]
+  - rule: cisco.ios.cis.4.1.1   # ntp servers configured
+    controls: [AU-8]
+  - rule: cisco.ios.cis.4.1.2   # cdp disabled
+    controls: [CM-7, SC-7]
+  - rule: cisco.ios.cis.4.2.2   # no ip proxy-arp
+    controls: [SC-7]
+  - rule: cisco.ios.cis.4.2.3   # no ip mask-reply
+    controls: [SC-7]
+  - rule: cisco.ios.cis.4.2.4   # no ip redirects
+    controls: [SC-7]
+  - rule: cisco.ios.cis.5.1.1   # syslog destination
+    controls: [AU-3, AU-6, AU-9]
+  - rule: cisco.ios.cis.5.2.1   # login banner
+    controls: [AC-8]
+  - rule: cisco.ios.cis.6.1.1   # no ip source-route
+    controls: [SC-7]
+
+  # ─── Cisco NX-OS ────────────────────────────────────────────────
+  - rule: cisco.nxos.cis.2.1.1   # no feature telnet
+    controls: [AC-17, IA-2, SC-8]
+  - rule: cisco.nxos.cis.3.3.1   # default SNMP communities (NX-OS)
+    controls: [AC-3, IA-2]
+  - rule: cisco.nxos.cis.3.3.2   # SNMPv3 auth + priv
+    controls: [IA-7, SC-8, SC-13]
+  - rule: cisco.nxos.cis.4.1.2   # NTP authenticate
+    controls: [AU-8, SC-13]
+  - rule: cisco.nxos.cis.5.2.1   # banner motd
+    controls: [AC-8]
+
+  # ─── Cisco ASA ──────────────────────────────────────────────────
+  - rule: cisco.asa.cis.1.2.1    # passwd encryption pbkdf2
+    controls: [IA-5, IA-7]
+  - rule: cisco.asa.cis.2.1.1    # no telnet
+    controls: [AC-17, IA-2, SC-8]
+  - rule: cisco.asa.cis.2.1.2    # ssh version 2 (ASA)
+    controls: [AC-17, SC-8, SC-23]
+  - rule: cisco.asa.cis.3.3.1    # default SNMP communities (ASA)
+    controls: [AC-3, IA-2]
+  - rule: cisco.asa.cis.4.1.2    # NTP authenticate (ASA)
+    controls: [AU-8, SC-13]
+
+  # ─── Newly added CIS rules ──────────────────────────────────────
+  - rule: cisco.ios.cis.1.1.7   # AAA authorization
+    controls: [AC-3, AC-6]
+  - rule: cisco.ios.cis.1.1.8   # AAA accounting
+    controls: [AU-2, AU-3, AU-12]
+  - rule: cisco.ios.cis.1.1.9   # AAA local fallback
+    controls: [AC-2, CP-2]
+  - rule: cisco.ios.cis.1.4.2   # console exec-timeout
+    controls: [AC-11, AC-12]
+  - rule: cisco.ios.cis.2.2.9   # SCP server enabled
+    controls: [AC-17, SC-8]
+  - rule: cisco.ios.cis.2.2.10  # PnP disabled
+    controls: [CM-3, CM-7]
+  - rule: cisco.ios.cis.4.1.3   # NTP ≥ 2 servers
+    controls: [AU-8, CP-2]
+  - rule: cisco.ios.cis.5.1.2   # logging buffered ≥ 16k
+    controls: [AU-4, AU-5]
+  - rule: cisco.ios.cis.5.1.3   # logging trap level
+    controls: [AU-2, AU-3]
+  - rule: cisco.ios.cis.5.1.4   # logging source-interface
+    controls: [AU-9]
+  - rule: cisco.ios.cis.5.2.2   # MOTD banner
+    controls: [AC-8]
+  - rule: cisco.ios.cis.5.2.3   # EXEC banner
+    controls: [AC-8]
+  - rule: cisco.ios.cis.5.3.1   # archive log config
+    controls: [AU-2, AU-12, CM-3]
+  - rule: cisco.nxos.cis.1.2.1  # password strength-check
+    controls: [IA-5]
+  - rule: cisco.nxos.cis.1.2.2  # password secure-mode
+    controls: [IA-5, IA-7]
+  - rule: cisco.nxos.cis.5.1.2  # NX-OS logging level
+    controls: [AU-2, AU-3]
+  - rule: cisco.asa.cis.2.1.3   # ssh stricthostkeycheck
+    controls: [AC-17, SC-8]
+  - rule: cisco.asa.cis.2.1.4   # ssh key-exchange dh-group14+
+    controls: [SC-13]
+  - rule: cisco.asa.cis.5.2.1   # ASA login banner
+    controls: [AC-8]
+
+  # ─── L2 + control-plane batch (round 3) ─────────────────────────
+  - rule: cisco.ios.cis.3.3.2   # snmp-server location
+    controls: [CM-8]
+  - rule: cisco.ios.cis.3.3.3   # snmp-server contact
+    controls: [CM-8]
+  - rule: cisco.ios.cis.3.3.4   # no SNMP RW community
+    controls: [AC-3, AC-6]
+  - rule: cisco.ios.cis.3.3.5   # snmp-server enable traps
+    controls: [AU-2, AU-6]
+  - rule: cisco.ios.cis.7.1.1   # VTP safe (transparent or password)
+    controls: [CM-2, SC-7]
+  - rule: cisco.ios.cis.7.2.1   # STP mode rapid-pvst / mst
+    controls: [CM-7, SC-5]
+  - rule: cisco.ios.cis.7.2.2   # BPDU guard default
+    controls: [SC-7]
+  - rule: cisco.ios.cis.7.3.1   # DHCP snooping
+    controls: [SC-7, AC-4]
+  - rule: cisco.ios.cis.7.3.2   # DAI
+    controls: [SC-7, AC-4]
+  - rule: cisco.ios.cis.6.1.2   # IP options drop
+    controls: [SC-7]
+  - rule: cisco.ios.cis.8.1.1   # CoPP
+    controls: [SC-5, SC-7]
+
+  # ─── Account / interface / hardening (round 4) ──────────────────
+  - rule: cisco.ios.cis.1.3.1   # no priv-15 users
+    controls: [AC-3, AC-6, IA-2]
+  - rule: cisco.ios.cis.1.3.2   # no default usernames
+    controls: [IA-2, IA-5]
+  - rule: cisco.ios.cis.1.3.3   # ≥2 local users
+    controls: [CP-2]
+  - rule: cisco.ios.cis.2.2.11  # no service config
+    controls: [CM-3, CM-7]
+  - rule: cisco.ios.cis.2.2.12  # ip cef
+    controls: [SC-5]
+  - rule: cisco.ios.cis.2.2.13  # no service pad
+    controls: [CM-7]
+  - rule: cisco.ios.cis.7.2.3   # stp loopguard default
+    controls: [SC-5]
+  - rule: cisco.ios.cis.7.4.1   # all access ports port-security
+    controls: [AC-3, SC-7]
+  - rule: cisco.ios.cis.7.4.2   # all access ports bpduguard
+    controls: [SC-7]
+  - rule: cisco.nxos.cis.2.2.1  # nxos no tftp-server
+    controls: [CM-7, SC-8]
+  - rule: cisco.nxos.cis.2.2.2  # nxos feature ssh required
+    controls: [AC-17, SC-8]
+  - rule: cisco.nxos.cis.3.3.3  # nxos no v2c
+    controls: [IA-7, SC-8]
+  - rule: cisco.asa.cis.6.1.1   # asa threat-detection
+    controls: [SI-4]
+  - rule: cisco.asa.cis.2.2.1   # asa tls min 1.2
+    controls: [SC-8, SC-13, SC-23]
+  - rule: cisco.asa.cis.6.2.1   # asa MPF global
+    controls: [SC-7, SI-4]
+
+  # ─── Round 6 — routing-protocol auth + L2 + ASA/NX-OS ──────────
+  - rule: cisco.ios.cis.7.4.3   # trunk native VLAN
+    controls: [SC-7]
+  - rule: cisco.ios.cis.7.4.4   # no dynamic switchport
+    controls: [SC-7]
+  - rule: cisco.ios.cis.9.1.1   # OSPF auth
+    controls: [AC-3, IA-2, SC-7]
+  - rule: cisco.ios.cis.9.1.2   # BGP auth
+    controls: [AC-3, IA-2, SC-7]
+  - rule: cisco.ios.cis.9.1.3   # EIGRP auth
+    controls: [AC-3, IA-2, SC-7]
+  - rule: cisco.ios.cis.9.2.1   # HSRP auth
+    controls: [AC-3, IA-2, SC-7]
+  - rule: cisco.nxos.cis.1.4.1  # NX-OS custom role
+    controls: [AC-3, AC-6]
+  - rule: cisco.nxos.cis.1.4.2  # NX-OS AAA group server
+    controls: [AC-2, IA-2]
+  - rule: cisco.asa.cis.6.1.2   # ASA scanning-threat
+    controls: [SI-4]
+  - rule: cisco.asa.cis.6.1.3   # ASA threat-detection statistics
+    controls: [AU-2, SI-4]
+  - rule: cisco.asa.cis.7.1.1   # ASA management-only iface
+    controls: [AC-4, SC-7]
+
+  # ─── PSIRT-flagged hardening (see packs/psirt) ──────────────────
+  - rule: cisco.ios.psirt.no_ospf_md5
+    controls: [SC-13]
+  - rule: cisco.ios.psirt.no_ip_rcmd_rsh
+    controls: [AC-3, AC-17]
+  - rule: cisco.ios.psirt.no_ip_rcmd_rcp
+    controls: [AC-17, SC-8]
+  - rule: cisco.ios.psirt.clock_timezone_utc
+    controls: [AU-8]
+  - rule: cisco.ios.psirt.loopback_required
+    controls: [AC-3]
+  - rule: cisco.ios.psirt.smi.disable
+    controls: [CM-7, SC-7]
+  - rule: cisco.ios.psirt.sshv1.disable
+    controls: [AC-17, SC-23]
+  - rule: cisco.ios.psirt.weak_ssh_ciphers
+    controls: [SC-13]
+  - rule: cisco.ios.psirt.no_ipv6_source_route
+    controls: [SC-7]
+  - rule: cisco.ios.psirt.no_mdns_gateway
+    controls: [CM-7, SC-5]
+  - rule: cisco.ios.psirt.no_pnp_autoinstall
+    controls: [CM-3, CM-7]
+  - rule: cisco.asa.psirt.ikev1.disable
+    controls: [SC-8, SC-13]
+
+  # ─── Round 9 additions ──────────────────────────────────────────
+  - rule: cisco.ios.cis.2.2.18  # no ip http active-session-modules
+    controls: [CM-7, AC-17]
+  - rule: cisco.ios.cis.9.3.1   # key chain required
+    controls: [IA-5]
+  - rule: cisco.nxos.cis.1.1.5  # NX-OS AAA local fallback
+    controls: [AC-2, CP-2]
+  - rule: cisco.nxos.cis.4.2.2  # NX-OS clock protocol ntp
+    controls: [AU-8]
+  - rule: cisco.nxos.cis.6.1.1  # NX-OS boot system
+    controls: [CM-2, CM-3]
+  - rule: cisco.nxos.cis.7.1.2  # NX-OS vrf context management
+    controls: [AC-4, SC-7]
+  - rule: cisco.asa.cis.5.1.2   # ASA crypto ikev2 enable
+    controls: [SC-8, SC-13]
+  - rule: cisco.asa.cis.5.1.3   # ASA IKEv2 DH ≥ 14
+    controls: [SC-13]
+  - rule: cisco.asa.cis.5.1.4   # ASA IPsec lifetime ≤ 3600s
+    controls: [SC-13]
+  - rule: cisco.asa.cis.7.1.2   # ASA no same-security inter-interface
+    controls: [AC-4, SC-7]
+  - rule: cisco.ios.psirt.no_eigrp_auto_summary
+    controls: [CM-7]
+
+  # ─── Round 10 additions ─────────────────────────────────────────
+  - rule: cisco.ios.cis.2.2.19  # no ip domain-lookup
+    controls: [CM-7]
+  - rule: cisco.ios.cis.2.2.20  # no service config
+    controls: [CM-7, SI-7]
+  - rule: cisco.ios.cis.2.2.21  # no ip bootp server
+    controls: [CM-7]
+  - rule: cisco.ios.cis.2.2.22  # no ip identd
+    controls: [CM-7]
+  - rule: cisco.ios.cis.3.6.4   # ip ssh maxstartups
+    controls: [SC-5, AC-17]
+  - rule: cisco.ios.cis.6.2.1   # no boot manual
+    controls: [CM-3, CP-10]
+  - rule: cisco.nxos.cis.2.1.4  # NX-OS no ip domain-lookup
+    controls: [CM-7]
+  - rule: cisco.nxos.cis.1.6.1  # NX-OS no feature bash-shell
+    controls: [AC-3, AC-6, CM-7]
+  - rule: cisco.nxos.cis.1.6.2  # NX-OS no feature nxapi
+    controls: [CM-7, AC-17]
+  - rule: cisco.nxos.cis.1.6.3  # NX-OS no feature openflow
+    controls: [CM-7, AC-3]
+  - rule: cisco.asa.cis.5.2.1   # ASA crypto map PFS
+    controls: [SC-13]
+  - rule: cisco.asa.cis.5.1.5   # ASA no IKEv1 outside
+    controls: [SC-8, SC-13]
+  - rule: cisco.asa.cis.5.3.1   # ASA no anyconnect-essentials
+    controls: [AC-19, IA-3]
+
+  # ─── Round 11 additions ─────────────────────────────────────────
+  - rule: cisco.ios.cis.1.2.5   # aaa authorization commands 15
+    controls: [AC-3, AC-6]
+  - rule: cisco.ios.cis.1.2.6   # aaa accounting commands 15
+    controls: [AU-2, AU-12]
+  - rule: cisco.ios.cis.1.2.7   # aaa accounting exec
+    controls: [AU-2, AU-3]
+  - rule: cisco.ios.cis.1.2.8   # aaa authentication enable
+    controls: [IA-2, AC-6]
+  - rule: cisco.asa.cis.1.2.1   # ASA enable password PBKDF2
+    controls: [IA-5]
+  - rule: cisco.asa.cis.1.2.2   # ASA no legacy passwd
+    controls: [IA-5, AC-2]
+  - rule: cisco.asa.cis.5.1.6   # ASA IKEv2 integrity sha256+
+    controls: [SC-13]
+  - rule: cisco.asa.cis.5.1.7   # ASA IKEv2 PRF sha256+
+    controls: [SC-13]
+  - rule: cisco.asa.cis.5.4.1   # ASA group-policy vpn-tunnel-protocol
+    controls: [SC-8, SC-13]
+  - rule: cisco.nxos.cis.3.6.1  # NX-OS ssh source-interface
+    controls: [AC-17, SC-7]
+  - rule: cisco.nxos.cis.7.2.1  # NX-OS switchport shutdown default
+    controls: [AC-4, SC-7]
+  - rule: cisco.nxos.cis.7.3.1  # NX-OS errdisable recovery
+    controls: [SC-5]
+  - rule: cisco.nxos.cis.1.2.7  # NX-OS aaa accounting default
+    controls: [AU-2, AU-3, AU-12]
+  - rule: cisco.ios.psirt.http_secure_trustpoint
+    controls: [SC-8, SC-12, SC-23]
+
+  # ─── Round 12 additions ─────────────────────────────────────────
+  - rule: cisco.ios.cis.8.1.1   # logging buffered ≥ 16384
+    controls: [AU-4, AU-11]
+  - rule: cisco.ios.cis.8.1.2   # logging facility explicit
+    controls: [AU-3]
+  - rule: cisco.ios.cis.4.3.1   # snmp-server enable traps
+    controls: [SI-4]
+  - rule: cisco.ios.cis.3.2.4   # service tcp-syn-wait bounded
+    controls: [SC-5]
+  - rule: cisco.nxos.cis.3.6.2  # ssh login-grace-time ≤ 60
+    controls: [SC-5, AC-17]
+  - rule: cisco.nxos.cis.4.2.3  # ntp authenticate
+    controls: [AU-8, IA-3]
+  - rule: cisco.nxos.cis.1.5.1  # radius-server timeout ≤ 10
+    controls: [AC-2, CP-2]
+  - rule: cisco.nxos.cis.1.5.2  # tacacs-server timeout ≤ 10
+    controls: [AC-2, CP-2]
+  - rule: cisco.asa.cis.2.1.8   # ssh key-exchange dh-group14+
+    controls: [SC-13]
+  - rule: cisco.asa.cis.5.1.8   # ikev2 cookie-challenge
+    controls: [SC-5]
+  - rule: cisco.asa.cis.6.2.1   # fragment chain 1
+    controls: [SC-7]
+  - rule: cisco.asa.cis.8.1.1   # flow-export destination (NSEL)
+    controls: [AU-2, SI-4]
+  - rule: cisco.asa.cis.1.3.1   # ASA aaa local max-fail
+    controls: [AC-7]
+  - rule: cisco.ios.psirt.enable_secret_not_md5
+    controls: [IA-5, IA-7]
+
+  # ─── Round 13 additions ─────────────────────────────────────────
+  - rule: cisco.ios.cis.1.2.9   # aaa session-id common
+    controls: [AU-3, AU-12]
+  - rule: cisco.ios.cis.7.3.4   # arp inspection log-buffer ≥ 1024
+    controls: [AU-4, SI-4]
+  - rule: cisco.ios.cis.4.3.2   # snmp-server view
+    controls: [AC-3, AC-6]
+  - rule: cisco.ios.cis.1.1.10  # local user break-glass ≥ 2
+    controls: [AC-2, CP-2]
+  - rule: cisco.nxos.cis.7.4.1  # NX-OS dot1x system-auth-control
+    controls: [AC-3, IA-3]
+  - rule: cisco.nxos.cis.7.5.1  # NX-OS feature dhcp
+    controls: [SC-7, AC-4]
+  - rule: cisco.nxos.cis.1.7.1  # NX-OS terminal session-timeout
+    controls: [AC-11, AC-12]
+  - rule: cisco.nxos.cis.1.2.8  # NX-OS password expire-days
+    controls: [IA-5]
+  - rule: cisco.asa.cis.2.2.3   # ASA TLS minimum 1.2
+    controls: [SC-13, SC-23]
+  - rule: cisco.asa.cis.2.3.1   # ASA crypto ca trustpool policy
+    controls: [SC-12, SC-17]
+  - rule: cisco.asa.cis.5.5.1   # ASA DAP record
+    controls: [AC-3, AC-19, IA-3]
+  - rule: cisco.asa.cis.1.4.1   # ASA aaa-server tacacs+
+    controls: [AC-3, AC-6, AU-2]
+  - rule: cisco.asa.cis.1.2.3   # ASA priv-15 count ≤ 5
+    controls: [AC-2, AC-6]
+  - rule: cisco.ios.psirt.no_type7_passwords
+    controls: [IA-5, IA-7]
+
+  # ─── Round 14 additions ─────────────────────────────────────────
+  - rule: cisco.ios.cis.3.2.5   # ip icmp rate-limit unreachable
+    controls: [SC-5]
+  - rule: cisco.ios.cis.1.1.11  # password encryption aes
+    controls: [IA-5, SC-28]
+  - rule: cisco.ios.cis.4.3.3   # SNMPv3 user required
+    controls: [SC-8, IA-3, AC-3]
+  - rule: cisco.ios.cis.3.2.6   # uRPF strict
+    controls: [SC-5, SC-7]
+  - rule: cisco.nxos.cis.7.5.2  # NX-OS ip dhcp snooping global
+    controls: [SC-7, AC-4]
+  - rule: cisco.nxos.cis.7.5.3  # NX-OS DAI on user VLANs
+    controls: [SC-7, AC-4]
+  - rule: cisco.nxos.cis.8.1.1  # NX-OS vPC peer-keepalive
+    controls: [CP-2, CP-10]
+  - rule: cisco.nxos.cis.7.6.1  # NX-OS feature lacp
+    controls: [CP-2]
+  - rule: cisco.nxos.cis.3.6.3  # NX-OS feature ssh
+    controls: [AC-17, SC-8]
+  - rule: cisco.asa.cis.2.3.2   # ASA trustpoint count ≥ 1
+    controls: [SC-12, SC-17]
+  - rule: cisco.asa.cis.2.1.9   # ASA ssh stricthostkeycheck
+    controls: [SC-8, SC-12]
+  - rule: cisco.asa.cis.1.4.2   # ASA aaa auth ssh group
+    controls: [IA-2, AC-2, AU-2]
+  - rule: cisco.ios.psirt.ssh_mac_sha2
+    controls: [SC-13]
+
+  # ─── Round 15 additions ─────────────────────────────────────────
+  - rule: cisco.ios.cis.8.2.1   # NetFlow flow exporter
+    controls: [AU-2, SI-4]
+  - rule: cisco.ios.cis.8.2.2   # NetFlow flow monitor
+    controls: [AU-2, SI-4]
+  - rule: cisco.ios.cis.2.2.23  # no service internal
+    controls: [CM-7]
+  - rule: cisco.ios.cis.7.3.5   # errdisable recovery configured
+    controls: [SC-5]
+  - rule: cisco.nxos.cis.6.2.1  # NX-OS feature scp-server
+    controls: [SC-8, AC-17]
+  - rule: cisco.nxos.cis.1.5.3  # NX-OS feature tacacs+
+    controls: [IA-2, AC-2, AU-2]
+  - rule: cisco.nxos.cis.1.1.7  # NX-OS no default admin account
+    controls: [IA-5, AC-2]
+  - rule: cisco.asa.cis.6.3.1   # ASA inspect dns
+    controls: [SC-7, SI-3]
+  - rule: cisco.asa.cis.6.4.1   # ASA dhcprelay timeout
+    controls: [SC-5]
+  - rule: cisco.asa.cis.1.2.4   # ASA password-policy lifetime
+    controls: [IA-5]
+  - rule: cisco.asa.cis.1.2.5   # ASA password-policy min-length
+    controls: [IA-5]
+  - rule: cisco.ios.psirt.arp_inspect_validate
+    controls: [SC-7, AC-4]
+
+  # ─── Round 16 additions ─────────────────────────────────────────
+  - rule: cisco.ios.cis.3.3.1   # ip cef (companion to 2.2.12)
+    controls: [SC-7, SI-4]
+  - rule: cisco.ios.cis.4.1.6   # no ntp peer
+    controls: [AU-8]
+  - rule: cisco.ios.cis.7.5.2   # dhcp snoop verify mac-address
+    controls: [SC-7, AC-4]
+  - rule: cisco.ios.cis.2.2.24  # ip http authentication aaa
+    controls: [IA-2, AC-3]
+  - rule: cisco.nxos.cis.7.5.4  # NX-OS dhcp snoop verify mac-address
+    controls: [SC-7, AC-4]
+  - rule: cisco.nxos.cis.1.4.3  # NX-OS aaa user default-role disable
+    controls: [AC-3, AC-6]
+  - rule: cisco.nxos.cis.7.6.2  # NX-OS feature udld
+    controls: [CP-2]
+  - rule: cisco.nxos.cis.7.7.1  # NX-OS mgmt0 IP
+    controls: [AC-17, SC-7]
+  - rule: cisco.asa.cis.5.1.9   # ASA crypto ipsec ikev2 ipsec-proposal
+    controls: [SC-13]
+  - rule: cisco.asa.cis.6.5.1   # ASA dns server-group
+    controls: [CM-7]
+  - rule: cisco.asa.cis.1.4.3   # ASA aaa auth http console group
+    controls: [IA-2, AC-2, AU-2]
+  - rule: cisco.asa.cis.6.6.1   # ASA clock timezone
+    controls: [AU-8]
+  - rule: cisco.ios.psirt.ssh_kex_modern
+    controls: [SC-13]
+
+  # ─── Round 17 additions ─────────────────────────────────────────
+  - rule: cisco.ios.cis.8.2.3   # flow record defined
+    controls: [AU-2, SI-4]
+  - rule: cisco.ios.cis.1.1.12  # service hide-keys
+    controls: [AC-3, AU-9, SC-28]
+  - rule: cisco.ios.cis.8.2.4   # ip flow-export source
+    controls: [AU-2, SC-7]
+  - rule: cisco.nxos.cis.1.6.4  # NX-OS nxapi sandbox off
+    controls: [CM-7, AC-17]
+  - rule: cisco.nxos.cis.7.8.1  # NX-OS no unsupported transceiver
+    controls: [CM-7, CM-2]
+  - rule: cisco.nxos.cis.3.4.1  # NX-OS no ip source-route
+    controls: [SC-7]
+  - rule: cisco.nxos.cis.1.1.8  # NX-OS priv-15 count ≤ 5
+    controls: [AC-2, AC-6]
+  - rule: cisco.asa.cis.1.4.4   # ASA aaa-server radius group
+    controls: [AC-3, IA-2]
+  - rule: cisco.asa.cis.6.3.2   # ASA inspect ftp
+    controls: [SC-7, SI-3]
+  - rule: cisco.asa.cis.6.3.3   # ASA inspect http
+    controls: [SC-7, SI-3]
+  - rule: cisco.asa.cis.5.1.10  # ASA crypto isakmp am-disable
+    controls: [SC-8, SC-13]
+  - rule: cisco.ios.psirt.no_ssh_3des
+    controls: [SC-13]
+
+  # ─── Round 18 additions ─────────────────────────────────────────
+  - rule: cisco.ios.cis.9.1.6   # bgp log-neighbor-changes
+    controls: [AU-2, SI-4]
+  - rule: cisco.ios.cis.1.2.10  # aaa authorization config-commands
+    controls: [AC-3, AC-6, AU-2]
+  - rule: cisco.ios.cis.1.2.11  # radius-server vsa send accounting
+    controls: [AU-3, AU-12]
+  - rule: cisco.ios.cis.8.2.5   # flow monitor bound to interface
+    controls: [AU-2, SI-4]
+  - rule: cisco.nxos.cis.1.5.4  # NX-OS radius-server retransmit
+    controls: [AC-2, CP-2]
+  - rule: cisco.nxos.cis.1.5.5  # NX-OS tacacs-server retransmit
+    controls: [AC-2, CP-2]
+  - rule: cisco.nxos.cis.7.4.2  # NX-OS feature dot1x
+    controls: [AC-3, IA-3]
+  - rule: cisco.nxos.cis.7.5.5  # NX-OS no dhcp allow-untrusted
+    controls: [SC-7, AC-4]
+  - rule: cisco.asa.cis.1.3.2   # ASA aaa proxy-limit
+    controls: [SC-5]
+  - rule: cisco.asa.cis.1.1.1   # ASA user count ≥ 2
+    controls: [AC-2, CP-2]
+  - rule: cisco.asa.cis.7.2.1   # ASA no multicast-routing
+    controls: [CM-7]
+  - rule: cisco.asa.cis.7.2.2   # ASA no arp permit-nonconnected
+    controls: [SC-7]
+  - rule: cisco.ios.psirt.keychain_hmac_sha
+    controls: [SC-13]
+
+  # ─── Round 19 additions ─────────────────────────────────────────
+  - rule: cisco.ios.cis.8.1.3   # no logging console
+    controls: [AU-4]
+  - rule: cisco.ios.cis.6.2.2   # parser command serializer
+    controls: [CM-3, SI-7]
+  - rule: cisco.ios.cis.3.6.5   # VTY transport preferred none
+    controls: [AC-17, CM-7]
+  - rule: cisco.ios.cis.4.1.7   # NTP server redundancy
+    controls: [AU-8, CP-2]
+  - rule: cisco.nxos.cis.9.1.1  # NX-OS BGP authentication
+    controls: [AC-3, IA-2, SC-8]
+  - rule: cisco.nxos.cis.9.2.1  # NX-OS OSPF authentication
+    controls: [AC-3, IA-2, SC-8]
+  - rule: cisco.nxos.cis.1.4.4  # NX-OS read-only user
+    controls: [AC-6, AC-2]
+  - rule: cisco.nxos.cis.6.3.1  # NX-OS feature scheduler
+    controls: [CM-3, CP-9]
+  - rule: cisco.asa.cis.6.7.1   # ASA dynamic-filter (BTF)
+    controls: [SI-3, SI-4]
+  - rule: cisco.asa.cis.4.3.1   # ASA SNMPv3 user
+    controls: [SC-8, IA-3, AC-3]
+  - rule: cisco.asa.cis.4.3.2   # ASA no SNMP community
+    controls: [SC-8, IA-3]
+  - rule: cisco.asa.cis.6.8.1   # ASA auth-prompt
+    controls: [AC-8, IA-6]
+  - rule: cisco.ios.psirt.no_service_nagle
+    controls: []
+
+  # ─── Round 20 additions (landing at 300) ─────────────────────────
+  - rule: cisco.ios.cis.2.2.25  # ip http secure-active-session-modules none
+    controls: [CM-7, AC-17]
+  - rule: cisco.ios.cis.3.6.6   # ip ssh source-interface
+    controls: [AC-17, SC-7]
+  - rule: cisco.ios.cis.3.3.2   # ipv6 cef
+    controls: [SC-5, SI-4]
+  - rule: cisco.ios.cis.1.2.12  # aaa accounting connection
+    controls: [AU-2, AU-12]
+  - rule: cisco.nxos.cis.6.1.2  # NX-OS boot poap disable
+    controls: [CM-3, CM-7, SI-7]
+  - rule: cisco.nxos.cis.3.6.4  # NX-OS RSA modulus ≥ 2048
+    controls: [SC-13, SC-17]
+  - rule: cisco.nxos.cis.1.1.9  # NX-OS user count ≥ 2
+    controls: [AC-2, CP-2]
+  - rule: cisco.nxos.cis.4.2.4  # NX-OS feature ntp
+    controls: [AU-8]
+  - rule: cisco.asa.cis.2.3.3   # ASA no permit-weak-crypto
+    controls: [SC-13, SC-17]
+  - rule: cisco.asa.cis.6.3.4   # ASA no legacy fixup
+    controls: [CM-7]
+  - rule: cisco.asa.cis.5.1.11  # ASA IPsec PMTU-aging bounded
+    controls: [SC-5]
+  - rule: cisco.ios.cis.1.1.13  # enable algorithm-type sha256/scrypt
+    controls: [IA-5, IA-7]

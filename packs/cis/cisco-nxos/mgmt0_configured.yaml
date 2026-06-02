@@ -1,0 +1,36 @@
+id: cisco.nxos.cis.7.7.1
+title: "NX-OS `mgmt0` interface must have an IP address"
+severity: high
+vendors: [cisco-nx-os]
+description: |
+  The `interface mgmt0` stanza must include an `ip address
+  <IP> <MASK>` line so the dedicated management interface is
+  reachable — out-of-band from any data-plane VLAN.
+rationale: |
+  `mgmt0` is the out-of-band management interface that the
+  whole NX-OS hardening story (separate management VRF,
+  source-interface lock-down for SSH/SNMP/NTP, AAA) is built
+  around. If it has no IP, all of that protection collapses
+  to whatever in-band path is reachable.
+impact: |
+  Out-of-band management not reachable; security stack
+  centered on mgmt0 silently rendered inert.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.7.1"
+  nist: ["AC-17", "SC-7"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_mgmt0_configured"
+  equals: true
+on_fail:
+  message: "interface mgmt0 has no IP address configured."
+  remediation_cli: |
+    configure terminal
+     interface mgmt0
+      vrf member management
+      ip address 10.0.0.1/24
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/mgmt0.compliant.txt
+  negative: fixtures/mgmt0.violating.txt

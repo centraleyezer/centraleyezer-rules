@@ -1,0 +1,36 @@
+id: cisco.ios.cis.7.4.1
+title: "Every access port must have port-security enabled"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Every `switchport mode access` interface must have
+  `switchport port-security` configured. Pure-routed devices
+  (no access ports) trivially comply.
+rationale: |
+  Port-security caps the number of MAC addresses learned on an
+  access port and shuts the port on violation. Without it, an
+  attacker who unplugs an endpoint and plugs in a switch can
+  enumerate the entire VLAN at L2.
+impact: |
+  Unauthorized devices on the access VLAN; rogue device hopping
+  via cable theft.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.4.1"
+  nist: ["AC-3", "SC-7"]
+  cwe: [284]
+query:
+  path: "$.hardening.all_access_ports_port_security"
+  equals: true
+on_fail:
+  message: "At least one access port lacks switchport port-security."
+  remediation_cli: |
+    configure terminal
+     interface range GigabitEthernet1/0/1 - 48
+      switchport port-security
+      switchport port-security maximum 2
+      switchport port-security violation restrict
+    end
+    write memory
+fixtures:
+  positive: fixtures/access_ps.compliant.txt
+  negative: fixtures/access_ps.violating.txt

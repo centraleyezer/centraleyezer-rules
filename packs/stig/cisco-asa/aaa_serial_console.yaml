@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220406
+title: "The Cisco ASA must require AAA authentication on the serial console."
+severity: medium
+vendors: [cisco-asa]
+description: |
+  Without AAA on the console, physical access bypasses centralised credentials and audit.
+rationale: |
+  Sourced from the DISA Cisco ASA NDM STIG. CAT II finding.
+  See V-220406 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220406 on the device's POA&M.
+references:
+  stig: ["V-220406"]
+  cci:
+    - "CCI-000213"
+query:
+  path: "$.aaa.serial_console_auth"
+  equals: true
+on_fail:
+  message: "Cisco ASA STIG V-220406 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220406.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/aaa_serial.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/aaa_serial.violating.txt

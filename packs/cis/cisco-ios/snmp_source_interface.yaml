@@ -1,0 +1,33 @@
+id: cisco.ios.cis.3.3.6
+title: "SNMP source-interface must be set (Loopback recommended)"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `snmp-server source-interface traps LoopbackN` must be set so
+  outbound SNMP traps emit from a stable address NMS-side ACLs
+  and SIEM rules can pin on.
+rationale: |
+  Without a fixed source-interface, traps leave from the egress
+  interface closest to the NMS — which changes when routes flap.
+  SIEM correlation breaks; NMS-side trap-source ACLs go stale.
+impact: |
+  Trap reception filtering breaks during routing events; alert
+  attribution becomes unreliable.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.3.6"
+  nist: ["AU-9"]
+  cwe: []
+query:
+  path: "$.snmp.source_interface"
+  matches: "."
+on_fail:
+  message: "snmp-server source-interface is not configured."
+  remediation_cli: |
+    configure terminal
+     snmp-server source-interface traps Loopback0
+     snmp-server source-interface informs Loopback0
+    end
+    write memory
+fixtures:
+  positive: fixtures/snmp_source.compliant.txt
+  negative: fixtures/snmp_source.violating.txt

@@ -1,0 +1,36 @@
+id: cisco.asa.cis.5.1.9
+title: "ASA `crypto ipsec ikev2 ipsec-proposal` must be defined"
+severity: high
+vendors: [cisco-asa]
+description: |
+  At least one `crypto ipsec ikev2 ipsec-proposal <NAME>` must
+  be defined when IPsec VPN is in use, so IKEv2 SAs use a
+  named (and operator-vetted) proposal rather than the
+  legacy default-set.
+rationale: |
+  The legacy default proposal-set on older ASA images
+  includes weaker transforms (3DES, MD5) that may still
+  negotiate with old peers. A named proposal forces the
+  operator to choose modern transforms explicitly.
+impact: |
+  IKEv2 SAs may fall back to weaker cipher suites from the
+  legacy default set.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.1.9"
+  nist: ["SC-13"]
+  cwe: [327]
+query:
+  path: "$.hardening.asa_ipsec_proposal"
+  equals: true
+on_fail:
+  message: "crypto ipsec ikev2 ipsec-proposal is not defined."
+  remediation_cli: |
+    configure terminal
+     crypto ipsec ikev2 ipsec-proposal NETZER-PROP
+      protocol esp encryption aes-256 aes-gcm-256
+      protocol esp integrity sha256 sha384
+    end
+    write memory
+fixtures:
+  positive: fixtures/ikev2_proposal.compliant.txt
+  negative: fixtures/ikev2_proposal.violating.txt

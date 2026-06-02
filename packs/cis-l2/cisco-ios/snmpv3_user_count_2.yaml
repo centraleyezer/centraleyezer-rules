@@ -1,0 +1,35 @@
+id: cisco.ios.cis-l2.4.3.4
+title: "L2: At least 2 SNMPv3 users must be defined (key-rotation pair)"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  At least 2 `snmp-server user <NAME> ... v3 auth ... priv ...`
+  entries must be present. L1 was ≥ 1; L2 requires ≥ 2 so
+  operators can rotate auth/priv keys without monitoring
+  downtime.
+rationale: |
+  Single-user SNMPv3 forces a maintenance window for every
+  key rotation. A second user lets you cut the NMS over,
+  rotate the first user's keys, then cut back — zero blind
+  spots for the monitoring system.
+impact: |
+  Key rotation requires a monitoring outage; operators defer
+  rotations indefinitely.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 4.3.4"
+  nist: ["IA-5", "AC-3"]
+  cwe: []
+query:
+  path: "$.hardening.snmpv3_user_count"
+  in: [2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "Fewer than 2 SNMPv3 users are defined."
+  remediation_cli: |
+    configure terminal
+     snmp-server user nsmon-a NETSCAN-GRP v3 auth sha <A1> priv aes 256 <P1>
+     snmp-server user nsmon-b NETSCAN-GRP v3 auth sha <A2> priv aes 256 <P2>
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_snmpv3_2.compliant.txt
+  negative: fixtures/l2_snmpv3_2.violating.txt

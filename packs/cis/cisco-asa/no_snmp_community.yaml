@@ -1,0 +1,34 @@
+id: cisco.asa.cis.4.3.2
+title: "ASA must not configure SNMPv1/v2c community strings"
+severity: high
+vendors: [cisco-asa]
+description: |
+  No `snmp-server community ...` line may be present.
+  SNMPv1/v2c communities are shared strings transmitted in
+  cleartext — incompatible with any modern hardening posture.
+rationale: |
+  Community-string snooping on the management VLAN yields the
+  device's monitoring credential — and from there, the full
+  MIB view. SNMPv3 (authPriv) is the modern alternative;
+  community-based access must be removed entirely once v3 is
+  in place.
+impact: |
+  SNMP community strings observable on the wire;
+  full-MIB-view credential leak.
+references:
+  cis: "CIS Cisco ASA Benchmark — 4.3.2"
+  nist: ["SC-8", "IA-3"]
+  cwe: [319]
+query:
+  path: "$.hardening.asa_snmp_community_v1v2"
+  equals: false
+on_fail:
+  message: "SNMPv1/v2c community string is configured."
+  remediation_cli: |
+    configure terminal
+     no snmp-server community <NAME>
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_snmp_comm.compliant.txt
+  negative: fixtures/no_snmp_comm.violating.txt

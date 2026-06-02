@@ -1,0 +1,35 @@
+id: cisco.ios.cis.1.2.10
+title: "`aaa authorization config-commands` must be configured"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `aaa authorization config-commands` must be configured so
+  EVERY configuration-mode command is checked against the
+  authorization server — not just exec-mode commands.
+rationale: |
+  By default, IOS authorizes exec commands but treats
+  configuration-mode commands as inherited from the
+  configure-terminal authorization. With config-commands on,
+  each `interface`/`router`/etc. sub-command is checked
+  individually — closing a real per-command audit gap.
+impact: |
+  Per-command authorization gap in configuration mode;
+  privileged operators can execute config commands the
+  authorization server should deny.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.2.10"
+  nist: ["AC-3", "AC-6", "AU-2"]
+  cwe: [284]
+query:
+  path: "$.aaa.authz_config_commands"
+  equals: true
+on_fail:
+  message: "aaa authorization config-commands is not configured."
+  remediation_cli: |
+    configure terminal
+     aaa authorization config-commands
+    end
+    write memory
+fixtures:
+  positive: fixtures/authz_cfg.compliant.txt
+  negative: fixtures/authz_cfg.violating.txt

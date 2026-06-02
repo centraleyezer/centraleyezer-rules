@@ -1,0 +1,15 @@
+version 17.9
+hostname compliant
+!
+key chain OSPF-KEYS
+ key 1
+  cryptographic-algorithm hmac-sha-256
+  key-string something
+!
+router ospf 100
+ area 0 authentication
+!
+interface GigabitEthernet0/0
+ ip ospf authentication key-chain OSPF-KEYS
+!
+end

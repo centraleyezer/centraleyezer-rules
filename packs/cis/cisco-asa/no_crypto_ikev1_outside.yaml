@@ -1,0 +1,34 @@
+id: cisco.asa.cis.5.1.5
+title: "ASA must not enable IKEv1 on the outside interface"
+severity: high
+vendors: [cisco-asa]
+description: |
+  `crypto ikev1 enable outside` must NOT be present. IKEv1 has
+  multiple historical RCE and information-disclosure CVEs and
+  is deprecated in favour of IKEv2 for new VPN deployments.
+rationale: |
+  Cisco's hardening guide and CIS L1 both flag IKEv1 on the
+  internet-facing interface as the modern attack surface to
+  remove. Even patched IKEv1 stacks have weaker default cipher
+  suites than IKEv2.
+impact: |
+  Exposure to IKEv1-specific CVEs and weaker default crypto on
+  the internet-facing VPN endpoint.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.1.5"
+  nist: ["SC-8", "SC-13"]
+  cwe: [327]
+query:
+  path: "$.hardening.asa_ikev1_outside_enabled"
+  equals: false
+on_fail:
+  message: "crypto ikev1 enable outside is configured."
+  remediation_cli: |
+    configure terminal
+     no crypto ikev1 enable outside
+     crypto ikev2 enable outside
+    end
+    write memory
+fixtures:
+  positive: fixtures/ikev1_outside.compliant.txt
+  negative: fixtures/ikev1_outside.violating.txt

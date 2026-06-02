@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant
+ip flow-export source Loopback0
+end

@@ -1,0 +1,35 @@
+id: cisco.nxos.cis.1.4.2
+title: "NX-OS must define at least one AAA group server"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `aaa group server tacacs+ <NAME>` (or `radius`) must be
+  configured. Without an AAA group, every authentication path
+  is local-only — there's no centralized control plane.
+rationale: |
+  Local-only auth means accounts must be created + rotated on
+  every device individually. Operationally untenable at scale
+  and incompatible with role-based access management.
+impact: |
+  Inconsistent credential lifecycle across the estate; no
+  central revocation path.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.4.2"
+  nist: ["AC-2", "IA-2"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_aaa_group_servers[0]"
+  exists: true
+on_fail:
+  message: "No NX-OS AAA group server is configured."
+  remediation_cli: |
+    configure terminal
+     aaa group server tacacs+ CORP-TACACS
+      server 10.0.0.10
+      server 10.0.0.11
+     aaa authentication login default group CORP-TACACS local
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/aaa_group.compliant.txt
+  negative: fixtures/aaa_group.violating.txt

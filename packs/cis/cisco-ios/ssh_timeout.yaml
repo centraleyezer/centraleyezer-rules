@@ -1,0 +1,30 @@
+id: cisco.ios.cis.2.1.4
+title: "SSH session timeout must be set (≤ 60 seconds)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip ssh time-out` bounds how long the SSH server waits during
+  authentication before disconnecting an idle client. Must be set
+  to 60 seconds or less.
+rationale: |
+  Default timeouts allow attackers to keep dozens of half-open SSH
+  sessions while attempting credential guessing.
+impact: |
+  Resource exhaustion + extended brute-force windows.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.1.4"
+  nist: ["AC-12", "AC-7"]
+  cwe: [400]
+query:
+  path: "$.hardening.ssh_timeout"
+  in: [10, 20, 30, 40, 50, 60]
+on_fail:
+  message: "ip ssh time-out is not set to ≤ 60 seconds."
+  remediation_cli: |
+    configure terminal
+     ip ssh time-out 60
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssh_timeout.compliant.txt
+  negative: fixtures/ssh_timeout.violating.txt

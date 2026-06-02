@@ -1,0 +1,34 @@
+id: cisco.asa.cis.5.2.1
+title: "ASA crypto map must enable Perfect Forward Secrecy"
+severity: high
+vendors: [cisco-asa]
+description: |
+  Every active crypto map entry must include `set pfs <group>`
+  so each IPsec SA derives a fresh Diffie-Hellman secret. PFS
+  is what limits the damage when a long-term key is recovered
+  later.
+rationale: |
+  Without PFS, an attacker who recovers the long-term IKE key
+  can passively decrypt every IPsec session ever negotiated
+  with that key. PFS forces a per-SA ephemeral DH exchange so
+  recovery of any one key reveals only one session.
+impact: |
+  Mass retroactive decryption of captured IPsec traffic after a
+  long-term-key compromise.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.2.1"
+  nist: ["SC-13"]
+  cwe: [326]
+query:
+  path: "$.hardening.asa_crypto_map_pfs"
+  equals: true
+on_fail:
+  message: "Perfect Forward Secrecy is not enabled on the crypto map."
+  remediation_cli: |
+    configure terminal
+     crypto map outside_map 10 set pfs group14
+    end
+    write memory
+fixtures:
+  positive: fixtures/crypto_pfs.compliant.txt
+  negative: fixtures/crypto_pfs.violating.txt

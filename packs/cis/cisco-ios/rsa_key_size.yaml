@@ -1,0 +1,30 @@
+id: cisco.ios.cis.2.1.6
+title: "RSA host key modulus must be ≥ 2048 bits"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  The SSH host key must be at least 2048 bits. 1024-bit RSA keys
+  are below current cryptographic-strength thresholds.
+rationale: |
+  NIST and CIS both deprecate ≤ 1024-bit RSA. A weak host key
+  invalidates the integrity guarantee SSH offers.
+impact: |
+  Long-term offline factoring attacks on captured SSH traffic.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.1.6"
+  nist: ["SC-13", "SC-17"]
+  cwe: [326]
+query:
+  path: "$.hardening.ssh_rsa_key_size"
+  in: [2048, 3072, 4096]
+on_fail:
+  message: "RSA host key modulus is < 2048 bits (or not configured explicitly)."
+  remediation_cli: |
+    configure terminal
+     crypto key zeroize rsa
+     crypto key generate rsa modulus 2048
+    end
+    write memory
+fixtures:
+  positive: fixtures/rsa_key.compliant.txt
+  negative: fixtures/rsa_key.violating.txt

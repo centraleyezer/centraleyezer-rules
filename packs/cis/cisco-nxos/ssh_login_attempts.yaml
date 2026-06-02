@@ -1,0 +1,32 @@
+id: cisco.nxos.cis.2.1.3
+title: "NX-OS ssh login-attempts must be set (≤ 3)"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `ssh login-attempts N` must be configured (≤ 3) so the SSH
+  server drops the session after N consecutive bad-credential
+  attempts.
+rationale: |
+  Without an explicit cap, NX-OS defaults to a permissive value
+  per session, which lets a single TCP connection burn through
+  many guesses.
+impact: |
+  Per-session credential brute-force; sustained low-rate attack
+  evades connection-rate thresholds.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 2.1.3"
+  nist: ["AC-7", "IA-5"]
+  cwe: [307]
+query:
+  path: "$.hardening.nxos_ssh_login_attempts"
+  in: [1, 2, 3]
+on_fail:
+  message: "ssh login-attempts is not set to ≤ 3."
+  remediation_cli: |
+    configure terminal
+     ssh login-attempts 3
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/ssh_attempts.compliant.txt
+  negative: fixtures/ssh_attempts.violating.txt

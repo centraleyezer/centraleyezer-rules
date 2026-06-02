@@ -1,0 +1,32 @@
+id: cisco.nxos.cis-l2.3.6.5
+title: "L2: NX-OS SSH RSA modulus must be ≥ 4096"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `ssh key rsa <N>` must be ≥ 4096 (L1 was ≥ 2048). Same
+  NIST 800-57 post-2030 floor as the IOS L2 rule.
+rationale: |
+  2048-bit RSA is acceptable through 2030. 4096-bit puts the
+  host key on the post-2030 safe side and matches the
+  modern OpenSSH default.
+impact: |
+  Host key has post-2030 deprecation pressure; weaker
+  long-term cryptographic posture.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — L2 3.6.5"
+  nist: ["SC-13", "SC-17"]
+  cwe: [326]
+query:
+  path: "$.hardening.nxos_rsa_modulus"
+  in: [4096, 8192]
+on_fail:
+  message: "NX-OS SSH RSA modulus is below 4096."
+  remediation_cli: |
+    configure terminal
+     no ssh key rsa
+     ssh key rsa 4096 force
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/l2_rsa.compliant.txt
+  negative: fixtures/l2_rsa.violating.txt

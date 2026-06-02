@@ -1,0 +1,34 @@
+id: cisco.nxos.cis-l2.1.4.5
+title: "L2: NX-OS must have ≥ 2 network-operator (read-only) users"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  At least 2 local `username ... role network-operator`
+  accounts must exist. L1 was ≥ 1; L2 ≥ 2 supports
+  monitoring-credential rotation without downtime.
+rationale: |
+  Two read-only operators let an organisation cycle
+  monitoring creds (NMS account A → B → rotate A → ...)
+  without ever pointing the NMS at a non-existent or
+  freshly-rotated user.
+impact: |
+  Monitoring credential rotation requires a brief NMS
+  outage; rotation gets skipped.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — L2 1.4.5"
+  nist: ["IA-5", "AC-2"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_readonly_user_count"
+  in: [2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "Fewer than 2 network-operator (read-only) users defined."
+  remediation_cli: |
+    configure terminal
+     username netzer-monitor-a password <X> role network-operator
+     username netzer-monitor-b password <Y> role network-operator
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/l2_ro2.compliant.txt
+  negative: fixtures/l2_ro2.violating.txt

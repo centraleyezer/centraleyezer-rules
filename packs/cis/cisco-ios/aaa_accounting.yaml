@@ -1,0 +1,32 @@
+id: cisco.ios.cis.1.1.8
+title: "AAA accounting must be configured"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `aaa accounting exec` / `aaa accounting commands 15` must be
+  configured so every authenticated session + privileged command
+  is logged to the AAA server.
+rationale: |
+  Local logging can be tampered with by an admin with shell
+  access; AAA accounting ships every command to an external
+  collector that the device itself cannot rewrite.
+impact: |
+  No tamper-resistant audit trail of admin activity.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.1.8"
+  nist: ["AU-2", "AU-3", "AU-12"]
+  cwe: [778]
+query:
+  path: "$.aaa.accounting_on"
+  equals: true
+on_fail:
+  message: "AAA accounting is not configured."
+  remediation_cli: |
+    configure terminal
+     aaa accounting exec default start-stop group tacacs+
+     aaa accounting commands 15 default start-stop group tacacs+
+    end
+    write memory
+fixtures:
+  positive: fixtures/aaa_accounting.compliant.txt
+  negative: fixtures/aaa_accounting.violating.txt

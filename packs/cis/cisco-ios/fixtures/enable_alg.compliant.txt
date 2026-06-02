@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant
+enable algorithm-type sha256 secret $8$abcdef
+end

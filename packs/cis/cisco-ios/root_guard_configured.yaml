@@ -1,0 +1,35 @@
+id: cisco.ios.cis.7.2.4
+title: "STP root-guard must be configured on at least one interface"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  At least one interface (typically downlinks toward access
+  switches) must have `spanning-tree guard root` configured so
+  the root bridge can't migrate downstream.
+rationale: |
+  Root Guard pairs with BPDU Guard: BPDU Guard kills the port if
+  a BPDU arrives at all; Root Guard kills the port only if the
+  arriving BPDU would cause a root-bridge change. Used on
+  designated-downstream ports to prevent root-bridge takeover
+  while still allowing legitimate STP traffic.
+impact: |
+  L2 root bridge takeover by misconfigured / malicious downstream
+  switch; broad-impact L2 topology disruption.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.2.4"
+  nist: ["SC-7"]
+  cwe: [346]
+query:
+  path: "$.hardening.root_guard_configured"
+  equals: true
+on_fail:
+  message: "STP root-guard is not configured on any interface."
+  remediation_cli: |
+    configure terminal
+     interface GigabitEthernet1/0/24
+      spanning-tree guard root
+    end
+    write memory
+fixtures:
+  positive: fixtures/rootguard.compliant.txt
+  negative: fixtures/rootguard.violating.txt

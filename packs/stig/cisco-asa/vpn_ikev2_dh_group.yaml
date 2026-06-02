@@ -1,0 +1,28 @@
+id: cisco.asa.stig.v-220802
+title: "The Cisco ASA IKEv2 policy must use DH group 14 or stronger."
+severity: high
+vendors: [cisco-asa]
+description: |
+  DH groups 1, 2 and 5 are no longer FIPS-acceptable. STIG mandates group 14+ (or ECP equivalents 19/20/21).
+rationale: |
+  Sourced from the DISA Cisco ASA VPN STIG. CAT I finding.
+  See V-220802 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-220802 on the device's POA&M.
+references:
+  stig: ["V-220802"]
+  cci:
+    - "CCI-001144"
+    - "CCI-002418"
+query:
+  path: "$.hardening.asa_ikev2_dh_group"
+  in: [14, 15, 16, 17, 18, 19, 20, 21, 24]
+on_fail:
+  message: "STIG V-220802 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220802.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/ikev2_dh.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/ikev2_dh.violating.txt

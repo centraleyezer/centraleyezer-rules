@@ -1,0 +1,31 @@
+id: cisco.ios.cis.1.1.1
+title: "Enable AAA (aaa new-model)"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  AAA must be enabled to enforce centralized authentication, authorization,
+  and accounting on the device.
+rationale: |
+  Without AAA, the device relies on locally configured passwords with no
+  centralized control plane, no per-user accountability, and no ability to
+  rotate credentials across an estate.
+impact: |
+  An attacker who recovers a local password gets full device access with
+  no audit trail and no way for operators to detect lateral movement.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.1.1"
+  nist: ["AC-2", "IA-2", "IA-5"]
+  cwe: [306]
+query:
+  path: "$.aaa.new_model"
+  equals: true
+on_fail:
+  message: "aaa new-model is not enabled."
+  remediation_cli: |
+    configure terminal
+     aaa new-model
+    end
+    write memory
+fixtures:
+  positive: fixtures/aaa_new_model.compliant.txt
+  negative: fixtures/aaa_new_model.violating.txt

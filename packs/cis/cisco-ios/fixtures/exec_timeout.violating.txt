@@ -1,0 +1,8 @@
+version 12.4
+hostname legacy-sw
+!
+line vty 0 4
+ transport input ssh
+! No exec-timeout set — defaults to forever-until-reset
+!
+end

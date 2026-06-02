@@ -1,0 +1,8 @@
+version 17.9
+hostname compliant-sw
+!
+logging host 10.0.0.50
+logging buffered 16384 informational
+logging trap informational
+!
+end

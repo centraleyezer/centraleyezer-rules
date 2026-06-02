@@ -1,0 +1,39 @@
+id: cisco.ios.cis.9.1.3
+title: "EIGRP must use authentication"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+applies_when:
+  features: [eigrp]
+description: |
+  When EIGRP is configured (`router eigrp X`), per-interface
+  authentication must be configured via `ip authentication mode
+  eigrp X md5` (or SHA on supported releases) + `ip authentication
+  key-chain eigrp X KEYCHAIN`.
+rationale: |
+  Unauthenticated EIGRP accepts Hellos from anyone L2-adjacent.
+  An attacker can become a neighbor, advertise more-specific
+  routes, and blackhole or redirect traffic.
+impact: |
+  L2-adjacent routing-table takeover.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 9.1.3"
+  nist: ["AC-3", "IA-2", "SC-7"]
+  cwe: [346]
+query:
+  path: "$.routing.eigrp.authenticated"
+  equals: true
+on_fail:
+  message: "EIGRP is enabled but authentication is not configured on any interface."
+  remediation_cli: |
+    configure terminal
+     key chain EIGRP-KEYS
+      key 1
+       key-string <STRONG>
+     interface GigabitEthernet0/0
+      ip authentication mode eigrp 100 md5
+      ip authentication key-chain eigrp 100 EIGRP-KEYS
+    end
+    write memory
+fixtures:
+  positive: fixtures/eigrp_auth.compliant.txt
+  negative: fixtures/eigrp_auth.violating.txt

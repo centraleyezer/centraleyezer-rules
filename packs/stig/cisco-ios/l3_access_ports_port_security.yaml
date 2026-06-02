@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220601
+title: "The Cisco switch must apply port-security on every access port."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Port-security caps the MAC count per port, blocking CAM-table flooding and unauthorized device attachment.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Switch L3 STIG. CAT II finding.
+  See V-220601 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220601 on the device's POA&M.
+references:
+  stig: ["V-220601"]
+  cci:
+    - "CCI-000366"
+query:
+  path: "$.hardening.all_access_ports_port_security"
+  equals: true
+on_fail:
+  message: "STIG V-220601 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220601.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/access_ps.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/access_ps.violating.txt

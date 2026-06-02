@@ -1,0 +1,35 @@
+id: cisco.ios.cis.6.2.2
+title: "`parser command serializer` must be configured"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `parser command serializer` must be configured so config
+  commands are serialised one-at-a-time to NVRAM rather than
+  batched. The trade-off is correctness over speed: a power
+  loss mid-commit leaves the NVRAM image in a known state.
+rationale: |
+  Without the serializer, a power loss during a large
+  configuration push can leave the device with a half-applied
+  config — security policies missing pieces, ACLs partially
+  loaded. The serializer guarantees atomic per-command writes.
+impact: |
+  Power-loss-mid-commit can leave a partially-applied
+  configuration; security policy gaps under unfortunate
+  timing.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 6.2.2"
+  nist: ["CM-3", "SI-7"]
+  cwe: []
+query:
+  path: "$.hardening.parser_command_serializer"
+  equals: true
+on_fail:
+  message: "parser command serializer is not configured."
+  remediation_cli: |
+    configure terminal
+     parser command serializer
+    end
+    write memory
+fixtures:
+  positive: fixtures/parser_ser.compliant.txt
+  negative: fixtures/parser_ser.violating.txt

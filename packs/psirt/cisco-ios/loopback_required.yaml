@@ -1,0 +1,35 @@
+id: cisco.ios.psirt.loopback_required
+title: "Loopback0 interface must exist (stable mgmt source address)"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  A `Loopback0` interface must be configured. Loopback0 is the
+  conventional stable source address for outbound management
+  traffic (syslog, NTP, AAA, BGP source-interface, source-
+  interface for SSH).
+rationale: |
+  Without a loopback, every management protocol leaves from
+  whichever physical interface is closest to the destination —
+  which changes on routing convergence. ACLs on the AAA / syslog
+  servers that key on source IP become unreliable.
+impact: |
+  AAA / syslog server ACLs go stale on routing changes;
+  inconsistent source attribution in remote ACLs.
+references:
+  cis: ""
+  nist: ["AC-3"]
+  cwe: []
+query:
+  path: "$.interfaces[*].name"
+  in: ["Loopback0"]
+on_fail:
+  message: "No Loopback0 interface is configured."
+  remediation_cli: |
+    configure terminal
+     interface Loopback0
+      ip address 10.255.255.1 255.255.255.255
+    end
+    write memory
+fixtures:
+  positive: fixtures/loopback.compliant.txt
+  negative: fixtures/loopback.violating.txt

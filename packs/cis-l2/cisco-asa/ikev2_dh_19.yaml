@@ -1,0 +1,33 @@
+id: cisco.asa.cis-l2.5.1.13
+title: "L2: ASA IKEv2 DH group must be ECDH (≥ 19)"
+severity: high
+vendors: [cisco-asa]
+description: |
+  IKEv2 policy DH group must be ≥ 19 (ECDH-256 or stronger).
+  L1 accepted MODP groups ≥ 14 (2048-bit DH). L2 requires
+  elliptic-curve groups only.
+rationale: |
+  ECDH groups (19=secp256r1, 20=secp384r1, 21=secp521r1)
+  resist Logjam-class precomputation that MODP DH groups
+  remain (theoretically) exposed to. ECDH is also faster.
+impact: |
+  MODP DH groups acceptable in IKEv2 policy; weaker against
+  long-term cryptanalysis.
+references:
+  cis: "CIS Cisco ASA Benchmark — L2 5.1.13"
+  nist: ["SC-13"]
+  cwe: [326]
+query:
+  path: "$.hardening.asa_ikev2_dh_group"
+  in: [19, 20, 21, 24]
+on_fail:
+  message: "ASA IKEv2 DH group is below 19 (not ECDH)."
+  remediation_cli: |
+    configure terminal
+     crypto ikev2 policy 10
+      group 21 20 19
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_dh19.compliant.txt
+  negative: fixtures/l2_dh19.violating.txt

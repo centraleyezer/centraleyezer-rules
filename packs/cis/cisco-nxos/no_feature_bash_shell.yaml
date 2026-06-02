@@ -1,0 +1,35 @@
+id: cisco.nxos.cis.1.6.1
+title: "NX-OS: `feature bash-shell` must be disabled"
+severity: high
+vendors: [cisco-nx-os]
+description: |
+  `feature bash-shell` must NOT be enabled. The Linux bash shell
+  feature on NX-OS exposes a full Linux command line — a
+  privileged escape hatch that is rarely needed in production.
+rationale: |
+  bash-shell access lets an authenticated admin step outside
+  the role-based command authorization model and execute
+  arbitrary Linux commands as root on the underlying NX-OS
+  Linux. This bypasses every RBAC control NX-OS provides and
+  is a documented escalation path for several NX-OS CVEs.
+impact: |
+  RBAC bypass; arbitrary command execution as root by any
+  network-admin role member.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.6.1"
+  nist: ["AC-3", "AC-6", "CM-7"]
+  cwe: [284]
+query:
+  path: "$.features[*]"
+  in: ["bash-shell"]
+  not: true
+on_fail:
+  message: "feature bash-shell is enabled."
+  remediation_cli: |
+    configure terminal
+     no feature bash-shell
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/feature_bash.compliant.txt
+  negative: fixtures/feature_bash.violating.txt

@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant
+logging buffered 131072 informational
+end

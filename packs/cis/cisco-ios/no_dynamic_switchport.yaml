@@ -1,0 +1,35 @@
+id: cisco.ios.cis.7.4.4
+title: "Switchports must not use `switchport mode dynamic`"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  No interface may use `switchport mode dynamic auto` or
+  `switchport mode dynamic desirable`. Every port must be
+  explicitly access or trunk.
+rationale: |
+  DTP (Dynamic Trunking Protocol) negotiation is enabled by
+  default on most Catalyst access ports. An attacker plugging
+  in a switch can negotiate a trunk and gain access to every
+  VLAN carried on the link.
+impact: |
+  VLAN-hopping via DTP negotiation from an unprivileged port.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.4.4"
+  nist: ["SC-7"]
+  cwe: [284]
+query:
+  path: "$.interfaces[*].switchport_dynamic"
+  equals: true
+  not: true
+on_fail:
+  message: "At least one interface is in `switchport mode dynamic`."
+  remediation_cli: |
+    configure terminal
+     interface range GigabitEthernet1/0/1 - 48
+      switchport mode access
+      switchport nonegotiate
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_dynamic.compliant.txt
+  negative: fixtures/no_dynamic.violating.txt

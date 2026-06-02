@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220605
+title: "The Cisco switch must enable IP Cisco Express Forwarding (CEF)."
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  CEF must be on for many control-plane policy / uRPF features STIG depends on elsewhere.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Switch L3 STIG. CAT III finding.
+  See V-220605 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220605 on the device's POA&M.
+references:
+  stig: ["V-220605"]
+  cci:
+    - "CCI-000366"
+query:
+  path: "$.hardening.ip_cef"
+  equals: true
+on_fail:
+  message: "STIG V-220605 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220605.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/ip_cef.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/ip_cef.violating.txt

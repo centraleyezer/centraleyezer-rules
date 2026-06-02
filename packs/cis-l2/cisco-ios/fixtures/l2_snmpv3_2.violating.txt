@@ -1,0 +1,5 @@
+version 15.2
+hostname legacy
+snmp-server group MON v3 priv
+snmp-server user mon MON v3 auth sha auth1 priv aes 256 priv1
+end

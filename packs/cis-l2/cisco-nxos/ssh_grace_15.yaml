@@ -1,0 +1,32 @@
+id: cisco.nxos.cis-l2.3.6.4
+title: "L2: NX-OS `ssh login-grace-time` must be ≤ 15 seconds"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `ssh login-grace-time <N>` must be ≤ 15 (L2-round-1 was
+  ≤ 30, L1 was ≤ 60). Tightens the unauthenticated socket
+  lifetime aggressively.
+rationale: |
+  15s is enough for any legitimate keyboard-interactive
+  prompt to complete. Anything longer is operationally
+  unnecessary and increases the cost-per-attempt for an
+  SSH-flood attacker.
+impact: |
+  Longer per-attempt unauthenticated SSH socket lifetime.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — L2 3.6.4"
+  nist: ["SC-5", "AC-17"]
+  cwe: [400]
+query:
+  path: "$.hardening.nxos_ssh_login_grace_time"
+  in: [5, 10, 15]
+on_fail:
+  message: "ssh login-grace-time is not ≤ 15 seconds."
+  remediation_cli: |
+    configure terminal
+     ssh login-grace-time 15
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/l2_grace15.compliant.txt
+  negative: fixtures/l2_grace15.violating.txt

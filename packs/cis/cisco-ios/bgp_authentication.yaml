@@ -1,0 +1,34 @@
+id: cisco.ios.cis.9.1.2
+title: "BGP neighbors must be authenticated"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+applies_when:
+  features: [bgp]
+description: |
+  When BGP is configured (`router bgp X`), every neighbor must
+  have an authentication password set (`neighbor X password Y`).
+rationale: |
+  Unauthenticated BGP neighbors accept session-establishment
+  attempts from anyone routable to the device. A TCP-reachable
+  attacker can establish an adjacency and inject routes.
+impact: |
+  Estate-wide route injection; selective MITM via attacker-
+  announced more-specific prefixes.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 9.1.2"
+  nist: ["AC-3", "IA-2", "SC-7"]
+  cwe: [346]
+query:
+  path: "$.routing.bgp.authenticated"
+  equals: true
+on_fail:
+  message: "BGP is enabled but at least one neighbor is not authenticated."
+  remediation_cli: |
+    configure terminal
+     router bgp 65001
+      neighbor 192.0.2.1 password <STRONG>
+    end
+    write memory
+fixtures:
+  positive: fixtures/bgp_auth.compliant.txt
+  negative: fixtures/bgp_auth.violating.txt

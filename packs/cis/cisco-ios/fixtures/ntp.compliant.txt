@@ -1,0 +1,8 @@
+version 17.9
+hostname compliant-sw
+!
+ntp authenticate
+ntp server 10.0.0.10 key 1
+ntp server 10.0.0.11 key 1
+!
+end

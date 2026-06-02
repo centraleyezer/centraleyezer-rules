@@ -1,0 +1,32 @@
+id: cisco.ios.cis.2.2.15
+title: "Disable the TFTP server (`no tftp-server`)"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  No `tftp-server` lines may be configured. The IOS TFTP server
+  exposes files (typically IOS images or running-config) to
+  unauthenticated UDP/69 callers.
+rationale: |
+  TFTP has no authentication, no encryption, no access control
+  beyond source IP. Many configs use it as a quick way to
+  expose backups — and forget to remove it.
+impact: |
+  Cleartext disclosure of IOS image / config to anyone
+  L3-reachable on UDP/69.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.15"
+  nist: ["CM-7", "SC-8"]
+  cwe: [319]
+query:
+  path: "$.hardening.tftp_server"
+  equals: false
+on_fail:
+  message: "A tftp-server line is configured."
+  remediation_cli: |
+    configure terminal
+     no tftp-server flash:
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_tftp_srv.compliant.txt
+  negative: fixtures/no_tftp_srv.violating.txt

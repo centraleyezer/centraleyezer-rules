@@ -1,0 +1,5 @@
+version 17.9
+hostname compliant
+errdisable recovery cause bpduguard
+errdisable recovery interval 300
+end

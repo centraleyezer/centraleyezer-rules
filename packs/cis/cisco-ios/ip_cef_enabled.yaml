@@ -1,0 +1,35 @@
+id: cisco.ios.cis.3.3.1
+title: "`ip cef` must be enabled"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip cef` must be configured. Cisco Express Forwarding is the
+  required switching path for uRPF, NetFlow, route maps, and
+  several security features. Without it the device falls back
+  to process-switching and many hardening features silently
+  fail open.
+rationale: |
+  uRPF strict (`ip verify unicast source reachable-via rx`),
+  Flexible NetFlow, and modern route-maps all require CEF.
+  Disabling CEF can be a stealthy bypass — the security
+  config is "present" but inert.
+impact: |
+  Multiple security features (uRPF, NetFlow, route-maps) fail
+  silently when CEF is off.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.3.1"
+  nist: ["SC-7", "SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.ip_cef"
+  equals: true
+on_fail:
+  message: "ip cef is not enabled."
+  remediation_cli: |
+    configure terminal
+     ip cef
+    end
+    write memory
+fixtures:
+  positive: fixtures/ip_cef.compliant.txt
+  negative: fixtures/ip_cef.violating.txt

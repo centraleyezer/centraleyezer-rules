@@ -1,0 +1,34 @@
+id: cisco.nxos.cis.4.2.4
+title: "NX-OS `feature ntp` must be enabled"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `feature ntp` must be enabled — without it, every other NTP
+  hardening rule (authentication, source-interface, clock
+  protocol) is inert because NX-OS silently rejects the
+  related commands.
+rationale: |
+  NX-OS gates NTP behind the `feature ntp` switch. Devices
+  that lose the feature line on a factory reset effectively
+  have no time discipline — log timestamps drift, certificate
+  validation breaks, Kerberos auth fails.
+impact: |
+  No NTP available; clock drifts unbounded; downstream auth
+  and audit features depending on accurate time fail.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 4.2.4"
+  nist: ["AU-8"]
+  cwe: []
+query:
+  path: "$.features[*]"
+  in: ["ntp"]
+on_fail:
+  message: "feature ntp is not enabled."
+  remediation_cli: |
+    configure terminal
+     feature ntp
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/feature_ntp.compliant.txt
+  negative: fixtures/feature_ntp.violating.txt

@@ -1,0 +1,37 @@
+id: cisco.asa.cis.6.2.3
+title: "ASA policy-map global_policy must be configured"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `policy-map global_policy` must be present and applied
+  globally (`service-policy global_policy global` — already
+  covered by 6.2.1). The policy-map binds inspection actions to
+  the inspection_default class.
+rationale: |
+  Without policy-map + service-policy applied, application-layer
+  inspection actions are never executed. The combination is the
+  MPF chain that delivers NGFW functionality.
+impact: |
+  ALG / inspection silently inert; protocol-state tracking
+  unavailable.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.2.3"
+  nist: ["SC-7", "SI-4"]
+  cwe: []
+query:
+  path: "$.hardening.asa_policy_map_global"
+  equals: true
+on_fail:
+  message: "policy-map global_policy is not configured."
+  remediation_cli: |
+    configure terminal
+     policy-map global_policy
+      class inspection_default
+       inspect dns preset_dns_map
+       inspect http
+       inspect ftp
+    end
+    write memory
+fixtures:
+  positive: fixtures/policy_map.compliant.txt
+  negative: fixtures/policy_map.violating.txt

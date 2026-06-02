@@ -1,0 +1,34 @@
+id: cisco.asa.cis.1.3.2
+title: "ASA `aaa proxy-limit` must be set (≤ 5)"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `aaa proxy-limit <N>` must be configured with N ≤ 5 so the
+  number of concurrent cut-through-proxy authentication
+  sessions is bounded. Default is unlimited per user, which
+  enables an authentication-state-table-flood DoS.
+rationale: |
+  Cut-through-proxy authentication state lives in a per-ASA
+  table. Without proxy-limit, a single attacker who can
+  trigger auth-proxy challenges can exhaust the table by
+  spawning many concurrent flows.
+impact: |
+  Auth-proxy state-table exhaustion under flood; legitimate
+  users blocked.
+references:
+  cis: "CIS Cisco ASA Benchmark — 1.3.2"
+  nist: ["SC-5"]
+  cwe: [400]
+query:
+  path: "$.hardening.asa_proxy_limit"
+  in: [1, 2, 3, 4, 5]
+on_fail:
+  message: "aaa proxy-limit is not set ≤ 5."
+  remediation_cli: |
+    configure terminal
+     aaa proxy-limit 3
+    end
+    write memory
+fixtures:
+  positive: fixtures/proxy_limit.compliant.txt
+  negative: fixtures/proxy_limit.violating.txt

@@ -1,0 +1,32 @@
+id: cisco.ios.cis.5.2.2
+title: "Set an MOTD banner"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  An MOTD banner must be configured. The MOTD is displayed at
+  every line before authentication and on every successful login.
+rationale: |
+  Same legal-notice rationale as the login banner; the MOTD
+  ensures the warning is seen by everyone, including legacy
+  protocols that bypass the login banner.
+impact: |
+  Reduced legal recourse + audit-finding exposure.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 5.2.2"
+  nist: ["AC-8"]
+  cwe: []
+query:
+  path: "$.banners.motd"
+  matches: "."
+on_fail:
+  message: "No MOTD banner is configured."
+  remediation_cli: |
+    configure terminal
+     banner motd ^C
+     UNAUTHORIZED ACCESS PROHIBITED.
+     ^C
+    end
+    write memory
+fixtures:
+  positive: fixtures/motd.compliant.txt
+  negative: fixtures/motd.violating.txt

@@ -1,0 +1,7 @@
+version 17.9
+hostname compliant-sw
+!
+no ip http server
+ip http secure-server
+!
+end

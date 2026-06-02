@@ -1,0 +1,30 @@
+id: cisco.ios.cis-l2.8.3.1
+title: "MLS QoS enabled to bound broadcast/control-plane saturation"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  MLS QoS classifies and rate-limits queues so a broadcast storm or scan burst cannot starve legitimate flows.
+rationale: |
+  CIS L2 treats QoS-based DoS protection as a hardening requirement for switch infrastructure.
+impact: |
+  Loss of one defence-in-depth layer for the LAN switching plane; combines
+  with other gaps to amplify lateral-movement risk.
+references:
+  cis: "CIS Cisco IOS Switch L2 Hardening — 8.3.1"
+  nist:
+    - "SC-5"
+    - "SC-6"
+query:
+  path: "$.hardening.mls_qos_enabled"
+  equals: true
+on_fail:
+  message: "MLS QoS enabled to bound broadcast/control-plane saturation: switch missing the L2 hardening control."
+  remediation_cli: |
+    configure terminal
+     ! See CIS Cisco IOS L2 Benchmark for the canonical CLI; the
+     ! corresponding STIG L2S rule lists the exact knob.
+    end
+    write memory
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/mls_qos.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/mls_qos.violating.txt

@@ -1,0 +1,34 @@
+id: cisco.ios.psirt.ssh_mac_sha2
+title: "SSH MAC algorithms must include hmac-sha2 (no sha1-only)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ip ssh server algorithm mac` must include at least one
+  `hmac-sha2-256` or `hmac-sha2-512` entry. Devices configured
+  with only `hmac-sha1` / `hmac-md5` MAC algorithms cannot
+  negotiate the modern Cisco/PuTTY/OpenSSH defaults.
+rationale: |
+  SHA-1-based MAC algorithms are no longer the OpenSSH default
+  as of OpenSSH 9.x. Devices that only advertise sha1 / md5
+  fail to negotiate with modern clients and indicate an
+  out-of-date crypto baseline.
+impact: |
+  Modern SSH clients refuse to connect; legacy SHA-1 MAC
+  surface remains exposed where they do.
+references:
+  cis: ""
+  nist: ["SC-13"]
+  cwe: [327]
+query:
+  path: "$.crypto.ssh_macs[*]"
+  in: ["hmac-sha2-256", "hmac-sha2-512", "hmac-sha2-256-etm@openssh.com", "hmac-sha2-512-etm@openssh.com"]
+on_fail:
+  message: "SSH MAC algorithms do not include hmac-sha2."
+  remediation_cli: |
+    configure terminal
+     ip ssh server algorithm mac hmac-sha2-512 hmac-sha2-256
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssh_mac_sha2.compliant.txt
+  negative: fixtures/ssh_mac_sha2.violating.txt

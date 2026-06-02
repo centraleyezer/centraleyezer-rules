@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant
+ip ssh server algorithm kex ecdh-sha2-nistp256 diffie-hellman-group14-sha1
+end

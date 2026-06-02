@@ -1,0 +1,27 @@
+id: cisco.nxos.stig.v-220309
+title: "The NX-OS switch must limit SSH login attempts to 3 or fewer per session."
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  Restricting per-session attempts blunts password-guessing brute force.
+rationale: |
+  Sourced from the DISA Cisco NX-OS Switch NDM STIG. CAT II finding.
+  See V-220309 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220309 on the device's POA&M.
+references:
+  stig: ["V-220309"]
+  cci:
+    - "CCI-000044"
+query:
+  path: "$.hardening.nxos_ssh_login_attempts"
+  in: [1, 2, 3]
+on_fail:
+  message: "Cisco NX-OS STIG V-220309 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220309.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-nxos/fixtures/ssh_attempts.compliant.txt
+  negative: ../../cis/cisco-nxos/fixtures/ssh_attempts.violating.txt

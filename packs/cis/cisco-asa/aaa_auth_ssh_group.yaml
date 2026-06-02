@@ -1,0 +1,35 @@
+id: cisco.asa.cis.1.4.2
+title: "ASA `aaa authentication ssh console` must use an AAA group (not LOCAL-only)"
+severity: high
+vendors: [cisco-asa]
+description: |
+  `aaa authentication ssh console <GROUP>` must point at a
+  TACACS+/RADIUS group — not the literal `LOCAL` keyword.
+  Local-only SSH authentication defeats every per-user
+  audit, identity, and central-revocation control.
+rationale: |
+  When SSH falls back to LOCAL authentication, every operator
+  shares whatever local credential the device has. There's no
+  per-user accountability and no central way to revoke access
+  when an operator leaves. AAA-group authentication binds
+  every SSH session to per-user identity.
+impact: |
+  Shared local credential for SSH; no per-operator audit; no
+  central revocation when operators leave.
+references:
+  cis: "CIS Cisco ASA Benchmark — 1.4.2"
+  nist: ["IA-2", "AC-2", "AU-2"]
+  cwe: [798]
+query:
+  path: "$.hardening.asa_auth_ssh_group"
+  equals: true
+on_fail:
+  message: "aaa authentication ssh console uses LOCAL (or is unset)."
+  remediation_cli: |
+    configure terminal
+     aaa authentication ssh console NETZER-TACACS LOCAL
+    end
+    write memory
+fixtures:
+  positive: fixtures/auth_ssh_group.compliant.txt
+  negative: fixtures/auth_ssh_group.violating.txt

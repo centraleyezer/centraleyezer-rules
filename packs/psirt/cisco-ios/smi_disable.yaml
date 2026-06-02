@@ -1,0 +1,33 @@
+id: cisco.ios.psirt.smi.disable
+title: "Disable Cisco Smart Install (cisco-sa-20180328-smi)"
+severity: critical
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Cisco Smart Install (SMI) must be disabled. The SMI client/server
+  accepts unauthenticated TFTP-driven configuration on TCP/4786.
+rationale: |
+  Cisco PSIRT advisory cisco-sa-20180328-smi documented widespread
+  exploitation of the SMI service in 2018 and again in 2022. The
+  feature has no defensible use outside zero-touch provisioning
+  windows; production devices must keep `no vstack` in effect.
+impact: |
+  Unauthenticated remote configuration push and credential reset
+  (TCP/4786 is reachable on tens of thousands of Internet-exposed
+  Cisco devices per Shodan).
+references:
+  cis: ""
+  nist: ["CM-7", "SC-7"]
+  cwe: [284, 306]
+query:
+  path: "$.hardening.smart_install"
+  equals: false
+on_fail:
+  message: "Cisco Smart Install (`vstack`) is enabled."
+  remediation_cli: |
+    configure terminal
+     no vstack
+    end
+    write memory
+fixtures:
+  positive: fixtures/smi.compliant.txt
+  negative: fixtures/smi.violating.txt

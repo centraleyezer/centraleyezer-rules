@@ -1,0 +1,5 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-clean
+snmp-server group NETZER-GRP v3 priv
+snmp-server user nsuser NETZER-GRP v3 auth sha authkey priv aes 256 privkey

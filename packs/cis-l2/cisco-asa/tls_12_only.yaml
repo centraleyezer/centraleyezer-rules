@@ -1,0 +1,32 @@
+id: cisco.asa.cis-l2.2.2.4
+title: "L2: ASA `ssl server-version` must be `tlsv1.2-only` (or 1.3)"
+severity: high
+vendors: [cisco-asa]
+description: |
+  `ssl server-version` must be set to `tlsv1.2-only` (or
+  `tlsv1.3` once available). L1 accepted plain `tlsv1.2` which
+  still negotiated 1.0/1.1 under some client paths.
+rationale: |
+  PCI-DSS 4.0 explicitly retires TLS 1.0/1.1; many auditors
+  flag a `tlsv1.2` (non-only) setting as ambiguous. The
+  `-only` variant locks the listener.
+impact: |
+  TLS 1.0/1.1 still negotiable in some client paths despite
+  L1's `tlsv1.2` setting.
+references:
+  cis: "CIS Cisco ASA Benchmark — L2 2.2.4"
+  nist: ["SC-13", "SC-23"]
+  cwe: [326]
+query:
+  path: "$.crypto.tls_min_version"
+  in: ["tlsv1.2-only", "tlsv1.3"]
+on_fail:
+  message: "ASA ssl server-version is not `tlsv1.2-only` / `tlsv1.3`."
+  remediation_cli: |
+    configure terminal
+     ssl server-version tlsv1.2-only
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_tls_only.compliant.txt
+  negative: fixtures/l2_tls_only.violating.txt

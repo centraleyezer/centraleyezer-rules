@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220637
+title: "The Cisco switch must enable IGMP snooping on user VLANs."
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  IGMP snooping confines multicast traffic to subscribed ports; disabling it floods every multicast group to every port in the VLAN.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Switch L2S STIG. CAT III finding.
+  See V-220637 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220637 on the device's POA&M.
+references:
+  stig: ["V-220637"]
+  cci:
+    - "CCI-000366"
+query:
+  path: "$.hardening.igmp_snooping_enabled"
+  equals: true
+on_fail:
+  message: "Cisco IOS L2S STIG V-220637 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220637.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/igmp_snoop.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/igmp_snoop.violating.txt

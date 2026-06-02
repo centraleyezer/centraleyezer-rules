@@ -1,0 +1,10 @@
+!
+! IGMP snooping globally disabled — STIG L2S V-220637 violation.
+!
+hostname sw-l2-igmp-violating
+!
+no ip igmp snooping
+!
+spanning-tree mode rapid-pvst
+!
+end

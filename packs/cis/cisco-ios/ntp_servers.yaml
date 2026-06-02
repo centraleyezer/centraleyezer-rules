@@ -1,0 +1,32 @@
+id: cisco.ios.cis.4.1.1
+title: "Configure at least one NTP server"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe, cisco-nx-os, cisco-asa]
+description: |
+  Accurate time is required for log correlation, certificate validation,
+  Kerberos, TACACS+, and forensic timelines.
+rationale: |
+  Without trusted time, logs cannot be correlated across devices and
+  certificate-based authentication degrades to "always valid".
+impact: |
+  Incident response timelines become unreliable; auth tokens that rely
+  on time-based validation behave unpredictably.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 4.1.1"
+  nist: ["AU-8"]
+  cwe: [613]
+query:
+  path: "$.ntp.servers[0]"
+  exists: true
+on_fail:
+  message: "No NTP server is configured."
+  remediation_cli: |
+    configure terminal
+     ntp server 10.0.0.10
+     ntp server 10.0.0.11
+     ntp authenticate
+    end
+    write memory
+fixtures:
+  positive: fixtures/ntp.compliant.txt
+  negative: fixtures/ntp.violating.txt

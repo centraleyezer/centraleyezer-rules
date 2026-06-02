@@ -1,0 +1,5 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-clean
+class-map inspection_default
+ match default-inspection-traffic

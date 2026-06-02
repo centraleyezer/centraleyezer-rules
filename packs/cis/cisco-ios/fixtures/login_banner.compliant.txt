@@ -1,0 +1,9 @@
+version 17.9
+hostname compliant-sw
+!
+banner login ^
+UNAUTHORIZED ACCESS PROHIBITED.
+This system is monitored. Disconnect immediately if not authorized.
+^
+!
+end

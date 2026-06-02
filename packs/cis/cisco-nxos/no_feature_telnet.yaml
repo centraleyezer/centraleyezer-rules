@@ -1,0 +1,32 @@
+id: cisco.nxos.cis.2.1.1
+title: "Do not enable the `feature telnet` toggle on NX-OS"
+severity: critical
+vendors: [cisco-nx-os]
+description: |
+  On NX-OS, telnet management is gated by an explicit feature toggle.
+  `feature telnet` must never be enabled — the SSH feature is always
+  available and is the only acceptable remote-management protocol.
+rationale: |
+  Telnet transmits credentials and session data in cleartext.
+  NX-OS leaves it disabled by default; an operator must have flipped
+  the toggle on for it to be available.
+impact: |
+  Full administrative compromise from any cleartext-observable
+  vantage point on the management network.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 2.1.1"
+  nist: ["AC-17", "IA-2", "SC-8"]
+  cwe: [319]
+query:
+  path: "$.services.telnet"
+  equals: false
+on_fail:
+  message: "`feature telnet` is enabled on this NX-OS device."
+  remediation_cli: |
+    configure terminal
+     no feature telnet
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/no_feature_telnet.compliant.txt
+  negative: fixtures/no_feature_telnet.violating.txt

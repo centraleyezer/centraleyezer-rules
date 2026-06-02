@@ -1,0 +1,34 @@
+id: cisco.nxos.cis.3.4.1
+title: "NX-OS IP source routing must be disabled"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `no ip source-route` (or `no ip routing source-route`) must
+  be configured so the device drops packets carrying loose /
+  strict source-route IP options. Source routing is a
+  classical reconnaissance and policy-bypass primitive.
+rationale: |
+  Source-routed packets let an attacker force traffic through
+  specific paths — including bypassing perimeter ACLs by
+  returning via an unexpected interface. RFC 5095 deprecates
+  it; every modern hardening guide turns it off.
+impact: |
+  Source-routed packets honoured; perimeter ACLs bypassable
+  via crafted source-route options.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 3.4.1"
+  nist: ["SC-7"]
+  cwe: [284]
+query:
+  path: "$.hardening.nxos_ip_source_route_off"
+  equals: true
+on_fail:
+  message: "IP source-route is not explicitly disabled."
+  remediation_cli: |
+    configure terminal
+     no ip source-route
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/no_src_route.compliant.txt
+  negative: fixtures/no_src_route.violating.txt

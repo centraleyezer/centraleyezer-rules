@@ -1,0 +1,37 @@
+id: cisco.asa.cis.6.8.1
+title: "ASA `auth-prompt prompt` must be configured"
+severity: low
+vendors: [cisco-asa]
+description: |
+  `auth-prompt prompt ...` (and ideally `accept` + `reject`)
+  must be configured so cut-through-proxy authentication
+  displays a known, operator-defined prompt — not the default
+  ASA prompt.
+rationale: |
+  A custom prompt confirms to the user that they're
+  authenticating against the operator's firewall, not a
+  spoofed captive portal. The default prompt is identical
+  across every ASA in the world and gives a phishing-style
+  attacker no obstacle.
+impact: |
+  Cut-through-proxy auth shows the default ASA prompt;
+  trivially impersonable by a hostile WiFi captive-portal.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.8.1"
+  nist: ["AC-8", "IA-6"]
+  cwe: []
+query:
+  path: "$.hardening.asa_auth_prompt"
+  equals: true
+on_fail:
+  message: "auth-prompt is not configured."
+  remediation_cli: |
+    configure terminal
+     auth-prompt prompt Please authenticate to NETZER
+     auth-prompt accept Authentication succeeded
+     auth-prompt reject Authentication failed
+    end
+    write memory
+fixtures:
+  positive: fixtures/auth_prompt.compliant.txt
+  negative: fixtures/auth_prompt.violating.txt

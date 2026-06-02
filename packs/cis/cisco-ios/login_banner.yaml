@@ -1,0 +1,33 @@
+id: cisco.ios.cis.5.2.1
+title: "Set a login banner"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe, cisco-nx-os, cisco-asa]
+description: |
+  A login banner must be configured to inform users that access is
+  restricted and monitored. Required by most regulatory regimes.
+rationale: |
+  Banners establish the legal basis for prosecuting unauthorized
+  access. Their absence has caused cases to be thrown out.
+impact: |
+  Inability to pursue legal recourse against unauthorized access;
+  audit findings against PCI / SOX / HIPAA / FedRAMP.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 5.2.1"
+  nist: ["AC-8"]
+  cwe: []
+query:
+  path: "$.banners.login"
+  matches: "."
+on_fail:
+  message: "No login banner is configured."
+  remediation_cli: |
+    configure terminal
+     banner login ^C
+     UNAUTHORIZED ACCESS PROHIBITED.
+     This system is monitored. Disconnect immediately if not authorized.
+     ^C
+    end
+    write memory
+fixtures:
+  positive: fixtures/login_banner.compliant.txt
+  negative: fixtures/login_banner.violating.txt

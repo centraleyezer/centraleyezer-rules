@@ -1,0 +1,29 @@
+id: cisco.nxos.cis-l2.1.5.9
+title: "L2: NX-OS `tacacs-server retransmit` must be ≤ 3"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `tacacs-server retransmit <N>` must be ≤ 3 (L1 was ≤ 5).
+  Sibling to the RADIUS retransmit L2 rule.
+rationale: |
+  Same logic: tighter cap on the worst-case login stall
+  during TACACS+ outage.
+impact: |
+  Longer per-login-attempt stall during TACACS+ outage.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — L2 1.5.9"
+  nist: ["AC-2", "CP-2"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_tacacs_retransmit"
+  in: [1, 2, 3]
+on_fail:
+  message: "tacacs-server retransmit is not set ≤ 3."
+  remediation_cli: |
+    configure terminal
+     tacacs-server retransmit 3
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/l2_tacacs_rt.compliant.txt
+  negative: fixtures/l2_tacacs_rt.violating.txt

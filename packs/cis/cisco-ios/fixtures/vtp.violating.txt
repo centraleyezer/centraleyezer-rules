@@ -1,0 +1,4 @@
+version 15.2
+hostname legacy
+! IOS default VTP mode is server — no password — VTP-bomb exposure.
+end

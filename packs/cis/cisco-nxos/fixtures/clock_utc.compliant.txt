@@ -1,0 +1,4 @@
+!Command: show running-config
+version 9.3(8)
+switchname nxos-clean
+clock timezone UTC 0 0

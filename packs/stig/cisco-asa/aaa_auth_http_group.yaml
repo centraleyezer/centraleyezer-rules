@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220415
+title: "The Cisco ASA must authenticate HTTP/ASDM management via an AAA group."
+severity: high
+vendors: [cisco-asa]
+description: |
+  ASDM authentication must hit the centralised AAA server, not the local user database.
+rationale: |
+  Sourced from the DISA Cisco ASA NDM STIG. CAT I finding.
+  See V-220415 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-220415 on the device's POA&M.
+references:
+  stig: ["V-220415"]
+  cci:
+    - "CCI-000213"
+query:
+  path: "$.hardening.asa_auth_http_group"
+  equals: true
+on_fail:
+  message: "Cisco ASA STIG V-220415 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220415.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/auth_http.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/auth_http.violating.txt

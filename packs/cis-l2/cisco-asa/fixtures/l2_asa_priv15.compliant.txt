@@ -1,0 +1,5 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-clean
+username a password $sha512$a pbkdf2 privilege 15
+username b password $sha512$b pbkdf2 privilege 15

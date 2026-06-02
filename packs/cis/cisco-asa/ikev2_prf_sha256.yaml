@@ -1,0 +1,33 @@
+id: cisco.asa.cis.5.1.7
+title: "ASA IKEv2 PRF must be SHA-256 or stronger"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  IKEv2 policy `prf` (pseudo-random function) must be SHA-256
+  or stronger. PRF is the keying-material function used in the
+  IKEv2 SKEYSEED derivation.
+rationale: |
+  Weak PRF (sha1, md5) lets an attacker who has captured the
+  IKE exchange reconstruct session keys faster. SHA-256 is
+  the contemporary baseline for IKE PRF.
+impact: |
+  Weaker session-key derivation; faster passive-capture
+  cryptanalysis under quantum-adjacent attack models.
+references:
+  cis: "CIS Cisco ASA Benchmark — 5.1.7"
+  nist: ["SC-13"]
+  cwe: [327]
+query:
+  path: "$.hardening.asa_ikev2_prf"
+  in: ["sha256", "sha384", "sha512"]
+on_fail:
+  message: "ASA IKEv2 PRF is not SHA-256+."
+  remediation_cli: |
+    configure terminal
+     crypto ikev2 policy 10
+      prf sha256
+    end
+    write memory
+fixtures:
+  positive: fixtures/ikev2_prf.compliant.txt
+  negative: fixtures/ikev2_prf.violating.txt

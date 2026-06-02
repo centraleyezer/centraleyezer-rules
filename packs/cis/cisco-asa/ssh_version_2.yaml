@@ -1,0 +1,30 @@
+id: cisco.asa.cis.2.1.2
+title: "Set SSH version to 2 on ASA"
+severity: high
+vendors: [cisco-asa]
+description: |
+  The ASA SSH listener must be pinned to SSH version 2. SSHv1 has
+  documented protocol-level weaknesses and is deprecated.
+rationale: |
+  SSHv1 allows insertion attacks and weak integrity verification.
+  Without `ssh version 2`, the listener accepts v1.99 (both protocols).
+impact: |
+  An on-path attacker can downgrade clients to v1 and manipulate
+  the session.
+references:
+  cis: "CIS Cisco ASA Benchmark — 2.1.2"
+  nist: ["AC-17", "SC-8", "SC-23"]
+  cwe: [327]
+query:
+  path: "$.services.ssh_version"
+  equals: 2
+on_fail:
+  message: "ASA SSH version is not pinned to 2."
+  remediation_cli: |
+    configure terminal
+     ssh version 2
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssh_v2.compliant.txt
+  negative: fixtures/ssh_v2.violating.txt

@@ -1,0 +1,33 @@
+id: cisco.nxos.cis.1.1.8
+title: "NX-OS local priv-15 user accounts must be ≤ 5"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  The number of local user accounts with privilege 15 (or
+  the equivalent `network-admin` role) must be ≤ 5. NX-OS
+  sibling of the ASA priv-15 cap.
+rationale: |
+  Each local privileged account is a long-term shared secret
+  in every backup. Bounding the count enforces the discipline
+  that AAA is the authentication path; local accounts are
+  break-glass only.
+impact: |
+  Many local privileged accounts; harder to audit who has
+  emergency access; larger blast radius from a config leak.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.1.8"
+  nist: ["AC-2", "AC-6"]
+  cwe: [284]
+query:
+  path: "$.hardening.nxos_priv15_count"
+  in: [0, 1, 2, 3, 4, 5]
+on_fail:
+  message: "More than 5 local privilege-15 / network-admin users are defined."
+  remediation_cli: |
+    configure terminal
+     no username <EXTRA-ADMIN>
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/nxos_priv15.compliant.txt
+  negative: fixtures/nxos_priv15.violating.txt

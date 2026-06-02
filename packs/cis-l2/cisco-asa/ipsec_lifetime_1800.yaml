@@ -1,0 +1,32 @@
+id: cisco.asa.cis-l2.5.1.12
+title: "L2: ASA IPsec SA lifetime must be ≤ 1800 seconds (30 min)"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `crypto ipsec security-association lifetime seconds <N>`
+  must be ≤ 1800 (L1 was ≤ 3600). Halves the per-SA key
+  exposure window.
+rationale: |
+  Shorter SA rekey interval limits the data encrypted with
+  any one key. Modern hardware can rekey in milliseconds so
+  there's no operational cost.
+impact: |
+  Larger volume of data encrypted with each IPsec SA key;
+  greater blast radius if a key is recovered.
+references:
+  cis: "CIS Cisco ASA Benchmark — L2 5.1.12"
+  nist: ["SC-13"]
+  cwe: []
+query:
+  path: "$.hardening.asa_ipsec_lifetime"
+  in: [60, 120, 300, 600, 900, 1200, 1800]
+on_fail:
+  message: "crypto ipsec SA lifetime is not ≤ 1800 seconds."
+  remediation_cli: |
+    configure terminal
+     crypto ipsec security-association lifetime seconds 1800
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_ipsec_life.compliant.txt
+  negative: fixtures/l2_ipsec_life.violating.txt

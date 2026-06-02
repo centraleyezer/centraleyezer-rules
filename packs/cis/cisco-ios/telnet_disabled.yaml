@@ -1,0 +1,32 @@
+id: cisco.ios.cis.2.1.1
+title: "Disable Telnet on VTY lines"
+severity: critical
+vendors: [cisco-ios, cisco-ios-xe, cisco-nx-os, cisco-asa]
+description: |
+  Telnet transmits credentials and session data in cleartext. The VTY
+  lines must accept SSH only.
+rationale: |
+  Any attacker with on-path access (network tap, ARP poison, rogue
+  switch port) captures usernames, passwords, and the entire
+  administrative session.
+impact: |
+  Full administrative compromise from any cleartext-observable
+  vantage point on the management network.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.1.1"
+  nist: ["AC-17", "IA-2", "SC-8"]
+  cwe: [319]
+query:
+  path: "$.services.telnet"
+  equals: false
+on_fail:
+  message: "Telnet is permitted on at least one VTY line."
+  remediation_cli: |
+    configure terminal
+     line vty 0 15
+      transport input ssh
+    end
+    write memory
+fixtures:
+  positive: fixtures/telnet_disabled.compliant.txt
+  negative: fixtures/telnet_disabled.violating.txt

@@ -1,0 +1,5 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-clean
+ntp authenticate
+ntp server 10.0.0.10 key 1

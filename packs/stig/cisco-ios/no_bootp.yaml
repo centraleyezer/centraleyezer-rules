@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-215823.no_bootp
+title: "The Cisco router must disable the bootp service."
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  ip bootp server is legacy DHCP precursor functionality with no STIG-permitted use case on modern devices.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router NDM STIG. CAT III finding.
+  See V-215823 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-215823 on the device's POA&M.
+references:
+  stig: ["V-215823"]
+  cci:
+    - "CCI-000382"
+query:
+  path: "$.services.bootp"
+  equals: false
+on_fail:
+  message: "Cisco IOS STIG V-215823 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-215823.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/no_bootp.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/no_bootp.violating.txt

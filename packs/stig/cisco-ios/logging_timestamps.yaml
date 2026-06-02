@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-215817
+title: "The Cisco router must include timestamps on every logged audit record."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Service-timestamps log datetime ensures every record has a precise UTC timestamp for correlation.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router NDM STIG. CAT II finding.
+  See V-215817 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-215817 on the device's POA&M.
+references:
+  stig: ["V-215817"]
+  cci:
+    - "CCI-000131"
+query:
+  path: "$.hardening.timestamps_log"
+  equals: true
+on_fail:
+  message: "Cisco IOS STIG V-215817 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-215817.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/timestamps_log.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/timestamps_log.violating.txt

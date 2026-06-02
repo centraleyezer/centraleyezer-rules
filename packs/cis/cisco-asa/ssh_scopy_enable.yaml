@@ -1,0 +1,32 @@
+id: cisco.asa.cis.2.1.7
+title: "ASA must enable `ssh scopy enable` for secure file copy"
+severity: low
+vendors: [cisco-asa]
+description: |
+  `ssh scopy enable` must be configured. SCP (SSH-tunneled file
+  copy) is the secure alternative to TFTP for ASA image / config
+  transfer.
+rationale: |
+  TFTP transfers config + images cleartext with no auth. SCP
+  reuses the existing SSH session for transport so credentials,
+  encryption, and integrity are already enforced.
+impact: |
+  Operational reliance on TFTP for ASA file transfer;
+  ASDM / ASA-image disclosure in transit.
+references:
+  cis: "CIS Cisco ASA Benchmark — 2.1.7"
+  nist: ["AC-17", "SC-8"]
+  cwe: [319]
+query:
+  path: "$.hardening.asa_ssh_scopy"
+  equals: true
+on_fail:
+  message: "ssh scopy enable is not configured."
+  remediation_cli: |
+    configure terminal
+     ssh scopy enable
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssh_scopy.compliant.txt
+  negative: fixtures/ssh_scopy.violating.txt

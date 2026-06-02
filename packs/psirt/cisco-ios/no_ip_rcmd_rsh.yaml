@@ -1,0 +1,32 @@
+id: cisco.ios.psirt.no_ip_rcmd_rsh
+title: "Disable the rsh server (`no ip rcmd rsh-enable`)"
+severity: critical
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no ip rcmd rsh-enable` must be in effect. The rsh server has
+  no authentication beyond source IP and is universally agreed
+  to be obsolete.
+rationale: |
+  rsh trust is based on `~/.rhosts` / `hosts.equiv` — neither
+  of which scales beyond a lab environment. The Cisco hardening
+  guide flags r-commands as "never enable on a production device".
+impact: |
+  Unauthenticated remote command execution to anyone who can
+  spoof the trusted source address.
+references:
+  cis: ""
+  nist: ["AC-3", "AC-17"]
+  cwe: [287, 306]
+query:
+  path: "$.hardening.ip_rcmd_rsh_enable"
+  equals: false
+on_fail:
+  message: "ip rcmd rsh-enable is configured."
+  remediation_cli: |
+    configure terminal
+     no ip rcmd rsh-enable
+    end
+    write memory
+fixtures:
+  positive: fixtures/rsh.compliant.txt
+  negative: fixtures/rsh.violating.txt

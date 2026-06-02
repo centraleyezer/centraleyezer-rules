@@ -1,0 +1,5 @@
+: Saved
+ASA Version 9.16(3)
+hostname asa-clean
+passwd encryption pbkdf2
+enable password some-hash pbkdf2

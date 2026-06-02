@@ -1,0 +1,31 @@
+id: cisco.ios.cis.2.1.2
+title: "Use SSH version 2"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe, cisco-asa]
+description: |
+  SSHv1 has known cryptographic weaknesses and has been deprecated for
+  over a decade. The device must use SSHv2 exclusively.
+rationale: |
+  SSHv1 protocol-level flaws (e.g. insertion attacks, weak integrity
+  checking) allow on-path attackers to manipulate sessions even when
+  the password is not recovered.
+impact: |
+  Authenticated session integrity is not guaranteed; downgraded clients
+  may be tricked into using v1 if v1 is permitted.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.1.2"
+  nist: ["AC-17", "SC-8", "SC-23"]
+  cwe: [327]
+query:
+  path: "$.services.ssh_version"
+  equals: 2
+on_fail:
+  message: "SSH version is not pinned to 2."
+  remediation_cli: |
+    configure terminal
+     ip ssh version 2
+    end
+    write memory
+fixtures:
+  positive: fixtures/ssh_v2.compliant.txt
+  negative: fixtures/ssh_v2.violating.txt

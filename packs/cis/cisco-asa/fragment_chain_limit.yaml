@@ -1,0 +1,32 @@
+id: cisco.asa.cis.6.3.2
+title: "Set ASA fragment chain limit"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `fragment chain N <interface>` must be configured (recommended
+  N ≤ 24). The ASA reassembles fragmented IP datagrams; without
+  a chain limit, fragmentation-based DoS is possible.
+rationale: |
+  Unbounded fragment chains let attackers consume reassembly
+  memory by sending many incomplete fragment chains. Many
+  historical CVEs exploit this.
+impact: |
+  Reassembly-buffer exhaustion DoS; control-plane CPU spike on
+  fragmentation attacks.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.3.2"
+  nist: ["SC-5"]
+  cwe: [400]
+query:
+  path: "$.hardening.asa_fragment_chain_limit"
+  in: [1, 2, 4, 8, 16, 24]
+on_fail:
+  message: "ASA fragment chain limit is not configured."
+  remediation_cli: |
+    configure terminal
+     fragment chain 24
+    end
+    write memory
+fixtures:
+  positive: fixtures/fragment.compliant.txt
+  negative: fixtures/fragment.violating.txt

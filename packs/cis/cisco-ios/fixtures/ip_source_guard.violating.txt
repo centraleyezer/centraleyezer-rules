@@ -1,0 +1,16 @@
+!
+! No `ip verify source` on access ports — IP Source Guard not in effect.
+! Parser leaves hardening.ip_source_guard=false.
+!
+hostname sw-l2-violating
+!
+ip dhcp snooping
+ip dhcp snooping vlan 10,20,30
+!
+interface GigabitEthernet1/0/1
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+end

@@ -1,0 +1,27 @@
+id: cisco.nxos.stig.v-220306
+title: "The NX-OS switch must authenticate NTP messages."
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  Authenticated NTP prevents an on-path attacker from skewing the device clock and forging audit timestamps.
+rationale: |
+  Sourced from the DISA Cisco NX-OS Switch NDM STIG. CAT II finding.
+  See V-220306 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220306 on the device's POA&M.
+references:
+  stig: ["V-220306"]
+  cci:
+    - "CCI-001891"
+query:
+  path: "$.ntp.authenticated"
+  equals: true
+on_fail:
+  message: "Cisco NX-OS STIG V-220306 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220306.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-nxos/fixtures/ntp_auth.compliant.txt
+  negative: ../../cis/cisco-nxos/fixtures/ntp_auth.violating.txt

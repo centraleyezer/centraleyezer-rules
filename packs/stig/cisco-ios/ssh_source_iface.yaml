@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220158
+title: "The Cisco router must source outbound SSH from the dedicated management interface."
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Binding SSH source to a known management interface keeps audit/firewall ACL design coherent across the fleet.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Router NDM STIG. CAT III finding.
+  See V-220158 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220158 on the device's POA&M.
+references:
+  stig: ["V-220158"]
+  cci:
+    - "CCI-000366"
+query:
+  path: "$.hardening.ip_ssh_source_interface"
+  exists: true
+on_fail:
+  message: "Cisco IOS STIG V-220158 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220158.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/ssh_src_iface.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/ssh_src_iface.violating.txt

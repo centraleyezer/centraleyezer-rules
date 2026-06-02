@@ -1,0 +1,30 @@
+id: cisco.ios.cis.2.2.2
+title: "Disable the finger service"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  The finger service must be disabled. It returns the list of
+  currently logged-in users to any unauthenticated remote caller.
+rationale: |
+  Reconnaissance: identifies live admin usernames for follow-on
+  password attacks.
+impact: |
+  Enumeration of administrative accounts.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.2"
+  nist: ["AC-3", "CM-7"]
+  cwe: [200]
+query:
+  path: "$.services.finger"
+  equals: false
+on_fail:
+  message: "finger service is enabled."
+  remediation_cli: |
+    configure terminal
+     no service finger
+     no ip finger
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_finger.compliant.txt
+  negative: fixtures/no_finger.violating.txt

@@ -1,0 +1,33 @@
+id: cisco.nxos.cis.6.1.1
+title: "NX-OS must have an explicit boot system image"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `boot nxos bootflash:<image>` must be configured so the
+  device always boots a deterministic, operator-vetted image
+  rather than whichever image happens to be first in flash.
+rationale: |
+  Without an explicit boot statement, NX-OS picks the first
+  bootable image in flash — which can change if someone copies
+  a new image without updating the boot pointer. Operators
+  should always know exactly which image will load on next reboot.
+impact: |
+  Surprise image change on reboot; no audit trail of intended
+  boot image.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 6.1.1"
+  nist: ["CM-2", "CM-3"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_boot_system"
+  equals: true
+on_fail:
+  message: "NX-OS boot system image is not explicitly configured."
+  remediation_cli: |
+    configure terminal
+     boot nxos bootflash:nxos.9.3.8.bin
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/boot_nxos.compliant.txt
+  negative: fixtures/boot_nxos.violating.txt

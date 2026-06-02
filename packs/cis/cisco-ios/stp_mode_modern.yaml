@@ -1,0 +1,32 @@
+id: cisco.ios.cis.7.2.1
+title: "Spanning-tree mode must be rapid-pvst or mst"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  STP must run in `rapid-pvst` (Rapid PVST+) or `mst` (Multiple
+  Spanning Tree) mode. Vanilla PVST has convergence times measured
+  in tens of seconds.
+rationale: |
+  PVST takes ~30 seconds for the listen → learning → forwarding
+  transition. During that window the port is L2-isolated; spurious
+  topology changes cause cascading reachability outages.
+impact: |
+  Multi-tens-of-seconds outages on topology changes; potential
+  for STP-blocked DoS by a low-cost-bridge advertisement.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 7.2.1"
+  nist: ["CM-7", "SC-5"]
+  cwe: []
+query:
+  path: "$.stp.mode"
+  in: ["rapid-pvst", "mst"]
+on_fail:
+  message: "Spanning-tree mode is not rapid-pvst or mst."
+  remediation_cli: |
+    configure terminal
+     spanning-tree mode rapid-pvst
+    end
+    write memory
+fixtures:
+  positive: fixtures/stp_mode.compliant.txt
+  negative: fixtures/stp_mode.violating.txt

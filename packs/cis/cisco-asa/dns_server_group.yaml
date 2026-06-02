@@ -1,0 +1,36 @@
+id: cisco.asa.cis.6.5.1
+title: "ASA `dns server-group` must be defined"
+severity: low
+vendors: [cisco-asa]
+description: |
+  At least one `dns server-group <NAME>` stanza must be
+  defined so the ASA can resolve hostnames for outbound TLS
+  validation, NTP servers by name, and AnyConnect URL-based
+  certificate checks.
+rationale: |
+  Without a DNS server-group, several modern features
+  (certificate revocation checks, AAA-server-by-hostname,
+  AnyConnect URL filters) silently fail. The hardening
+  guidance is to define at least the management DNS group
+  even on devices that don't otherwise need outbound DNS.
+impact: |
+  Certificate-revocation checks and hostname-based features
+  fail silently.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.5.1"
+  nist: ["CM-7"]
+  cwe: []
+query:
+  path: "$.hardening.asa_dns_server_group"
+  equals: true
+on_fail:
+  message: "No dns server-group is defined."
+  remediation_cli: |
+    configure terminal
+     dns server-group NETZER-DNS
+      name-server 10.0.0.10
+    end
+    write memory
+fixtures:
+  positive: fixtures/dns_grp.compliant.txt
+  negative: fixtures/dns_grp.violating.txt

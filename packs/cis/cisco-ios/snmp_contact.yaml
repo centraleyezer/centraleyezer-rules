@@ -1,0 +1,29 @@
+id: cisco.ios.cis.3.3.3
+title: "Set snmp-server contact"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `snmp-server contact` must be configured so SNMP-discovering
+  tools and operators know who owns the device.
+rationale: |
+  In a multi-team estate, contactless devices fall through
+  ownership cracks during change windows or incidents.
+impact: |
+  Stalled escalations; devices become unowned over time.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.3.3"
+  nist: ["CM-8"]
+  cwe: []
+query:
+  path: "$.snmp.contact"
+  matches: "."
+on_fail:
+  message: "snmp-server contact is not configured."
+  remediation_cli: |
+    configure terminal
+     snmp-server contact noc@example.com
+    end
+    write memory
+fixtures:
+  positive: fixtures/snmp_contact.compliant.txt
+  negative: fixtures/snmp_contact.violating.txt

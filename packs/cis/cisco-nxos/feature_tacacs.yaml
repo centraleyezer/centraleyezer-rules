@@ -1,0 +1,34 @@
+id: cisco.nxos.cis.1.5.3
+title: "NX-OS `feature tacacs+` must be enabled"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `feature tacacs+` must be enabled so the device can bind
+  management-plane authentication to a central TACACS+ server.
+  Without the feature, TACACS+-related stanzas are syntactically
+  rejected and the device falls back to local-only auth.
+rationale: |
+  TACACS+ is the standard for management-plane auth on Cisco
+  hardware — per-user identity, command authorization,
+  central audit. Local-only auth means a shared credential
+  with no central revocation.
+impact: |
+  No central AAA available; local-only auth with no per-user
+  audit / revocation.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.5.3"
+  nist: ["IA-2", "AC-2", "AU-2"]
+  cwe: []
+query:
+  path: "$.features[*]"
+  in: ["tacacs+"]
+on_fail:
+  message: "feature tacacs+ is not enabled."
+  remediation_cli: |
+    configure terminal
+     feature tacacs+
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/feature_tac.compliant.txt
+  negative: fixtures/feature_tac.violating.txt

@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220630
+title: "The Cisco switch must enable spanning-tree BPDU guard by default on user-facing ports."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  BPDU guard prevents rogue switches plugged into access ports from becoming the STP root and causing topology churn.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Switch L3 STIG. CAT II finding.
+  See V-220630 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220630 on the device's POA&M.
+references:
+  stig: ["V-220630"]
+  cci:
+    - "CCI-002385"
+query:
+  path: "$.stp.bpduguard_default"
+  equals: true
+on_fail:
+  message: "STIG V-220630 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220630.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/bpduguard.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/bpduguard.violating.txt

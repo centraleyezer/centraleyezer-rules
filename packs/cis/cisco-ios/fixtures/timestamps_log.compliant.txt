@@ -1,0 +1,5 @@
+version 17.9
+hostname compliant-sw
+service timestamps log datetime msec localtime show-timezone
+service timestamps debug datetime msec localtime show-timezone
+end

@@ -1,0 +1,35 @@
+id: cisco.ios.psirt.arp_inspect_validate
+title: "DAI `validate` must include src-mac dst-mac ip"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  When Dynamic ARP Inspection is configured, `ip arp inspection
+  validate src-mac dst-mac ip` must also be set. The default
+  DAI validation checks only the binding table — adding `src-
+  mac dst-mac ip` enforces RFC-826-compliant ARP frames
+  (matching L2 MACs, valid IP) on top.
+rationale: |
+  An attacker can craft ARP frames with mismatched L2/L3
+  addresses that still satisfy the DHCP-snooping binding
+  table. Strict validate-mode rejects them based on RFC-826
+  alone — a cheap second layer of defense.
+impact: |
+  Malformed ARP frames pass DAI; defense reduced to
+  binding-table-only.
+references:
+  cis: ""
+  nist: ["SC-7", "AC-4"]
+  cwe: [294]
+query:
+  path: "$.hardening.arp_inspect_validate"
+  matches: "src-mac.*dst-mac.*ip|src-mac.*ip.*dst-mac|dst-mac.*src-mac.*ip|ip.*src-mac.*dst-mac"
+on_fail:
+  message: "ip arp inspection validate is not configured with src-mac dst-mac ip."
+  remediation_cli: |
+    configure terminal
+     ip arp inspection validate src-mac dst-mac ip
+    end
+    write memory
+fixtures:
+  positive: fixtures/arp_validate.compliant.txt
+  negative: fixtures/arp_validate.violating.txt

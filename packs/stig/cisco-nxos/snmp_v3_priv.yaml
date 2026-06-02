@@ -1,0 +1,28 @@
+id: cisco.nxos.stig.v-220308
+title: "The NX-OS switch must encrypt SNMPv3 messages (authPriv)."
+severity: high
+vendors: [cisco-nx-os]
+description: |
+  SNMPv3 without privacy leaks management telemetry. Every v3 user must have a priv algorithm set.
+rationale: |
+  Sourced from the DISA Cisco NX-OS Switch NDM STIG. CAT I finding.
+  See V-220308 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-220308 on the device's POA&M.
+references:
+  stig: ["V-220308"]
+  cci:
+    - "CCI-001967"
+    - "CCI-002418"
+query:
+  path: "$.snmp.v3_users[*].priv_algo"
+  matches: "."
+on_fail:
+  message: "Cisco NX-OS STIG V-220308 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220308.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-nxos/fixtures/snmpv3_priv.compliant.txt
+  negative: ../../cis/cisco-nxos/fixtures/snmpv3_priv.violating.txt

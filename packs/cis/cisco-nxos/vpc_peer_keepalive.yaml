@@ -1,0 +1,37 @@
+id: cisco.nxos.cis.8.1.2
+title: "NX-OS `peer-keepalive destination` must be configured when vPC is in use"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  When `vpc domain` is configured, `peer-keepalive destination
+  <IP>` must also be configured so the vPC peers exchange
+  out-of-band liveness on the management VRF. Without it, the
+  vPC pair can't distinguish a peer-link outage from a real
+  peer failure — leading to dual-active scenarios that
+  blackhole traffic.
+rationale: |
+  Peer-keepalive is the tie-breaker for vPC split-brain. Its
+  absence is the single most common cause of vPC dual-active
+  outages — and the resulting blackhole counts as an
+  availability failure for security-monitored services.
+impact: |
+  vPC split-brain produces dual-active forwarding; traffic
+  blackholed during peer-link failure.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 8.1.1"
+  nist: ["CP-2", "CP-10"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_vpc_peer_keepalive"
+  equals: true
+on_fail:
+  message: "vPC peer-keepalive destination is not configured."
+  remediation_cli: |
+    configure terminal
+     vpc domain 1
+      peer-keepalive destination 10.0.0.2 source 10.0.0.1
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/vpc_keepalive.compliant.txt
+  negative: fixtures/vpc_keepalive.violating.txt

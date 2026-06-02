@@ -1,0 +1,27 @@
+id: cisco.nxos.stig.v-220312
+title: "The NX-OS switch must set a bounded TACACS+ timeout (≤ 10s)."
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  An open-ended TACACS+ timeout extends authentication latency and masks AAA-server outages.
+rationale: |
+  Sourced from the DISA Cisco NX-OS Switch NDM STIG. CAT III finding.
+  See V-220312 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220312 on the device's POA&M.
+references:
+  stig: ["V-220312"]
+  cci:
+    - "CCI-000764"
+query:
+  path: "$.hardening.nxos_tacacs_timeout"
+  in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "Cisco NX-OS STIG V-220312 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220312.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-nxos/fixtures/tacacs_to.compliant.txt
+  negative: ../../cis/cisco-nxos/fixtures/tacacs_to.violating.txt

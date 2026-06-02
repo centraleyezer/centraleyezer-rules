@@ -1,0 +1,27 @@
+id: cisco.ios.stig.v-220631
+title: "The Cisco switch must enable STP Loop Guard globally."
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  Loop Guard moves a non-designated port to a loop-inconsistent state when BPDUs cease, preventing single-link STP loops.
+rationale: |
+  Sourced from the DISA Cisco IOS XE Switch L2S STIG (CISC-L2-* control family).
+  CAT II finding. See V-220631 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220631 on the device's POA&M.
+references:
+  stig: ["V-220631"]
+  cci:
+    - "CCI-002385"
+query:
+  path: "$.stp.loopguard_default"
+  equals: true
+on_fail:
+  message: "Cisco IOS L2S STIG V-220631 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220631.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-ios/fixtures/loopguard.compliant.txt
+  negative: ../../cis/cisco-ios/fixtures/loopguard.violating.txt

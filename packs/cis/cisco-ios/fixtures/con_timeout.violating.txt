@@ -1,0 +1,5 @@
+version 15.2
+hostname legacy
+line con 0
+ login authentication default
+end

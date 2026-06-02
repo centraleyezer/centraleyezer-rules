@@ -1,0 +1,5 @@
+!Command: show running-config
+version 9.3(8)
+switchname nxos-clean
+username a password 5 $5$a role network-admin
+username b password 5 $5$b role network-admin

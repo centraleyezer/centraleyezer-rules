@@ -1,0 +1,31 @@
+id: cisco.ios.cis.1.2.6
+title: "aaa accounting commands 15 default must be configured"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `aaa accounting commands 15 default start-stop group <X>` must
+  be configured so privileged-mode commands are accounted to
+  TACACS+/RADIUS as they run.
+rationale: |
+  Without command accounting there is no central audit of who
+  ran which privileged command and when. Command accounting is
+  the primary forensic trail for any change-related incident.
+impact: |
+  No central audit trail for privileged-mode commands.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.2.6"
+  nist: ["AU-2", "AU-12"]
+  cwe: []
+query:
+  path: "$.aaa.acct_commands_15"
+  equals: true
+on_fail:
+  message: "aaa accounting commands 15 default is not configured."
+  remediation_cli: |
+    configure terminal
+     aaa accounting commands 15 default start-stop group tacacs+
+    end
+    write memory
+fixtures:
+  positive: fixtures/acct_cmd15.compliant.txt
+  negative: fixtures/acct_cmd15.violating.txt

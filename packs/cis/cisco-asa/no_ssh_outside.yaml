@@ -1,0 +1,36 @@
+id: cisco.asa.cis.2.1.6
+title: "ASA SSH must not be permitted from the outside interface"
+severity: critical
+vendors: [cisco-asa]
+description: |
+  No `ssh <subnet> <mask> outside` lines may be configured. The
+  ASA SSH management interface must never be exposed to the
+  untrusted (outside) zone.
+rationale: |
+  Internet-facing SSH is a top-tier brute-force target. Even
+  with strong credentials, the listener attracts continuous
+  scanning, drives logging volume, and exposes any future SSH
+  CVE. Management must be in-band on a trusted segment.
+impact: |
+  Continuous SSH brute-force from the Internet at large; future-
+  CVE exposure on the most-attacked Cisco product family.
+references:
+  cis: "CIS Cisco ASA Benchmark — 2.1.6"
+  nist: ["AC-17", "SC-7"]
+  cwe: [284]
+query:
+  path: "$.hardening.asa_ssh_from_outside"
+  equals: false
+on_fail:
+  message: "SSH is permitted from the outside interface."
+  remediation_cli: |
+    configure terminal
+     ! list current ssh entries
+     show running-config ssh
+     ! remove outside-facing ones
+     no ssh 0.0.0.0 0.0.0.0 outside
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_ssh_outside.compliant.txt
+  negative: fixtures/no_ssh_outside.violating.txt

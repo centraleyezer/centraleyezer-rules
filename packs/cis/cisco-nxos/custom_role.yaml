@@ -1,0 +1,38 @@
+id: cisco.nxos.cis.1.4.1
+title: "NX-OS must define at least one custom role"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  At least one custom role (anything besides the four built-in
+  roles network-admin / network-operator / vdc-admin /
+  vdc-operator) must be defined via `role name X`. Operators
+  should use the custom role to grant the minimum privileges
+  required.
+rationale: |
+  The built-in `network-admin` role is full-device admin — no
+  per-command authorization. A device with only built-in roles
+  is one stolen `network-admin` credential away from full
+  compromise.
+impact: |
+  No least-privilege separation; every authenticated user is
+  effectively root.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 1.4.1"
+  nist: ["AC-3", "AC-6"]
+  cwe: [250]
+query:
+  path: "$.hardening.nxos_custom_roles[0]"
+  exists: true
+on_fail:
+  message: "No custom NX-OS RBAC role is defined."
+  remediation_cli: |
+    configure terminal
+     role name noc-read-only
+      description "NOC read-only role"
+      rule 1 permit read
+     username noc-user role noc-read-only
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/custom_role.compliant.txt
+  negative: fixtures/custom_role.violating.txt

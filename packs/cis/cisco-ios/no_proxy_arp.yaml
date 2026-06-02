@@ -1,0 +1,30 @@
+id: cisco.ios.cis.4.2.2
+title: "Disable IP proxy-ARP globally"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  IP proxy-ARP must be disabled. The router must not answer ARP
+  requests on behalf of remote hosts.
+rationale: |
+  Proxy-ARP hides network segmentation problems and is a classic
+  enabler for man-in-the-middle attacks on flat networks.
+impact: |
+  ARP-spoof / MITM amplification; observability blind spots when
+  segmentation is bypassed.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 4.2.2"
+  nist: ["SC-7"]
+  cwe: [284]
+query:
+  path: "$.hardening.ip_proxy_arp"
+  equals: false
+on_fail:
+  message: "IP proxy-ARP is enabled (the IOS default)."
+  remediation_cli: |
+    configure terminal
+     no ip proxy-arp
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_proxy_arp.compliant.txt
+  negative: fixtures/no_proxy_arp.violating.txt

@@ -1,0 +1,33 @@
+id: cisco.ios.cis.3.1.1
+title: "Enable timestamps on log messages (datetime + msec)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `service timestamps log datetime msec` must be configured so
+  every log message carries an absolute UTC time stamp with
+  millisecond resolution.
+rationale: |
+  Cross-device correlation in incident response is impossible
+  without msec-resolution timestamps. Relative uptime-based
+  timestamps (the default) are useless after a reboot.
+impact: |
+  Investigators cannot align events across devices; SIEM
+  ingestion may discard ambiguous timestamps.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.1.1"
+  nist: ["AU-8"]
+  cwe: [778]
+query:
+  path: "$.hardening.timestamps_log"
+  equals: true
+on_fail:
+  message: "service timestamps log is not enabled with datetime msec."
+  remediation_cli: |
+    configure terminal
+     service timestamps log datetime msec localtime show-timezone
+     service timestamps debug datetime msec localtime show-timezone
+    end
+    write memory
+fixtures:
+  positive: fixtures/timestamps_log.compliant.txt
+  negative: fixtures/timestamps_log.violating.txt

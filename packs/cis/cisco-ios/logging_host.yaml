@@ -1,0 +1,32 @@
+id: cisco.ios.cis.5.1.1
+title: "Configure a syslog destination"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe, cisco-nx-os, cisco-asa]
+description: |
+  Logs must be shipped to a centralized syslog host so they survive
+  device reboot or compromise.
+rationale: |
+  Local buffer logs are erased on reboot and unavailable when the
+  device is offline or under attack. Centralized logging is a
+  precondition for any incident response.
+impact: |
+  Investigators lack the audit trail required to scope or attribute
+  an incident.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 5.1.1"
+  nist: ["AU-3", "AU-6", "AU-9"]
+  cwe: [778]
+query:
+  path: "$.logging.hosts[0]"
+  exists: true
+on_fail:
+  message: "No syslog host is configured."
+  remediation_cli: |
+    configure terminal
+     logging host 10.0.0.50
+     logging trap informational
+    end
+    write memory
+fixtures:
+  positive: fixtures/logging.compliant.txt
+  negative: fixtures/logging.violating.txt

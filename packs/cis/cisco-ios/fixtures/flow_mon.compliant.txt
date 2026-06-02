@@ -1,0 +1,5 @@
+version 17.9
+hostname compliant
+flow monitor NETZER-MON
+ record netflow ipv4 original-input
+end

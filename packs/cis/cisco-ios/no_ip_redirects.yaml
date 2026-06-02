@@ -1,0 +1,29 @@
+id: cisco.ios.cis.4.2.4
+title: "Disable IP redirects"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  ICMP redirects must be disabled. They allow the router to
+  instruct hosts to use a different gateway, which an attacker
+  can exploit to reroute traffic.
+rationale: |
+  ICMP-redirect injection is a documented MITM technique.
+impact: |
+  Traffic redirection / interception on local segments.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 4.2.4"
+  nist: ["SC-7"]
+  cwe: [346]
+query:
+  path: "$.hardening.ip_redirects"
+  equals: false
+on_fail:
+  message: "ICMP redirects are enabled (the IOS default)."
+  remediation_cli: |
+    configure terminal
+     no ip redirects
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_ip_redirects.compliant.txt
+  negative: fixtures/no_ip_redirects.violating.txt

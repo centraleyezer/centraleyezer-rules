@@ -1,0 +1,5 @@
+!Command: show running-config
+version 9.3(8)
+switchname nxos-clean
+vpc domain 1
+ peer-keepalive destination 10.0.0.2 source 10.0.0.1

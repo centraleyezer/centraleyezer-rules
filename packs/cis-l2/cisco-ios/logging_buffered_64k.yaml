@@ -1,0 +1,32 @@
+id: cisco.ios.cis-l2.8.1.4
+title: "L2: `logging buffered` must be ≥ 65536"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `logging buffered <SIZE>` must be ≥ 65536 (L1 was 16384).
+  Larger buffer survives longer incidents before rolling.
+rationale: |
+  Modern routers and switches have plenty of memory to spare.
+  64 KiB of buffered log holds an order of magnitude more
+  events than 16 KiB — crucial during incidents where the
+  log roll-out happens fast.
+impact: |
+  Buffered log rolls within seconds of any incident; SOC
+  can't recover the on-device trail of what happened.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 8.1.4"
+  nist: ["AU-4", "AU-11"]
+  cwe: []
+query:
+  path: "$.logging.buffer_size"
+  in: [65536, 131072, 262144, 524288, 1048576]
+on_fail:
+  message: "logging buffered is below 65536 bytes."
+  remediation_cli: |
+    configure terminal
+     logging buffered 131072 informational
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_log_buf.compliant.txt
+  negative: fixtures/l2_log_buf.violating.txt

@@ -1,0 +1,34 @@
+id: cisco.ios.cis.1.2.9
+title: "aaa session-id common must be configured"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `aaa session-id common` must be configured so the same
+  session-id is used for authentication, authorization, and
+  accounting records of a single operator session.
+rationale: |
+  Without `session-id common`, each AAA record carries a fresh
+  ID — making it expensive to correlate the auth, the
+  authorization decisions, and the command-accounting trail
+  for the same login. With it, every record for the session
+  shares one ID.
+impact: |
+  AAA-correlation across auth/authz/acct is difficult during
+  incident investigation.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.2.9"
+  nist: ["AU-3", "AU-12"]
+  cwe: []
+query:
+  path: "$.aaa.session_id_common"
+  equals: true
+on_fail:
+  message: "aaa session-id common is not configured."
+  remediation_cli: |
+    configure terminal
+     aaa session-id common
+    end
+    write memory
+fixtures:
+  positive: fixtures/sess_id.compliant.txt
+  negative: fixtures/sess_id.violating.txt

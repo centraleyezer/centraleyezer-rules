@@ -1,0 +1,28 @@
+id: cisco.asa.stig.v-220417
+title: "The Cisco ASA must not permit SSH from the outside interface."
+severity: high
+vendors: [cisco-asa]
+description: |
+  Exposing SSH on the outside interface invites brute-force from the public internet and is explicitly forbidden by STIG.
+rationale: |
+  Sourced from the DISA Cisco ASA NDM STIG. CAT I finding.
+  See V-220417 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category I; auditors will
+  cite V-220417 on the device's POA&M.
+references:
+  stig: ["V-220417"]
+  cci:
+    - "CCI-000054"
+    - "CCI-000366"
+query:
+  path: "$.hardening.asa_ssh_from_outside"
+  equals: false
+on_fail:
+  message: "Cisco ASA STIG V-220417 (I) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220417.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/no_ssh_outside.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/no_ssh_outside.violating.txt

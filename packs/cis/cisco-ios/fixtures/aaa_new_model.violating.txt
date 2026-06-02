@@ -1,0 +1,8 @@
+! Cisco IOS-XE running-config (violating cisco.ios.cis.1.1.1 — no AAA)
+version 17.9
+hostname legacy-rtr-01
+!
+! AAA not enabled — relies on local enable secret only.
+enable secret 5 $1$abc.$xyz
+!
+end

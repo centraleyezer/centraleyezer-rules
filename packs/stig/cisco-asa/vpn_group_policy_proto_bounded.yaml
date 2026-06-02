@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220807
+title: "The Cisco ASA RA-VPN group-policy must restrict the protocol set to IKEv2 / SSL-client / SSL-clientless."
+severity: medium
+vendors: [cisco-asa]
+description: |
+  Allowing legacy IPSec-IKEv1 in a group-policy permits downgraded sessions; STIG bounds the permitted protocol set.
+rationale: |
+  Sourced from the DISA Cisco ASA VPN STIG. CAT II finding.
+  See V-220807 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220807 on the device's POA&M.
+references:
+  stig: ["V-220807"]
+  cci:
+    - "CCI-000366"
+query:
+  path: "$.hardening.asa_group_policy_vpn_proto"
+  matches: "^(ikev2|ssl-clientless|ikev2 ssl-client|ssl-client|ikev2 ssl-clientless|ssl-client ssl-clientless|ikev2 ssl-client ssl-clientless)$"
+on_fail:
+  message: "STIG V-220807 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220807.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/grp_vpn_proto.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/grp_vpn_proto.violating.txt

@@ -1,0 +1,35 @@
+id: cisco.nxos.cis.7.5.1
+title: "NX-OS `feature dhcp` must be enabled (precondition for DHCP snooping)"
+severity: medium
+vendors: [cisco-nx-os]
+description: |
+  `feature dhcp` must be enabled so DHCP snooping and the
+  related L2 protections (DAI, IP source guard) can take
+  effect on access ports.
+rationale: |
+  DHCP snooping is the foundation of L2 trust — without it,
+  there's no binding table for Dynamic ARP Inspection or IP
+  Source Guard to consult. NX-OS gates all three behind
+  `feature dhcp` and the dependent stanzas.
+impact: |
+  DHCP snooping / DAI / IP source guard cannot be configured;
+  rogue DHCP servers and ARP poisoning attacks are
+  undefended.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 7.5.1"
+  nist: ["SC-7", "AC-4"]
+  cwe: []
+query:
+  path: "$.features[*]"
+  in: ["dhcp"]
+on_fail:
+  message: "feature dhcp is not enabled."
+  remediation_cli: |
+    configure terminal
+     feature dhcp
+     ip dhcp snooping
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/feature_dhcp.compliant.txt
+  negative: fixtures/feature_dhcp.violating.txt

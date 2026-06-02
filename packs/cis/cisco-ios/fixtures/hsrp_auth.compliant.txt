@@ -1,0 +1,10 @@
+version 17.9
+hostname compliant
+!
+interface Vlan10
+ ip address 10.0.10.1 255.255.255.0
+ standby 10 ip 10.0.10.254
+ standby 10 priority 110
+ standby 10 authentication md5 key-chain HSRP-KEYS
+!
+end

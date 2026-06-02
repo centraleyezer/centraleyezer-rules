@@ -1,0 +1,32 @@
+id: cisco.nxos.cis.5.2.1
+title: "Set an MOTD banner on NX-OS"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  An MOTD banner must be configured to inform users that access
+  is restricted and monitored.
+rationale: |
+  Required by most regulatory regimes. Banners establish the
+  legal basis for prosecuting unauthorized access.
+impact: |
+  Audit findings against PCI / SOX / HIPAA / FedRAMP; failed
+  prosecutions over consent-to-monitor.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 5.2.1"
+  nist: ["AC-8"]
+  cwe: []
+query:
+  path: "$.banners.motd"
+  matches: "."
+on_fail:
+  message: "No MOTD banner is configured."
+  remediation_cli: |
+    configure terminal
+     banner motd ^
+     UNAUTHORIZED ACCESS PROHIBITED.
+     ^
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/banner.compliant.txt
+  negative: fixtures/banner.violating.txt

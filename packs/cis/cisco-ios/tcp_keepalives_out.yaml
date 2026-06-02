@@ -1,0 +1,31 @@
+id: cisco.ios.cis.3.2.2
+title: "Enable service tcp-keepalives-out"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `service tcp-keepalives-out` must be enabled so the device
+  detects orphaned outbound TCP sessions (e.g. syslog/TACACS+).
+rationale: |
+  Outbound keepalives ensure stuck connections to syslog /
+  TACACS+ / AAA servers are detected and re-established rather
+  than silently dropping events.
+impact: |
+  Silent loss of audit + AAA traffic when an upstream collector
+  is unreachable.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 3.2.2"
+  nist: ["AC-12", "AU-4"]
+  cwe: [778]
+query:
+  path: "$.hardening.tcp_keepalives_out"
+  equals: true
+on_fail:
+  message: "service tcp-keepalives-out is not enabled."
+  remediation_cli: |
+    configure terminal
+     service tcp-keepalives-out
+    end
+    write memory
+fixtures:
+  positive: fixtures/keepalives.compliant.txt
+  negative: fixtures/keepalives.violating.txt

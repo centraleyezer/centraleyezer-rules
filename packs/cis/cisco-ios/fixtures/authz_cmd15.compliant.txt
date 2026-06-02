@@ -1,0 +1,5 @@
+version 17.9
+hostname compliant
+aaa new-model
+aaa authorization commands 15 default group tacacs+ local
+end

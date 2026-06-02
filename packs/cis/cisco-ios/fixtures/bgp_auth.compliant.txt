@@ -1,0 +1,8 @@
+version 17.9
+hostname compliant
+!
+router bgp 65001
+ neighbor 192.0.2.1 remote-as 65002
+ neighbor 192.0.2.1 password some-secret
+!
+end

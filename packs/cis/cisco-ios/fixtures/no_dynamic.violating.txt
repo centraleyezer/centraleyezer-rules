@@ -1,0 +1,7 @@
+version 15.2
+hostname legacy
+!
+interface GigabitEthernet1/0/1
+ switchport mode dynamic desirable
+!
+end

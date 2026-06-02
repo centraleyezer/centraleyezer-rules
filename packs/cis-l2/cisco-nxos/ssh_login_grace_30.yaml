@@ -1,0 +1,31 @@
+id: cisco.nxos.cis-l2.3.6.3
+title: "L2: NX-OS `ssh login-grace-time` must be ≤ 30 seconds"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `ssh login-grace-time <N>` must be ≤ 30 (L1 was ≤ 60).
+  Tightens the unauthenticated socket lifetime further.
+rationale: |
+  30s is the OpenSSH 9.x default; halving the L1 cap shrinks
+  the window each unauthenticated SSH attempt can occupy a
+  worker slot.
+impact: |
+  Longer per-attempt SSH-flood resource cost; easier socket
+  exhaustion.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — L2 3.6.3"
+  nist: ["SC-5", "AC-17"]
+  cwe: [400]
+query:
+  path: "$.hardening.nxos_ssh_login_grace_time"
+  in: [5, 10, 15, 20, 25, 30]
+on_fail:
+  message: "ssh login-grace-time is not ≤ 30 seconds."
+  remediation_cli: |
+    configure terminal
+     ssh login-grace-time 30
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/l2_ssh_grace.compliant.txt
+  negative: fixtures/l2_ssh_grace.violating.txt

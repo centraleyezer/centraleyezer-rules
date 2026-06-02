@@ -1,0 +1,31 @@
+id: cisco.ios.cis.1.4.2
+title: "Console exec-timeout must be set (≤ 10 minutes)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  The console port `line con 0` must have `exec-timeout` set to
+  ≤ 10 minutes. CIS L1 recommends 10 0.
+rationale: |
+  An attacker with physical access to the rack can take over an
+  abandoned console session. Bounding the idle window forces
+  re-authentication.
+impact: |
+  Unauthorized device control via the physical console.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.4.2"
+  nist: ["AC-11", "AC-12"]
+  cwe: [613]
+query:
+  path: "$.console.exec_timeout"
+  in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+on_fail:
+  message: "Console exec-timeout is not set to ≤ 10 minutes."
+  remediation_cli: |
+    configure terminal
+     line con 0
+      exec-timeout 10 0
+    end
+    write memory
+fixtures:
+  positive: fixtures/con_timeout.compliant.txt
+  negative: fixtures/con_timeout.violating.txt

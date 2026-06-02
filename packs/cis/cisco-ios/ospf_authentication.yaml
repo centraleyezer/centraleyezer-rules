@@ -1,0 +1,40 @@
+id: cisco.ios.cis.9.1.1
+title: "OSPF must use authentication"
+severity: high
+vendors: [cisco-ios, cisco-ios-xe]
+applies_when:
+  features: [ospf]
+description: |
+  When OSPF is configured (`router ospf X`), every OSPF area or
+  interface must use authentication — either `area X
+  authentication message-digest`, per-interface `ip ospf
+  authentication`, or `ip ospf message-digest-key`.
+rationale: |
+  Unauthenticated OSPF accepts LSAs from any source. A laptop on
+  the L2 segment can inject a default route or blackhole prefixes
+  with a single hand-crafted Hello.
+impact: |
+  Routing-table takeover at L2 adjacency; selective MITM via
+  injected LSAs.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 9.1.1"
+  nist: ["AC-3", "IA-2", "SC-7"]
+  cwe: [346]
+query:
+  path: "$.routing.ospf.authenticated"
+  equals: true
+on_fail:
+  message: "OSPF is enabled but authentication is not configured."
+  remediation_cli: |
+    configure terminal
+     key chain OSPF-KEYS
+      key 1
+       cryptographic-algorithm hmac-sha-256
+       key-string <STRONG>
+     router ospf 100
+      area 0 authentication message-digest
+    end
+    write memory
+fixtures:
+  positive: fixtures/ospf_auth.compliant.txt
+  negative: fixtures/ospf_auth.violating.txt

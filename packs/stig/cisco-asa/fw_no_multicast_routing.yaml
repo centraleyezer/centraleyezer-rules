@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220705
+title: "The Cisco ASA must not enable multicast routing unless operationally required."
+severity: low
+vendors: [cisco-asa]
+description: |
+  Multicast widens the control-plane surface; STIG requires it be disabled when not in use.
+rationale: |
+  Sourced from the DISA Cisco ASA Firewall STIG. CAT III finding.
+  See V-220705 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220705 on the device's POA&M.
+references:
+  stig: ["V-220705"]
+  cci:
+    - "CCI-000381"
+query:
+  path: "$.hardening.asa_multicast_routing"
+  equals: false
+on_fail:
+  message: "STIG V-220705 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220705.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/no_mcast.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/no_mcast.violating.txt

@@ -1,0 +1,6 @@
+version 17.9
+hostname compliant
+snmp-server group MON v3 priv
+snmp-server user mon-a MON v3 auth sha auth1 priv aes 256 priv1
+snmp-server user mon-b MON v3 auth sha auth2 priv aes 256 priv2
+end

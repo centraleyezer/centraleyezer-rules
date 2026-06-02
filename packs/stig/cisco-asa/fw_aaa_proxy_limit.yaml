@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220706
+title: "The Cisco ASA must bound AAA proxy connections per user (≤ 5)."
+severity: low
+vendors: [cisco-asa]
+description: |
+  Unbounded AAA proxy connections enable resource exhaustion and concurrent-session abuse.
+rationale: |
+  Sourced from the DISA Cisco ASA Firewall STIG. CAT III finding.
+  See V-220706 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category III; auditors will
+  cite V-220706 on the device's POA&M.
+references:
+  stig: ["V-220706"]
+  cci:
+    - "CCI-000054"
+query:
+  path: "$.hardening.asa_proxy_limit"
+  in: [1, 2, 3, 4, 5]
+on_fail:
+  message: "STIG V-220706 (III) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220706.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/proxy_limit.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/proxy_limit.violating.txt

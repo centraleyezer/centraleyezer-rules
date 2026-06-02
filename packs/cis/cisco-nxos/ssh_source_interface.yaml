@@ -1,0 +1,33 @@
+id: cisco.nxos.cis.3.6.1
+title: "NX-OS `ip ssh source-interface` must be set"
+severity: low
+vendors: [cisco-nx-os]
+description: |
+  `ip ssh source-interface mgmt0` (or another deterministic
+  management interface) must be configured so outbound SSH
+  sourced from the device uses a known, ACL-allowed address.
+rationale: |
+  Without a fixed source-interface, outbound SSH (jumphost
+  patterns) chooses whichever egress IP wins routing — which
+  may not match the central jump-host ACL. Pinning the source
+  to mgmt0 makes outbound SSH deterministic and auditable.
+impact: |
+  Outbound SSH source IP varies — central jump-host ACLs
+  intermittently deny legitimate device-initiated SSH.
+references:
+  cis: "CIS Cisco NX-OS Benchmark — 3.6.1"
+  nist: ["AC-17", "SC-7"]
+  cwe: []
+query:
+  path: "$.hardening.nxos_ssh_source_interface"
+  exists: true
+on_fail:
+  message: "ip ssh source-interface is not configured."
+  remediation_cli: |
+    configure terminal
+     ip ssh source-interface mgmt0
+    end
+    copy running-config startup-config
+fixtures:
+  positive: fixtures/ssh_src.compliant.txt
+  negative: fixtures/ssh_src.violating.txt

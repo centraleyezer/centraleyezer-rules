@@ -1,0 +1,36 @@
+id: cisco.asa.cis.1.4.1
+title: "ASA `aaa-server <GROUP> protocol tacacs+` must be defined"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  At least one `aaa-server <GROUP> protocol tacacs+` stanza
+  must be present so management-plane authentication can be
+  bound to TACACS+ — providing per-user identity and central
+  command audit.
+rationale: |
+  RADIUS-only ASA deployments lose per-command authorization
+  (RADIUS doesn't support the same command-by-command authz
+  that TACACS+ does). TACACS+ is the standard for management-
+  plane auth on Cisco hardware where command-level audit
+  matters.
+impact: |
+  No per-command authorization; auth-only AAA with
+  coarse-grained access decisions.
+references:
+  cis: "CIS Cisco ASA Benchmark — 1.4.1"
+  nist: ["AC-3", "AC-6", "AU-2"]
+  cwe: []
+query:
+  path: "$.hardening.asa_aaa_server_tacacs"
+  equals: true
+on_fail:
+  message: "No aaa-server TACACS+ group is defined."
+  remediation_cli: |
+    configure terminal
+     aaa-server NETZER-TACACS protocol tacacs+
+     aaa-server NETZER-TACACS (inside) host 10.0.0.10
+    end
+    write memory
+fixtures:
+  positive: fixtures/aaa_tac.compliant.txt
+  negative: fixtures/aaa_tac.violating.txt

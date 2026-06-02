@@ -1,0 +1,5 @@
+version 17.9
+hostname compliant
+username admin1 privilege 15 secret 9 $9$abc
+username admin2 privilege 15 secret 9 $9$def
+end

@@ -1,0 +1,31 @@
+id: cisco.ios.cis.2.2.21
+title: "Disable `ip bootp server`"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no ip bootp server` must be configured. BOOTP is a legacy
+  predecessor to DHCP; modern networks have no business running
+  a BOOTP server on a router.
+rationale: |
+  BOOTP exposes a UDP/67 listener that is not required for any
+  normal routing or switching function. Disabling it shrinks
+  the management-plane attack surface.
+impact: |
+  Unnecessary UDP/67 listener on the device.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 2.2.21"
+  nist: ["CM-7"]
+  cwe: [284]
+query:
+  path: "$.hardening.no_ip_bootp_server"
+  equals: true
+on_fail:
+  message: "ip bootp server is enabled (default)."
+  remediation_cli: |
+    configure terminal
+     no ip bootp server
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_bootp.compliant.txt
+  negative: fixtures/no_bootp.violating.txt

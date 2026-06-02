@@ -1,0 +1,32 @@
+id: cisco.ios.cis-l2.2.2.26
+title: "L2: CDP must be globally disabled (`no cdp run`)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no cdp run` must be configured globally. L1 allows CDP off
+  per-interface on the edge; L2 turns it off everywhere.
+rationale: |
+  CDP advertises platform, software version, port, VLAN and
+  IP info to anyone on the same L2 segment — a textbook
+  recon primitive. In modern networks LLDP (or nothing)
+  replaces it; CDP is rarely operationally required.
+impact: |
+  Device leaks model / software / port info to L2-adjacent
+  attackers via CDP frames.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 2.2.26"
+  nist: ["CM-7"]
+  cwe: [200]
+query:
+  path: "$.services.cdp"
+  equals: false
+on_fail:
+  message: "cdp run is enabled globally."
+  remediation_cli: |
+    configure terminal
+     no cdp run
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_no_cdp.compliant.txt
+  negative: fixtures/l2_no_cdp.violating.txt

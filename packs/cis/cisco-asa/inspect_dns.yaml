@@ -1,0 +1,36 @@
+id: cisco.asa.cis.6.3.5
+title: "ASA `inspect dns` must be enabled in the global policy"
+severity: medium
+vendors: [cisco-asa]
+description: |
+  `inspect dns preset_dns_map` must be present in the global
+  policy-map (or another policy that's applied globally) so
+  the ASA enforces DNS message length, validates header bits,
+  and drops malformed DNS responses.
+rationale: |
+  Without DNS inspection, the ASA permits the full DNS attack
+  surface — including the long-message variants used by some
+  DNS-based exfiltration and cache-poisoning amplification
+  attacks. Inspection enforces RFC-compliant message bounds.
+impact: |
+  DNS-based exfiltration / amplification attacks pass
+  unchecked through the firewall.
+references:
+  cis: "CIS Cisco ASA Benchmark — 6.3.1"
+  nist: ["SC-7", "SI-3"]
+  cwe: []
+query:
+  path: "$.hardening.asa_inspect_dns"
+  equals: true
+on_fail:
+  message: "inspect dns is not enabled in any policy."
+  remediation_cli: |
+    configure terminal
+     policy-map global_policy
+      class inspection_default
+       inspect dns preset_dns_map
+    end
+    write memory
+fixtures:
+  positive: fixtures/inspect_dns.compliant.txt
+  negative: fixtures/inspect_dns.violating.txt

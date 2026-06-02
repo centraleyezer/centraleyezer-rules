@@ -1,0 +1,34 @@
+id: cisco.ios.cis-l2.4.1.8
+title: "L2: NTP authentication must use SHA (no MD5)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `ntp authentication-key N md5 ...` is forbidden — L2 requires
+  SHA-family digests (`sha1` or stronger). L1 accepts MD5 as a
+  transitional baseline.
+rationale: |
+  NTP-MD5 has known collision-class weaknesses tied to the
+  shared key. NTPv4 supports SHA-1 and SHA-256 keys on modern
+  IOS; collapse to SHA breaks compatibility with very old
+  peers but is the modern baseline.
+impact: |
+  NTP authentication shared key vulnerable to MD5-class
+  collision attacks; clock-skew amplification via spoofed NTP.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — L2 4.1.8"
+  nist: ["AU-8", "SC-13"]
+  cwe: [327]
+query:
+  path: "$.ntp.uses_md5"
+  equals: false
+on_fail:
+  message: "NTP authentication-key uses MD5."
+  remediation_cli: |
+    configure terminal
+     no ntp authentication-key <N> md5 <KEY>
+     ntp authentication-key <N> sha1 <KEY>
+    end
+    write memory
+fixtures:
+  positive: fixtures/l2_ntp_sha.compliant.txt
+  negative: fixtures/l2_ntp_sha.violating.txt

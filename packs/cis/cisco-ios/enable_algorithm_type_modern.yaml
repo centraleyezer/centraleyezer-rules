@@ -1,0 +1,35 @@
+id: cisco.ios.cis.1.1.13
+title: "Enable secret must use modern hash (`enable algorithm-type sha256` or `scrypt`)"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  At least one `enable algorithm-type sha256 secret <X>` or
+  `enable algorithm-type scrypt secret <X>` must be configured
+  so the enable secret is stored under PBKDF2-SHA-256 (type 8)
+  or scrypt (type 9) rather than the legacy MD5-based type 5.
+rationale: |
+  The legacy `enable secret 5 $1$...` form uses MD5 — recoverable
+  on commodity GPU within hours. The modern `algorithm-type
+  sha256` / `scrypt` syntax forces type-8 / type-9 storage.
+  This is the input-side discipline; the PSIRT rule
+  `enable_secret_not_md5` catches the result.
+impact: |
+  Operators continue to add `enable secret <plain>` lines that
+  end up stored as type-5 (MD5) — recoverable from any backup.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 1.1.13"
+  nist: ["IA-5", "IA-7"]
+  cwe: [916]
+query:
+  path: "$.hardening.enable_algorithm_type_sha"
+  equals: true
+on_fail:
+  message: "enable algorithm-type sha256/scrypt is not configured."
+  remediation_cli: |
+    configure terminal
+     enable algorithm-type sha256 secret <NEW-STRONG-PASSWORD>
+    end
+    write memory
+fixtures:
+  positive: fixtures/enable_alg.compliant.txt
+  negative: fixtures/enable_alg.violating.txt

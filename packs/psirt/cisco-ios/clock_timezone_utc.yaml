@@ -1,0 +1,33 @@
+id: cisco.ios.psirt.clock_timezone_utc
+title: "Clock timezone must be set to UTC"
+severity: low
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `clock timezone UTC 0 0` (or simply `clock timezone UTC 0`)
+  must be configured. All operational logs must use UTC.
+rationale: |
+  Cross-timezone forensics fall apart when each device labels
+  events in local time. UTC is the universally agreed reference.
+  Cisco's hardening guide and every SIEM ingestion guideline
+  call for UTC timestamps on network gear.
+impact: |
+  Forensic timeline reconstruction across the estate becomes
+  manual time-zone arithmetic; correlation rules in the SIEM
+  break.
+references:
+  cis: ""
+  nist: ["AU-8"]
+  cwe: []
+query:
+  path: "$.hardening.clock_timezone"
+  equals: "UTC"
+on_fail:
+  message: "clock timezone is not UTC."
+  remediation_cli: |
+    configure terminal
+     clock timezone UTC 0 0
+    end
+    write memory
+fixtures:
+  positive: fixtures/clock.compliant.txt
+  negative: fixtures/clock.violating.txt

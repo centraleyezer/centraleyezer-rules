@@ -1,0 +1,4 @@
+version 17.9
+hostname compliant-sw
+ip ssh server algorithm encryption aes256-ctr aes192-ctr aes128-ctr
+end

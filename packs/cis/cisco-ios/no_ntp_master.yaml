@@ -1,0 +1,32 @@
+id: cisco.ios.cis.4.1.4
+title: "Device must not act as an NTP master"
+severity: medium
+vendors: [cisco-ios, cisco-ios-xe]
+description: |
+  `no ntp master` must be in effect (or `ntp master` simply
+  absent). Network devices must consume time from a trusted
+  reference NTP server, not generate it.
+rationale: |
+  An NTP master with a wrong / drifted clock will skew time on
+  every downstream device that trusts it. The role belongs to
+  hardened time-reference appliances, not switches / routers.
+impact: |
+  Time-drift cascade across the estate; authentication tokens
+  with time-sensitive validity behave unpredictably.
+references:
+  cis: "CIS Cisco IOS 17 Benchmark v2.1.0 — 4.1.4"
+  nist: ["AU-8"]
+  cwe: [613]
+query:
+  path: "$.hardening.ntp_master"
+  equals: false
+on_fail:
+  message: "ntp master is configured."
+  remediation_cli: |
+    configure terminal
+     no ntp master
+    end
+    write memory
+fixtures:
+  positive: fixtures/no_ntp_master.compliant.txt
+  negative: fixtures/no_ntp_master.violating.txt

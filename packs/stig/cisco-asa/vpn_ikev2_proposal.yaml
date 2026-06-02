@@ -1,0 +1,27 @@
+id: cisco.asa.stig.v-220801
+title: "The Cisco ASA must define at least one IKEv2 IPsec proposal."
+severity: medium
+vendors: [cisco-asa]
+description: |
+  Without an explicit proposal, the ASA falls back to defaults that may include legacy ciphers; STIG requires an explicit policy.
+rationale: |
+  Sourced from the DISA Cisco ASA VPN STIG. CAT II finding.
+  See V-220801 in the current STIG release.
+impact: |
+  Non-compliance is recorded as a STIG finding at category II; auditors will
+  cite V-220801 on the device's POA&M.
+references:
+  stig: ["V-220801"]
+  cci:
+    - "CCI-001144"
+query:
+  path: "$.hardening.asa_ipsec_proposal"
+  equals: true
+on_fail:
+  message: "STIG V-220801 (II) is not satisfied."
+  remediation_cli: |
+    ! Apply the remediation prescribed by STIG V-220801.
+    ! See the current STIG release for vendor-supplied CLI.
+fixtures:
+  positive: ../../cis/cisco-asa/fixtures/ikev2_proposal.compliant.txt
+  negative: ../../cis/cisco-asa/fixtures/ikev2_proposal.violating.txt

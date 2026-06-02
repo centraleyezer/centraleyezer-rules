@@ -1,0 +1,10 @@
+! Cisco IOS-XE running-config (compliant for cisco.ios.cis.1.1.1)
+version 17.9
+hostname core-sw-01
+!
+aaa new-model
+aaa authentication login default group tacacs+ local
+aaa authorization exec default group tacacs+ local
+tacacs-server host 10.0.0.1
+!
+end
