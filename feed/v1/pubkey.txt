@@ -1,0 +1,3 @@
+# Sandline rule-platform signing public key.
+# Will be populated after the first signer bootstrap.
+# Until then, this file intentionally empty so the URL resolves.

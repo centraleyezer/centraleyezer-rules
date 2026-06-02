@@ -1,0 +1,15 @@
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor leftovers
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Build artefacts (none expected in this repo, but defensive)
+*.tar.gz
+*.sig
+*.tgz

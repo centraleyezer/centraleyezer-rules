@@ -1,0 +1,7 @@
+# Code owners — every PR touching these paths requires review from
+# one of the listed users. Maintained by hand; update when staff changes.
+
+packs/**            @centraleyezer
+feed/**             @centraleyezer
+.github/**          @centraleyezer
+CODEOWNERS          @centraleyezer
