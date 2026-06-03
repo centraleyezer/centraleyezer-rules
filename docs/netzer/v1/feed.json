@@ -1,18 +1,27 @@
 {
   "schema_version": 1,
   "product": "netzer",
-  "updated_at": "2026-06-02T22:20:33.1409169Z",
+  "updated_at": "2026-06-03T09:53:43.334055121Z",
   "entries": {
     "cisco/stable": {
       "pack": "cisco",
       "channel": "stable",
       "current": {
-        "version": "1.0.1",
-        "released_at": "2026-06-02T22:20:31.868515316Z",
-        "bundle_url": "",
-        "sig_url": "https://github.com/centraleyezer/centraleyezer-rules/releases/download/untagged-9c9e71dfe127fd2ebd94/netzer-cisco-rules-1.0.1.tar.gz.sig",
-        "sha256": "9cfceed1e5f2dd7dfb880cb3e9aa9ab284738aede2628083f986dc4987c61cdb"
-      }
+        "version": "1.0.2",
+        "released_at": "2026-06-03T09:53:42.136475764Z",
+        "bundle_url": "https://github.com/centraleyezer/centraleyezer-rules/releases/download/untagged-10515d1cc1f0b63015d9/netzer-cisco-rules-1.0.2.tar.gz",
+        "sig_url": "https://github.com/centraleyezer/centraleyezer-rules/releases/download/untagged-10515d1cc1f0b63015d9/netzer-cisco-rules-1.0.2.tar.gz.sig",
+        "sha256": "9c1343b7fd6d1a906feccb8fa72f8b582c6969ec1a27fed6e5c0013ab75fdaa9"
+      },
+      "history": [
+        {
+          "version": "1.0.1",
+          "released_at": "2026-06-02T22:20:31.868515316Z",
+          "bundle_url": "",
+          "sig_url": "https://github.com/centraleyezer/centraleyezer-rules/releases/download/untagged-9c9e71dfe127fd2ebd94/netzer-cisco-rules-1.0.1.tar.gz.sig",
+          "sha256": "9cfceed1e5f2dd7dfb880cb3e9aa9ab284738aede2628083f986dc4987c61cdb"
+        }
+      ]
     }
   }
 }
