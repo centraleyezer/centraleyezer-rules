@@ -9,8 +9,8 @@
       "current": {
         "version": "1.0.2",
         "released_at": "2026-06-03T09:53:42.136475764Z",
-        "bundle_url": "https://github.com/centraleyezer/centraleyezer-rules/releases/download/untagged-10515d1cc1f0b63015d9/netzer-cisco-rules-1.0.2.tar.gz",
-        "sig_url": "https://github.com/centraleyezer/centraleyezer-rules/releases/download/untagged-10515d1cc1f0b63015d9/netzer-cisco-rules-1.0.2.tar.gz.sig",
+        "bundle_url": "https://github.com/centraleyezer/centraleyezer-rules/releases/download/netzer-cisco-v1.0.2/netzer-cisco-rules-1.0.2.tar.gz",
+        "sig_url": "https://github.com/centraleyezer/centraleyezer-rules/releases/download/netzer-cisco-v1.0.2/netzer-cisco-rules-1.0.2.tar.gz.sig",
         "sha256": "9c1343b7fd6d1a906feccb8fa72f8b582c6969ec1a27fed6e5c0013ab75fdaa9"
       },
       "history": [
